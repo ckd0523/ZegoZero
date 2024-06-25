@@ -1,6 +1,6 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
-    var table; // DataTable 객체를 저장할 변수 선언
+    var table;
 
     // 초기화 함수 정의
     function initializeDataTable(url) {
@@ -12,7 +12,11 @@ $(document).ready(function () {
         table = $('#myTable').DataTable({
             ajax: {
                 url: url, // JSON 데이터 URL
-                dataSrc: ''
+                type: 'GET',
+                dataSrc: 'data',
+                error: function(xhr, error, thrown) {
+                    console.log('Ajax error:', xhr.responseText);
+                }
             },
             responsive: true,
             orderMulti: true,
@@ -26,10 +30,12 @@ $(document).ready(function () {
                 },
                 { data: 'equipment_plan_id' },
                 { data: 'product_name' },
-                { data: 'quantity' },
+                { data: 'input' },
+                { data: 'output' },
                 { data: 'estimated_start_date' },
                 { data: 'estimated_end_date' },
-                { data: 'status' },
+                { data: 'start_date' },
+                { data: 'end_date' }
             ],
             "language": {
                 "emptyTable": "데이터가 없어요.",
@@ -85,91 +91,84 @@ $(document).ready(function () {
         $('#myTable').on('click', '.colVisButton', function() {
             table.buttons(['.buttons-colvis']).trigger();
         });
-
     }
+
+    // 셀렉트 박스 변경 이벤트 리스너
+    $('#equipmentSelect').on('change', function() {
+        var selectedValue = $(this).val();
+
+        // 선택된 값에 따라 JSON 데이터 URL 변경
+        var jsonUrl = '/api/equipment/' + selectedValue;
+
+        // DataTable 초기화 함수 호출
+        initializeDataTable(jsonUrl);
+    });
+
+    var selectedValue1 = $(equipmentSelect).val();
+    // 페이지 로드 시 초기화
+    initializeDataTable('/api/equipment/'+ selectedValue1 ); // 초기에는 기본 데이터로 초기화
 
     // START 버튼 클릭 시 이벤트 처리
     $('#startButton').on('click', function() {
         // 체크된 체크박스 가져오기
         var checkedBox = $('.checkbox:checked');
 
+        if (checkedBox.length === 1) {
+            var selectedRow = checkedBox.closest('tr');
+            var rowData = table.row(selectedRow).data();
+            var selectedValue = $('#equipmentSelect').val();
 
-        // 체크된 체크박스가 하나인 경우
-        var selectedRow = checkedBox.closest('tr');
-        var rowData = table.row(selectedRow).data();
-        // 셀렉트 박스 값 가져오기
-        var selectedValue = $('#equipmentSelect').val();
+            console.log('선택된 행의 데이터:', rowData);
+            console.log('선택된 설비 start :', selectedValue);
 
-        // rowData에 선택된 행의 데이터가 포함됨
-        console.log('선택된 행의 데이터:', rowData);
-        console.log('선택된 설비 start :', selectedValue);
+            // 여기서 선택된 데이터에 대한 추가적인 동작을 수행할 수 있습니다.
+            // 예: 선택된 데이터를 서버로 전송하여 처리하는 등의 작업
+            
 
-        // 여기서 선택된 데이터에 대한 추가적인 동작을 수행할 수 있습니다.
-        // 예: 선택된 데이터를 서버로 전송하여 처리하는 등의 작업
-
-
+        } else {
+            alert('하나의 행을 선택해야 합니다.');
+        }
     });
 
-    // stop 버튼 클릭 시 이벤트 처리
+    // STOP 버튼 클릭 시 이벤트 처리
     $('#stopButton').on('click', function() {
         // 체크된 체크박스 가져오기
         var checkedBox = $('.checkbox:checked');
 
-
+        if (checkedBox.length === 1) {
             var selectedRow = checkedBox.closest('tr');
             var rowData = table.row(selectedRow).data();
-            // 셀렉트 박스 값 가져오기
             var selectedValue = $('#equipmentSelect').val();
 
-            // rowData에 선택된 행의 데이터가 포함됨
             console.log('선택된 행의 데이터:', rowData);
             console.log('선택된 설비 stop :', selectedValue);
 
             // 여기서 선택된 데이터에 대한 추가적인 동작을 수행할 수 있습니다.
             // 예: 선택된 데이터를 서버로 전송하여 처리하는 등의 작업
 
-        // 금속검출기라면
-        if(selectedValue == '11'){
+            if (selectedValue == '12') {
+                var finishData = {
+                    order_id: rowData.equipment_plan_id,
+                    product_name: rowData.product_name,
+                    received_quantity: rowData.quantity
+                };
 
-            var finshdata = {
-                order_id: rowData.equipment_plan_id,
-                product_name: rowData.product_name,
-                received_quantity: rowData.quantity,
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "/api/receive",
-                data: JSON.stringify(finshdata),
-                contentType: "application/json",
-                success: function (response) {
-                    alert("박스 포장 종료, 완재품 재고로 입고되었습니다.");
-                },
-                error: function (xhr, status, error) {
-                    alert("시간 저장 중 오류가 발생했습니다.");
-                }
-            });
-
-        }
-    });
-
-    // 셀렉트 박스 변경 이벤트 리스너
-    $('#equipmentSelect').on('change', function() {
-        var selectedValue = $(this).val();
-        console.log(selectedValue);
-
-        // 선택된 값에 따라 JSON 데이터 URL 변경
-        var jsonUrl;
-        if (selectedValue === '2') {
-            jsonUrl = 'MOCK_DATA5.json'; // 선택된 값이 '2'일 때 새로운 JSON 데이터 URL
+                $.ajax({
+                    type: "POST",
+                    url: "/api/receive",
+                    data: JSON.stringify(finishData),
+                    contentType: "application/json",
+                    success: function(response) {
+                        alert("박스 포장 종료, 완재품 재고로 입고되었습니다.");
+                    },
+                    error: function(xhr, status, error) {
+                        alert("시간 저장 중 오류가 발생했습니다.");
+                    }
+                });
+            }
         } else {
-            jsonUrl = 'MOCK_DATA2.json'; // 기본적으로 사용할 JSON 데이터 URL
+            alert('하나의 행을 선택해야 합니다.');
         }
-
-        // DataTable 초기화 함수 호출
-        initializeDataTable(jsonUrl);
     });
 
-    // 페이지 로드 시 초기화
-    initializeDataTable('MOCK_DATA2.json'); // 초기에는 기본 데이터로 초기화
 });

@@ -1,14 +1,22 @@
 package com.codehows.zegozero.controller;
 
 import com.codehows.zegozero.dto.*;
+import com.codehows.zegozero.entity.Plan_equipment;
+import com.codehows.zegozero.entity.System_time;
 import com.codehows.zegozero.service.PlanEquipmentService;
+import com.codehows.zegozero.service.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 public class Plan_equipment_api_controller {
 
     private final PlanEquipmentService planEquipmentService;
+    private final TimeService timeService;
 
     // 설비 3 및 설비 4의 마지막 예상 출고 날짜 비교
     @GetMapping("/earliestEndDate")
@@ -134,6 +143,26 @@ public class Plan_equipment_api_controller {
     public ResponseEntity<Void> saveAllEquipmentPlans() {
         planEquipmentService.savePlanEquipments();
         return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/equipment/{equipmentId}")
+    public Map<String, Object> getTodayPlansByEquipment(@PathVariable int equipmentId ) {
+
+        LocalDate date = timeService.getDateTimeFromDB().getTime().toLocalDate();
+
+
+        Map<String, Object> equipmentPlanResponse = new HashMap<>();
+
+        // equipmentId와 date에 해당하는 계획을 조회하여 DTO로 매핑
+        List<Equipment_plan_date_Dto> equipmentPlans = planEquipmentService.getPlansByEquipmentIdAndDate(equipmentId, date)
+                .stream()
+                .map(Equipment_plan_date_Dto::new) // Entity를 DTO로 변환
+                .collect(Collectors.toList());
+
+        equipmentPlanResponse.put("data", equipmentPlans);
+
+        return equipmentPlanResponse;
     }
 
 

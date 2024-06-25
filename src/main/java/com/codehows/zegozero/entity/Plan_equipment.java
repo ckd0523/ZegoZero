@@ -26,9 +26,9 @@ public class Plan_equipment {
 
     private LocalDateTime estimated_end_date;
 
-    private Date start_date;
+    private LocalDateTime start_date;
 
-    private Date end_date;
+    private LocalDateTime end_date;
 
     private int input;
 

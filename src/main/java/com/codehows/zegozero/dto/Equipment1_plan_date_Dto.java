@@ -1,5 +1,6 @@
 package com.codehows.zegozero.dto;
 
+import com.codehows.zegozero.entity.Plan_equipment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class Equipment1_plan_date_Dto {
     private LocalDateTime estimatedEndDate;
     private int input;
     private int output;
+
 }

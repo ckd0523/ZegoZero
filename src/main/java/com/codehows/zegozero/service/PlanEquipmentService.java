@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -704,6 +706,14 @@ public class PlanEquipmentService {
 
         temporaryPlans.clear();
         Plans.clear();
+    }
+
+    // 창현 : 오늘에 따른 장비별 계획 조회
+    public List<Plan_equipment> getPlansByEquipmentIdAndDate(int equipmentId, LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+
+        return planEquipmentRepository.findPlansByEquipmentIdAndDate(equipmentId, startOfDay, endOfDay);
     }
 
 }

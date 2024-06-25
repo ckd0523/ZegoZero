@@ -43,7 +43,11 @@ public class OrderApiController {
             return ResponseEntity.badRequest().body("필요한 재고가 부족합니다.");
         }
 
-        finishedProductService.orderProductsave(Orderdata);
+        if (Orderdata.getUsed_inventory() > 0) {
+
+            finishedProductService.orderProductsave(Orderdata);
+
+        }
         orderService.save(Orderdata);
 
         // 원하는 작업 후 데이터를 담은 객체를 반환

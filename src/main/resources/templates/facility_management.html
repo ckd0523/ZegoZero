@@ -17,18 +17,18 @@
     <div class="row" style="height: 100px; margin-bottom: 10px;">
         <div class="col-6">
             <select id="equipmentSelect" style="padding: 5px; border: 1px solid #ccc; width: 100%; height: 100%;">
-                <option value="1">충진기1</option>
-                <option value="2">충진기2</option>
-                <option value="3">충진기3</option>
-                <option value="4">충진기4</option>
-                <option value="5">추출기1</option>
-                <option value="6">추출기2</option>
-                <option value="7">살균기1</option>
-                <option value="8">살균기2</option>
-                <option value="9">혼합기</option>
-                <option value="10">여과기</option>
-                <option value="11">box포장기</option>
-                <option value="12">금속검출기</option>
+                <option value="2">세척</option>
+                <option value="3">추출기1</option>
+                <option value="4">추출기2</option>
+                <option value="5">살균기1</option>
+                <option value="6">살균기2</option>
+                <option value="7">혼합기1</option>
+                <option value="8">혼합기2</option>
+                <option value="9">여과기</option>
+                <option value="10">충진기1,2(즙)</option>
+                <option value="11">충진기3, 4(젤리)</option>
+                <option value="12">Box포장기</option>
+                <option value="13">검사기</option>
             </select>
         </div>
         <div class="col-3" style="text-align: center; height: 100%; background-color: #00695C;">
@@ -44,12 +44,15 @@
                 <thead>
                 <tr>
                     <th>선택</th>
-                    <th>번호</th>
+                    <th>생산계획번호</th>
                     <th>품명</th>
-                    <th data-orderable="false">수량</th>
+                    <th data-orderable="false">투입량</th>
+                    <th data-orderable="false">산출예정량</th>
                     <th>시작 예정 시간</th>
                     <th>종료 예정 시간</th>
-                    <th>상태</th>
+                    <th>시작 시간</th>
+                    <th>종료 시간</th>
+<!--                    <th>상태</th>-->
                 </tr>
                 </thead>
                 <tbody>

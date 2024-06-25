@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,12 +25,17 @@ public class TimeService {
         System_time timeEntity = systemTimeRepository.findById(1L).orElse(null);
 
         if (timeEntity != null) {
-            // Date 형식을 HTML datetime-local 형식으로 변환
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            return formatter.format(timeEntity.getTime());
+            // LocalDateTime을 HTML datetime-local 형식으로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            return timeEntity.getTime().format(formatter);
         } else {
             return "No data found";
         }
+    }
+
+    public System_time getDateTimeFromDB() {
+        System_time timeEntity = systemTimeRepository.findById(1L).orElse(null);
+        return timeEntity;
     }
 
     public void saveOrUpdate(System_time_Dto systemTimeDto) {

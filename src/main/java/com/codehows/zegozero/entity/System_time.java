@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -19,7 +19,7 @@ public class System_time {
     private Long id;
 
     @Column(name = "time")
-    private Date time;
+    private LocalDateTime time;
 
 
 }

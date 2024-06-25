@@ -29,6 +29,7 @@ $(document).ready(function () {
             contentType: "application/json",
             success: function (response) {
                 alert("시간이 성공적으로 저장되었습니다.");
+                location.reload(); // 페이지 리로드
             },
             error: function (xhr, status, error) {
                 alert("시간 저장 중 오류가 발생했습니다.");

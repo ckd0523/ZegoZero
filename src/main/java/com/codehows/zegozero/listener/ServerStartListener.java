@@ -9,6 +9,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -22,13 +23,9 @@ public class ServerStartListener {
 
     @EventListener(ApplicationReadyEvent.class)
     public void logServerStartTime() {
-
-
-        if(timeService.getTimeFromDB() == null) {
-            System_time serverStartTime = new System_time();
-            serverStartTime.setTime(new Date());
-            serverStartTimeRepository.save(serverStartTime);
-            System.out.println("서버 시작 시간: " + serverStartTime.getTime());
-        }
+        System_time serverStartTime = new System_time();
+        serverStartTime.setTime(LocalDateTime.now()); // 현재 시간을 LocalDateTime으로 설정
+        serverStartTimeRepository.save(serverStartTime);
+        System.out.println("서버 시작 시간: " + serverStartTime.getTime());
     }
 }
