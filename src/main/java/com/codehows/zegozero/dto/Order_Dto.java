@@ -32,7 +32,7 @@ public class Order_Dto {
 
     private int production_quantity;
 
-    private Date order_date;
+    private LocalDateTime order_date;
 
     private LocalDateTime expected_shipping_date;
 
@@ -44,7 +44,7 @@ public class Order_Dto {
     @Size(min = 1, message = "배송지를 입력해주세요.")
     private String delivery_address;
 
-    private Date shipping_date;
+    private LocalDateTime shipping_date;
 
     private Boolean deletable;
 
@@ -52,7 +52,7 @@ public class Order_Dto {
 
     public Order_Dto(Orders orders) {
 
-        this.order_id = orders.getOrder_id();
+        this.order_id = orders.getOrderId();
         this.product_name = orders.getProduct_name();
         this.quantity = orders.getQuantity();
         this.used_inventory = orders.getUsed_inventory();

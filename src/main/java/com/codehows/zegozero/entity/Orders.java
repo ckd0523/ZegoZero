@@ -1,9 +1,7 @@
 package com.codehows.zegozero.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -13,12 +11,13 @@ import java.util.Date;
 @Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Orders {
 
     @Id
     @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int order_id;
+    private int orderId;
 
     private String product_name;
 
@@ -28,7 +27,7 @@ public class Orders {
 
     private int production_quantity;
 
-    private Date order_date;
+    private LocalDateTime order_date;
 
     private LocalDateTime expected_shipping_date;
 
@@ -36,7 +35,7 @@ public class Orders {
 
     private String delivery_address;
 
-    private Date shipping_date;
+    private LocalDateTime shipping_date;
 
     private Boolean deletable;
 
@@ -46,4 +45,20 @@ public class Orders {
     @JoinColumn(name="plan")
     private Plans plan;
 
+    //원자재 발주 여부 추가.
+    private Boolean ordered;
+
+    @Builder
+    public Orders(int orderId,String product_name,int quantity,
+                  int used_inventory,int production_quantity,LocalDateTime order_date,LocalDateTime expected_shipping_date,
+                    String customer_name,String delivery_address, Boolean deletable) {
+        this. orderId= orderId;
+        this.product_name = product_name;
+        this.used_inventory = used_inventory;
+        this.order_date = order_date;
+        this.expected_shipping_date = expected_shipping_date;
+        this.customer_name = customer_name;
+        this.delivery_address = delivery_address;
+        this.deletable = deletable;
+    }
 }

@@ -14,13 +14,11 @@
     <table id="example" class="display" style="width:100%">
         <thead>
         <tr>
-            <th>선택</th>
             <th>수주 번호</th>
             <th>발주 번호</th>
             <th>원자재</th>
             <th>주문량</th>
             <th>주문일</th>
-            <th>배송 완료일</th>
             <th>배송 상태</th>
         </tr>
         </thead>
@@ -30,11 +28,11 @@
 </div>
 <div class="container mt-3">
     <div class="row justify-content-end">
+<!--        <div class="col-auto">-->
+<!--            <button id="deleteSelected" class="btn btn-danger mt-0">선택된 항목 삭제</button>-->
+<!--        </div>-->
         <div class="col-auto">
-            <button id="deleteSelected" class="btn btn-danger mt-0">선택된 항목 삭제</button>
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-primary ms-2" type="button">배송 완료</button>
+            <button class="btn btn-primary ms-2" type="button" id="deliveryOk">배송 완료</button>
         </div>
         <div class="col-auto">
             <button class="btn btn-primary ms-2" type="button" id="openRegistrationPopup">발주 계획 조회</button>
@@ -49,7 +47,7 @@
             <!-- 제목을 포함하는 그리드 -->
             <div class="row mb-3">
                 <div class="col">
-                    <h1 class="text-center mt-5 mb-4">발주 등록</h1>
+                    <h1 class="text-center mt-5 mb-4">발주 계획</h1>
                 </div>
             </div>
 
@@ -80,7 +78,6 @@
                     <table id="example1" class="table table-bordered display" style="width:100%">
                         <thead>
                         <tr>
-                            <th>선택</th>
                             <th>수주 번호</th>
                             <th>제품명</th>
                             <th>생산 수량(box)</th>
@@ -88,36 +85,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                        </tr>
-                        <!-- 다른 행들도 필요에 따라 추가 -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
         <div class="popupbtnarea">
-            <button id="openConfirmationPopup" class="closepopupbtn btn-primary">수주등록</button>
-            <button class="closepopupbtn btn-danger" onclick="closePopup('registrationPopup')">취소</button>
+            <button id="openConfirmationPopup" class="closepopupbtn btn-primary">발주</button>
+            <button id="cancel" class="closepopupbtn btn-danger" >취소</button>
         </div>
     </div>
 </div>
@@ -129,7 +104,7 @@
             <!-- 제목을 포함하는 그리드 -->
             <div class="row mb-3">
                 <div class="col">
-                    <h1 class="text-center mt-5 mb-4">발주 계획</h1>
+                    <h1 class="text-center mt-5 mb-4">발주 등록</h1>
                 </div>
             </div>
 
@@ -166,55 +141,41 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <!-- 코드 계속 -->
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                        </tr>
-                        <!-- 다른 행들도 필요에 따라 추가 -->
+                            <!-- 다른 행들도 필요에 따라 추가 -->
                         </tbody>
                     </table>
                 </div>
-                <div class="col">
-                    <table id="example3" class="table table-bordered display" style="width:100%">
-                        <thead>
-                        <tr>
-                            <th>원자재명</th>
-                            <th>원자재량</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>Tiger Nixon</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>Tiger Nixon</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>Tiger Nixon</td>
-                        </tr>
-                        <!-- 다른 행들도 필요에 따라 추가 -->
-                        </tbody>
-                    </table>
-                </div>
+<!--                <div class="col">-->
+<!--                    <table id="example3" class="table table-bordered display" style="width:100%">-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th>수주번호</th>-->
+<!--                            <th>원자재</th>-->
+<!--                            <th>주문 수량</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+
+
+<!--                </div>-->
             </div>
         </div>
+
+        <table id="example4" class="table table-bordered display" style="width:100%">
+            <thead>
+            <tr>
+                <th>수주 번호</th>
+                <th>주문할 원자재</th>
+                <th>수량</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
         <div class="popupbtnarea">
-            <button class="closepopupbtn btn-primary" onclick="closePopup('confirmationPopup')">닫기</button>
+            <button class="closepopupbtn btn-primary" id="regist" >등록하기</button>
         </div>
     </div>
 </div>
@@ -223,6 +184,9 @@
 <!-- 공통 cdn.js 포함 -->
 <th:block th:replace="header :: footer"></th:block>
 <script src="/js/material_order_management.js"></script>
+<script>
+
+</script>
 </body>
 </html>
 

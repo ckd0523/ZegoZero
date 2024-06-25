@@ -18,4 +18,10 @@ public interface OrdersRepository  extends JpaRepository<Orders, Integer> {
     @Query("SELECT o FROM Orders o WHERE o.shipping_date IS NOT NULL")
     List<Orders> findAllByShippingDateIsNotNull();
 
+
+    List<Orders> findByDeletable(Boolean deletable);
+//    List<Orders> findAllByOrderIdIn(List<Integer> orderIds);
+
+    Orders findByOrderId(Integer orderId);
+
 }

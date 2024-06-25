@@ -2,16 +2,17 @@ package com.codehows.zegozero.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Data
 @Table(name = "purchase_matarial")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Purchase_matarial {
 
     @Id
@@ -23,14 +24,28 @@ public class Purchase_matarial {
 
     private int order_quantity;
 
-    private Date purchase_date;
+    private LocalDateTime purchase_date;
 
-    private Date delivery_completion_date;
+    private LocalDateTime delivery_completion_date;
 
-    private String delivery_status = "배송중";
+    private String delivery_status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="order_id")
     private Orders order_id;
+
+
+    @Builder
+    public Purchase_matarial( int purchase_matarial_id, String raw_material, int order_quantity,
+                              LocalDateTime purchase_date,LocalDateTime delivery_completion_date,String delivery_status,
+                              Orders order_id){
+        this.purchase_matarial_id = purchase_matarial_id;
+        this.raw_material = raw_material;
+        this.order_quantity = order_quantity;
+        this.purchase_date = purchase_date;
+        this.delivery_completion_date = delivery_completion_date;
+        this.delivery_status = delivery_status;
+        this.order_id = order_id;
+    }
 
 }
