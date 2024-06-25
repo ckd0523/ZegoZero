@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,247 @@ public class PlanEquipmentService {
 
     // 설비별 Dto를 담을 리스트
     private final List<Plan_equipment> temporaryPlans = new CopyOnWriteArrayList<>();
+
+    // 설비별 Dto를 담을 리스트
+    private final List<Plan_equipment> temporaryPlans2 = new CopyOnWriteArrayList<>();
+
+    // 젤리 계획 잡기
+    public void zeliPlan(String productName, int input7) {
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime estimatedStartDate7;
+        LocalDateTime estimatedEndDate7;
+        LocalDateTime id1StartTime;
+
+        // 설비 시작 시간에 따라 계산
+        if (currentDateTime.getHour() < 15) {
+            estimatedStartDate7 = currentDateTime.plusDays(3).withHour(9).truncatedTo(ChronoUnit.HOURS);
+        } else {
+            estimatedStartDate7 = currentDateTime.plusDays(4).withHour(9).truncatedTo(ChronoUnit.HOURS);
+        }
+
+        List<Plan_equipment> existingPlans7 = planEquipmentRepository.findAllByEquipmentEquipmentId(7);
+
+        LocalDateTime adjustedStartTime7 = adjustStartTime7(estimatedStartDate7, existingPlans7);
+
+        // 가동시간 8시간 추가
+        estimatedEndDate7 = adjustedStartTime7.plusHours(8);
+
+        int output7 = input7 * 25 * 10;
+
+        // 혼합기 계획 저장
+        Equipment equipment7 = new Equipment();
+        equipment7.setEquipment_id(7);
+
+        Plan_equipment plan7 = new Plan_equipment();
+        plan7.setEquipment(equipment7);
+        plan7.setEstimated_start_date(adjustedStartTime7);
+        plan7.setEstimated_end_date(estimatedEndDate7);
+        plan7.setInput(input7);
+        plan7.setOutput(output7);
+        temporaryPlans2.add(plan7);
+
+        // 발주 계획 생성
+        if (adjustedStartTime7.getHour() > 9 || adjustedStartTime7.getHour() == 9) {
+            id1StartTime = adjustedStartTime7.minusDays(3).withHour(15).truncatedTo(ChronoUnit.HOURS);
+        } else {
+            id1StartTime = adjustedStartTime7.minusDays(4).withHour(15).truncatedTo(ChronoUnit.HOURS);
+        }
+
+        // 발주 계획 저장
+        Equipment equipment1 = new Equipment();
+        equipment1.setEquipment_id(1);
+
+        Plan_equipment plan1 = new Plan_equipment();
+        plan1.setEquipment(equipment1);
+        plan1.setEstimated_start_date(id1StartTime);
+        plan1.setEstimated_end_date(id1StartTime.plusDays(3).withHour(9).truncatedTo(ChronoUnit.HOURS));
+        plan1.setInput(0);
+        plan1.setOutput(input7*125);
+        temporaryPlans2.add(plan1);
+        
+        // 살균기 설비 계획
+        LocalDateTime id56EndDate = estimatedEndDate7;
+        int id56Input = output7;
+
+        // 설비 5와 설비 6의 기존 계획들을 가져옴
+        List<Plan_equipment> existingPlans5 = planEquipmentRepository.findAllByEquipmentEquipmentId(5);
+        List<Plan_equipment> existingPlans6 = planEquipmentRepository.findAllByEquipmentEquipmentId(6);
+
+        // 설비 5와 6의 계획을 겹치지 않도록 조정하고 선택
+        LocalDateTime adjustedStartTime5 = id56StartTime(id56EndDate, existingPlans5);
+        LocalDateTime adjustedStartTime6 = id56StartTime(id56EndDate, existingPlans6);
+
+        LocalDateTime selectedStartTime;
+        int selectedEquipmentId;
+
+        // 설비5와 6의 계획을 검토하여 가장 빠른 가능 시간을 선택
+        if (adjustedStartTime5.isBefore(adjustedStartTime6)) {
+            selectedStartTime = adjustedStartTime5;
+            selectedEquipmentId = 5;
+        } else {
+            selectedStartTime = adjustedStartTime6;
+            selectedEquipmentId = 6;
+        }
+
+        if (selectedEquipmentId == 5) {
+
+            Equipment equipment5 = new Equipment();
+            equipment5.setEquipment_id(selectedEquipmentId);
+
+            Plan_equipment plan5 = new Plan_equipment();
+            plan5.setEquipment(equipment5);
+            plan5.setEstimated_start_date(selectedStartTime);
+            plan5.setEstimated_end_date(selectedStartTime.plusHours(2));
+            plan5.setInput(id56Input);
+            plan5.setOutput(id56Input);
+            temporaryPlans2.add(plan5);
+
+        } else {
+
+            Equipment equipment6 = new Equipment();
+            equipment6.setEquipment_id(selectedEquipmentId);
+
+            Plan_equipment plan6 = new Plan_equipment();
+            plan6.setEquipment(equipment6);
+            plan6.setEstimated_start_date(selectedStartTime);
+            plan6.setEstimated_end_date(selectedStartTime.plusHours(2));
+            plan6.setInput(id56Input);
+            plan6.setOutput(id56Input);
+            temporaryPlans2.add(plan6);
+
+        }
+
+        // 충진기3,4(젤리) 계획 생성
+        LocalDateTime id11StartDate = selectedStartTime.plusHours(2);
+        int id11Input = id56Input;
+        // 투입량을 1시간에 4000개 처리할 수 있는 경우, 끝나는 시간 계산 (10분 단위로 올림)
+        int processingRatePerHour = 4000;
+        int totalProcessingTimeMinutes = (int) Math.ceil((double) id11Input / processingRatePerHour * 60 / 10) * 10;
+        LocalDateTime id11EndDate = id11StartDate.plusMinutes(totalProcessingTimeMinutes);
+
+        // 산출량 계산
+        double defectRate = 0.01 + (0.03 - 0.01) * Math.random(); // 1~3% 랜덤 불량률
+        int id11Output = (int) Math.floor((id11Input / 10) * (1 - defectRate));
+
+        // 충진기3,4(젤리) 계획 저장
+        Equipment equipment11 = new Equipment();
+        equipment11.setEquipment_id(11);
+
+        Plan_equipment plan11 = new Plan_equipment();
+        plan11.setEquipment(equipment11);
+        plan11.setEstimated_start_date(id11StartDate);
+        plan11.setEstimated_end_date(id11EndDate);
+        plan11.setInput(id56Input);
+        plan11.setOutput(id11Output);
+        temporaryPlans2.add(plan11);
+
+        // 냉각 공정 계획 저장
+        Equipment equipment8 = new Equipment();
+        equipment8.setEquipment_id(8);
+
+        Plan_equipment plan8 = new Plan_equipment();
+        plan8.setEquipment(equipment8);
+        plan8.setEstimated_start_date(id11EndDate);
+        plan8.setEstimated_end_date(id11EndDate.plusHours(8));
+        plan8.setInput(id11Output);
+        plan8.setOutput(id11Output);
+        temporaryPlans2.add(plan8);
+
+        // 검사기 계획 생성
+        LocalDateTime id13StartDate = id11EndDate.plusHours(8);
+        int id13Input = id11Output;
+
+        // 설비13 계획을 가져옴
+        List<Plan_equipment> existingPlans = planEquipmentRepository.findAllByEquipmentEquipmentId(13);
+
+        // 겹치지 않도록 시작 시간을 조정
+        LocalDateTime adjustedStartTime = id13StartTime(id13StartDate, id13Input, existingPlans);
+
+        // 처리 시간을 분 단위로 계산
+        double processingTimeInHours = (double) id13Input / 5000;
+        long processingTimeInMinutes = (long) Math.ceil(processingTimeInHours * 60);
+
+        // 종료 시간 계산
+        LocalDateTime id13EndDate = adjustedStartTime.plusMinutes(processingTimeInMinutes);
+
+        // 종료 시간을 10분 단위로 올림
+        id13EndDate = roundUpToNearest10Minutes(id13EndDate);
+
+        // 검사기 계획 저장
+        Equipment equipment13 = new Equipment();
+        equipment13.setEquipment_id(13);
+
+        Plan_equipment plan13 = new Plan_equipment();
+        plan13.setEquipment(equipment13);
+        plan13.setEstimated_start_date(adjustedStartTime);
+        plan13.setEstimated_end_date(id13EndDate);
+        plan13.setInput(id13Input);
+        plan13.setOutput(id13Input);
+        temporaryPlans2.add(plan13);
+
+        // Box 포장기 계획 생성
+        LocalDateTime id12StartDate = id13EndDate;
+        int id12Input = id13Input;
+
+        // 박스 수 계산 (나머지는 버림)
+        int boxes = id12Input / 25;
+
+        // 필요한 가동 시간 계산 (시간과 분으로 분리)
+        int processingHours = (int) Math.floor(boxes / 160);  // 시간
+        int processingMinutes = (int) Math.ceil((boxes % 160) * 60.0 / 160);  // 분
+
+        // 이미 계획된 설비 12의 계획들을 가져옴
+        List<Plan_equipment> existing12Plans = planEquipmentRepository.findAllByEquipmentEquipmentId(12);
+
+        // 겹치지 않도록 시작 시간을 조정
+        LocalDateTime adjusted12StartTime = adjustStartTimeForEquipment12(id12StartDate, existing12Plans, processingHours, processingMinutes);
+
+        // 종료시간 계산
+        LocalDateTime endTime = adjusted12StartTime.plusHours(processingHours).plusMinutes(processingMinutes);
+
+        // 종료 시간을 10분 단위로 올림
+        endTime = roundUpToNearest10Minutes(endTime);
+
+        // 포장기 계획 저장
+        Equipment equipment12 = new Equipment();
+        equipment12.setEquipment_id(12);
+
+        Plan_equipment plan12 = new Plan_equipment();
+        plan12.setEquipment(equipment12);
+        plan12.setEstimated_start_date(adjusted12StartTime);
+        plan12.setEstimated_end_date(endTime);
+        plan12.setInput(id12Input);
+        plan12.setOutput(boxes);
+        temporaryPlans2.add(plan12);
+
+        // 생산계획 dto 저장
+        Plans newplan = new Plans();
+        newplan.setProduct_name(productName);
+        newplan.setPlanned_quantity(input7);
+        newplan.setStatus("planned");
+        newplan.setStart_date(id1StartTime);
+        newplan.setCompletion_date(endTime);
+        Plans.add(newplan);
+
+    }
+
+    // 설비7기존 계획과 겹치지 않도록 시작 시간을 조정하는 메서드
+    private LocalDateTime adjustStartTime7(LocalDateTime proposedStartTime, List<Plan_equipment> existingPlans) {
+        LocalDateTime adjustedTime = proposedStartTime;
+
+        for (Plan_equipment plan : existingPlans) {
+            LocalDateTime existingStart = plan.getEstimated_start_date();
+            LocalDateTime existingEnd = plan.getEstimated_end_date();
+
+            // 겹치는 경우
+            if (adjustedTime.isBefore(existingEnd) && adjustedTime.plusHours(8).plusHours(1).isAfter(existingStart)) {
+                adjustedTime = existingEnd.plusHours(1); // 기존 계획의 종료 시간 이후로 조정
+            }
+        }
+
+        return adjustedTime;
+    }
 
     // 설비3 및 설비4의 마지막 예상 출고 날짜 비교
     @Transactional(readOnly = true)
@@ -449,7 +691,7 @@ public class PlanEquipmentService {
         LocalDateTime adjustedStartTime = id10StartTime(id10StartDate, id10Input, existingPlans);
 
         // 처리 시간을 분 단위로 계산
-        double processingTimeInHours = (double) (id10Input / 10) / 4000;
+        double processingTimeInHours = (double) (id10Input / 10) / 2500;
         long processingTimeInMinutes = (long) Math.ceil(processingTimeInHours * 60);
 
         // 종료 시간 계산
@@ -696,6 +938,24 @@ public class PlanEquipmentService {
         temporaryPlans.clear(); // 저장 후 임시 리스트 초기화
     }
 
+    // 데이터베이스에 임시 계획을 한꺼번에 저장하는 메서드
+    @Transactional
+    public void savePlanEquipments2() {
+        int maxPlanId = getMaxPlanId(); // 최대 Plan ID를 가져옴
+
+        for (Plan_equipment plan2 : temporaryPlans2) {
+            Plans plans = new Plans();
+            plans.setPlan_id(maxPlanId); // 설정할 Plan ID
+            plan2.setPlan(plans); // Plan_equipment 객체의 Plans에 plan_id 설정
+        }
+
+        planEquipmentRepository.saveAll(temporaryPlans2);
+
+        // 저장 후에 임시 리스트 비우기
+        temporaryPlans2.clear();
+    }
+
+    // 생산계획 가장 높은 id 값 가져오기
     public int getMaxPlanId() {
         Integer maxPlanId = plansRepository.getMaxPlanId();
         return maxPlanId != null ? maxPlanId : 0; // null 체크 후 처리

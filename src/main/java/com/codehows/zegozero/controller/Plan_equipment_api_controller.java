@@ -45,6 +45,19 @@ public class Plan_equipment_api_controller {
         }
     }
 
+    // 젤리 계획 잡기
+    @GetMapping("/zeliPlan")
+    public ResponseEntity<Void> zeliPlan(
+            @RequestParam String productName,
+            @RequestParam int input){
+
+        planEquipmentService.clearTemporaryPlans();
+
+        planEquipmentService.zeliPlan(productName, input);
+
+        return ResponseEntity.ok().build();
+    }
+
     // 설비2 계획 잡기
     @GetMapping("/id2Plan")
     public ResponseEntity<Equipment2_plan_date_Dto> id2Plan(
@@ -142,6 +155,12 @@ public class Plan_equipment_api_controller {
     @PostMapping("/saveAllEquipmentPlans")
     public ResponseEntity<Void> saveAllEquipmentPlans() {
         planEquipmentService.savePlanEquipments();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/saveAllEquipmentPlans2")
+    public ResponseEntity<Void> saveAllEquipmentPlans2() {
+        planEquipmentService.savePlanEquipments2();
         return ResponseEntity.ok().build();
     }
 

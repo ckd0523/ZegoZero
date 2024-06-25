@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-    var productName = $('#productName').val();
-
     // 주문수량, 재고사용을 바꿀때마다 작동
     $('#productName, #orderQuantity, #stockUsage').on('input change', function () {
         calculateExpectedShipmentDate();
@@ -12,33 +10,115 @@ $(document).ready(function () {
         if (window.productionPlans) {
             var newPlan = window.productionPlans.newPlan;
             var totalProductionQuantity = window.productionPlans.totalProductionQuantity;
+            var productName = window.productionPlans.productName;
 
-            if(newPlan == 1){
-                id34Plan(productName, 3, 4, totalProductionQuantity);
-            }else if(newPlan == 2){
-                id34Plan(productName, 3, 4, 333);
-                setTimeout(function() {
+            if(productName == "양배추즙" || productName == "흑마늘즙"){
+                if(newPlan == 1){
                     id34Plan(productName, 3, 4, totalProductionQuantity);
-                }, 500); // 0.5초(500밀리초) 후에 호출
-            }else if(newPlan == 3){
-                id34Plan(productName, 3, 4, 333);
-                setTimeout(function() {
+                }else if(newPlan == 2){
                     id34Plan(productName, 3, 4, 333);
-                }, 500); // 0.5초(500밀리초) 후에 호출
-                setTimeout(function() {
-                    id34Plan(productName, 3, 4, totalProductionQuantity);
-                }, 1000); // 1초(1000밀리초) 후에 호출
-            }else if(newPlan == 4){
-                id34Plan(productName, 3, 4, 333);
-                setTimeout(function() {
+                    setTimeout(function() {
+                        id34Plan(productName, 3, 4, totalProductionQuantity);
+                    }, 500);
+                }else if(newPlan == 3){
                     id34Plan(productName, 3, 4, 333);
-                }, 500); // 0.5초(500밀리초) 후에 호출
-                setTimeout(function() {
+                    setTimeout(function() {
+                        id34Plan(productName, 3, 4, 333);
+                    }, 500);
+                    setTimeout(function() {
+                        id34Plan(productName, 3, 4, totalProductionQuantity);
+                    }, 1000);
+                }else if(newPlan == 4){
                     id34Plan(productName, 3, 4, 333);
-                }, 1000); // 1초(1000밀리초) 후에 호출
-                setTimeout(function() {
-                    id34Plan(productName, 3, 4, totalProductionQuantity);
-                }, 1500); // 1.5초(1500밀리초) 후에 호출
+                    setTimeout(function() {
+                        id34Plan(productName, 3, 4, 333);
+                    }, 500);
+                    setTimeout(function() {
+                        id34Plan(productName, 3, 4, 333);
+                    }, 1000);
+                    setTimeout(function() {
+                        id34Plan(productName, 3, 4, totalProductionQuantity);
+                    }, 1500);
+                }
+            }else {
+                if (newPlan == 1) {
+                    zeliPlan(productName, totalProductionQuantity);
+                } else if (newPlan == 2) {
+                    zeliPlan(productName, 160);
+                    setTimeout(function () {
+                        zeliPlan(productName, totalProductionQuantity);
+                    }, 500);
+                } else if (newPlan == 3) {
+                    zeliPlan(productName, 160);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 500);
+                    zeliPlan(function () {
+                        zeliPlan(productName, totalProductionQuantity);
+                    }, 1000);
+                } else if (newPlan == 4) {
+                    zeliPlan(productName, 160);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 500);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 1000);
+                    setTimeout(function () {
+                        zeliPlan(productName, totalProductionQuantity);
+                    }, 1500);
+                } else if (newPlan == 5) {
+                    zeliPlan(productName, 160);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 400);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 800);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 1200);
+                    setTimeout(function () {
+                        zeliPlan(productName, totalProductionQuantity);
+                    }, 1600);
+                } else if (newPlan == 6) {
+                    zeliPlan(productName, 160);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 300);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 600);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 900);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 1200);
+                    setTimeout(function () {
+                        zeliPlan(productName, totalProductionQuantity);
+                    }, 1500);
+                } else if (newPlan == 7) {
+                    zeliPlan(productName, 160);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 250);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 500);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 750);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 1000);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 1250);
+                    setTimeout(function () {
+                        zeliPlan(productName, totalProductionQuantity);
+                    }, 1500);
+                }
             }
         }
     });
@@ -47,7 +127,9 @@ $(document).ready(function () {
         var orderQuantity = parseInt($('#orderQuantity').val()) || 0; // 숫자로 파싱하며, 실패할 경우 0으로 설정
         var stockUsage = parseInt($('#stockUsage').val()) || 0; // 숫자로 파싱하며, 실패할 경우 0으로 설정
         var productionQuantity = Math.ceil((orderQuantity - stockUsage) * 1.031); // 1.031을 곱해서 올림 처리
+        var productName = $('#productName').val();
 
+        console.log(productName);
 
         if (!isNaN(productionQuantity)) {
             $.ajax({
@@ -70,7 +152,8 @@ $(document).ready(function () {
                     // 생산계획을 saveNewPlan 함수 내에서 처리할 수 있도록 전역 변수로 설정
                     window.productionPlans = {
                         newPlan: newPlan,
-                        totalProductionQuantity: totalProductionQuantity
+                        totalProductionQuantity: totalProductionQuantity,
+                        productName: productName
                     };
                 },
                 error: function (xhr, status, error) {
@@ -130,6 +213,25 @@ $(document).ready(function () {
                 console.error('에러 발생:', error);
             }
         });
+    }
+
+    // 혼합기 계획 잡기
+    function zeliPlan(productName, zeliInput){
+        $.ajax({
+            url: '/api/zeliPlan',
+            type: 'GET',
+            data: {
+                productName: productName,
+                input: zeliInput
+            },
+            success: function (data) {
+                saveNewPlan2();
+            },
+            error: function (xhr, status, error) {
+                console.error('에러 발생:', error);
+            }
+        });
+
     }
 
     // 세척 계획 잡기
@@ -409,8 +511,8 @@ $(document).ready(function () {
         var koreanTime = new Date(date.getTime() + (9 * 60 * 60 * 1000)); // 9시간을 밀리초로 계산하여 더함
         return koreanTime.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
     }
-
-
+    
+    // 즙 생산계획 저장
     function saveNewPlan() {
         $.ajax({
             url: '/api/saveNewPlan',
@@ -425,9 +527,39 @@ $(document).ready(function () {
         });
     }
 
+    // 즙 설비계획 저장
     function saveAllEquipmentPlans() {
         $.ajax({
             url: '/api/saveAllEquipmentPlans',
+            type: 'POST',
+            success: function () {
+                console.log("설비계획이 성공적으로 저장되었습니다.");
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    // 스틱 생산계획 저장
+    function saveNewPlan2() {
+        $.ajax({
+            url: '/api/saveNewPlan',
+            type: 'POST',
+            success: function () {
+                console.log("생산계획이 성공적으로 저장되었습니다.");
+                saveAllEquipmentPlans2();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    // 스틱 설비계획 저장
+    function saveAllEquipmentPlans2() {
+        $.ajax({
+            url: '/api/saveAllEquipmentPlans2',
             type: 'POST',
             success: function () {
                 console.log("설비계획이 성공적으로 저장되었습니다.");

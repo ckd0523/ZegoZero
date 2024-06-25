@@ -24,30 +24,8 @@ public class PlanService {
     // 제품명과 제작수량을 받아서 새로운 계획을 만들지 기존 계획에 추가할지 판단
     @Transactional(readOnly = true)
     public int[] calculateProductionQuantity(String productName, int productionQuantity) {
-        PageRequest pageRequest = PageRequest.of(0, 1); // 첫 번째 페이지의 하나의 항목만 가져옴
-        Plans latestPlan = plansRepository.findLatestPlanByProductName(productName, pageRequest).getContent().stream().findFirst().orElse(null);
 
-        if (latestPlan != null) {
-            totalProductionQuantity = productionQuantity;
-
-            // 기존 생산계획에 추가할 수 있는지 판단
-            if (totalProductionQuantity > 333) {
-                totalProductionQuantity = productionQuantity;
-                numberOfPlans = 1;
-                // 새로 만들어야할 계획 수
-                while (totalProductionQuantity > 333) {
-                    totalProductionQuantity -= 333;
-                    numberOfPlans++;
-                }
-
-                result[0] = numberOfPlans;
-                result[1] = totalProductionQuantity;
-            } else {
-                numberOfPlans = 1;
-                result[0] = numberOfPlans;
-                result[1] = totalProductionQuantity;
-            }
-        } else {
+        if(productName.equals("양배추즙")||productName.equals("흑마늘즙")){
             totalProductionQuantity = productionQuantity;
             numberOfPlans = 1;
             // 새로 만들어야할 계획 수
@@ -58,8 +36,23 @@ public class PlanService {
 
             result[0] = numberOfPlans;
             result[1] = totalProductionQuantity;
-        }
 
-        return result;
+            return result;
+        }else {
+
+            totalProductionQuantity = productionQuantity;
+            numberOfPlans = 1;
+            // 새로 만들어야할 계획 수
+            while (totalProductionQuantity > 160) {
+                totalProductionQuantity -= 160;
+                numberOfPlans++;
+            }
+
+            result[0] = numberOfPlans;
+            result[1] = totalProductionQuantity;
+
+            return result;
+        }
     }
+
 }
