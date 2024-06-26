@@ -55,6 +55,26 @@ $(document).ready(function() {
         ]
     });
 
+    // 페이지가 로드될 때 API를 호출하여 데이터를 가져옵니다.
+    $.ajax({
+        url: '/api/getPackagingData',
+        type: 'GET',
+        success: function(data) {
+            // 데이터가 성공적으로 반환되면 테이블에 데이터를 삽입합니다.
+            var tbody = $('#box tbody');
+            tbody.empty(); // 기존 데이터를 지웁니다.
+
+            var row = '<tr>' +
+                '<td>' + data.packaging + '</td>' +
+                '<td>' + data.box + '</td>' +
+                '</tr>';
+            tbody.append(row);
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+
 
     //발주 계획 조회 버튼 클릭
     $('#openRegistrationPopup').click(function () {
@@ -155,6 +175,26 @@ $(document).ready(function() {
 
     //발주버튼 클릭 이벤트
     $("#openConfirmationPopup").click(function () {
+
+        // 페이지가 로드될 때 API를 호출하여 데이터를 가져옵니다.
+        $.ajax({
+            url: '/api/getPackagingData',
+            type: 'GET',
+            success: function(data) {
+                // 데이터가 성공적으로 반환되면 테이블에 데이터를 삽입합니다.
+                var tbody = $('#box2 tbody');
+                tbody.empty(); // 기존 데이터를 지웁니다.
+
+                var row = '<tr>' +
+                    '<td>' + data.packaging + '</td>' +
+                    '<td>' + data.box + '</td>' +
+                    '</tr>';
+                tbody.append(row);
+            },
+            error: function(error) {
+                console.error('Error fetching data:', error);
+            }
+        });
 
         //선택된 행의 데이터를 배열형태로 저장/
         //forEach함수 사용을 위해 배열형대로 변환
@@ -302,8 +342,8 @@ $(document).ready(function() {
                 console.log("양배추즙")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var cabbageRequired = production_quantity * CABBAGEorGarlic_PER_JUICE;
-                var honeyRequired = production_quantity * HONEY_PER_JUICE
+                var cabbageRequired = Math.floor(production_quantity * CABBAGEorGarlic_PER_JUICE);
+                var honeyRequired = Math.floor(production_quantity * HONEY_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
@@ -328,8 +368,8 @@ $(document).ready(function() {
                 console.log("흑마늘즙")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var garlicRequired = production_quantity * CABBAGEorGarlic_PER_JUICE;
-                var honeyRequired2 = production_quantity * HONEY_PER_JUICE
+                var garlicRequired = Math.floor(production_quantity * CABBAGEorGarlic_PER_JUICE);
+                var honeyRequired2 = Math.floor(production_quantity * HONEY_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
@@ -354,8 +394,8 @@ $(document).ready(function() {
                 console.log("석류젤리")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var pomegranateJelly = production_quantity * PER_JUICE;
-                var collagenRequired = production_quantity * COLAGEN_PER_JUICE
+                var pomegranateJelly = Math.floor(production_quantity * PER_JUICE);
+                var collagenRequired = Math.floor(production_quantity * COLAGEN_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
@@ -378,8 +418,8 @@ $(document).ready(function() {
                 console.log("매실젤리")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var plumJelly = production_quantity * PER_JUICE;
-                var collagenRequired2 = production_quantity * COLAGEN_PER_JUICE
+                var plumJelly = Math.floor(production_quantity * PER_JUICE);
+                var collagenRequired2 = Math.floor(production_quantity * COLAGEN_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
@@ -413,7 +453,19 @@ $(document).ready(function() {
                 columns: [
                     {data: 'order_id'},
                     {data: 'raw_material'},
-                    {data: 'order_quantity'},
+                    {
+                        data: 'order_quantity',
+                        render: function(data, type, row) {
+                            // raw_material에 따라 단위를 설정
+                            var unit = '';
+                            if (row.raw_material === '양배추' || row.raw_material === '흑마늘') {
+                                unit = 'kg';
+                            } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀') {
+                                unit = 'ml';
+                            }
+                            return data + ' ' + unit; // 단위를 포함하여 반환
+                        }
+                    },
                 ],
 
             })

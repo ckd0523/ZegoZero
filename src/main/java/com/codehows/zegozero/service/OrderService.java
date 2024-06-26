@@ -1,9 +1,6 @@
 package com.codehows.zegozero.service;
 
-import com.codehows.zegozero.dto.Finished_product_management_Dto;
-import com.codehows.zegozero.dto.Order_Dto;
-import com.codehows.zegozero.dto.Shipment_management_dto;
-import com.codehows.zegozero.dto.savePurchaseMaterial_Dto;
+import com.codehows.zegozero.dto.*;
 import com.codehows.zegozero.entity.Material_details;
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Purchase_matarial;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +26,7 @@ public class OrderService {
     private final OrdersRepository ordersRepository;
     private final PurchaseMatarialRepository purchaseMatarialRepository;
     private final MaterialDetailsRepository materialDetailsRepository;
+
     private final TimeService timeService;
     private final PlanService planService;
     private final PlansRepository plansRepository;
@@ -118,15 +117,14 @@ public class OrderService {
 
     }
 
-    public List<Orders> findByDeletable(Boolean deletable){
+    public List<Orders> findByDeletable(Boolean deletable) {
         return ordersRepository.findByDeletable(deletable);
     }
 
-    public List<Purchase_matarial> findByDelivery_status(String deliveryStatus){
+    public List<Purchase_matarial> findByDelivery_status(String deliveryStatus) {
 
         return purchaseMatarialRepository.findByDeliveryStatusJPQL(deliveryStatus);
     }
-
 
 
     public void savePurchaseMaterial(savePurchaseMaterial_Dto saveRequest) {
@@ -137,8 +135,7 @@ public class OrderService {
     }
 
 
-
-    public void findByPurchase_material_id(Integer Purchase_material_id){
+    public void findByPurchase_material_id(Integer Purchase_material_id) {
 
         //발주번호로 데이터를 조회하고, '배송중'->'배송 완료'로 변경하여 저장
         String deliveryOk = "배송완료";
@@ -160,6 +157,99 @@ public class OrderService {
 
     }
 
+    public List<Material_details> findAllMaterialDetail() {
+        return materialDetailsRepository.findAll();
+    }
 
 
+//    //디티오로 보내
+//    public Material_details PackagingData() {
+//Integer[] list;
+//
+//        //원자재명이 박스, 포장지인 데이터를 가져와 발주번호를 추출한다.
+//        //해당 발주번호 중 출고 가장 최근의 입고량에서
+//
+//        List<Purchase_matarial> pack = purchaseMatarialRepository.findByRawMaterial("포장지");
+//        for(int i=0;i<=pack.toArray().length;i++){
+//            list[i] = pack[i].getPurchase_Material_Id;
+//
+//        }
+//
+//        //pack의 발주번호를 모두 추출
+//        //발주번호로 원자재내역 테이블에서 입고량과 출고량을 모두 더한 값을 도출
+//
+//
+//
+//
+//        materialDetailsRepository.findBy
+//
+//        return;
+//    }
+
+    public PackagingData_Dto getPackagingData() {
+
+        PackagingData_Dto dto = new PackagingData_Dto();
+
+
+
+        String boxName="박스";
+
+        int usableBox=0;// 사용가능한 박스
+        int usedBox=0;//사용된 박스
+        int stockOfBox=0;//현재 박스 재고
+
+        List<Purchase_matarial> Box = purchaseMatarialRepository.findByRawMaterial(boxName);
+
+        // Order ID를 저장할 리스트
+        List<Integer> purchaseIds  = new ArrayList<>();
+
+        for (Purchase_matarial pm : Box) {
+            purchaseIds.add(pm.getPurchase_matarial_id());
+        }
+
+        // 각 purchaseId의 값을 모두 더하기
+        for (Integer purchaseId : purchaseIds) {
+           Material_details materialDetails= materialDetailsRepository.findByPurchaseId(purchaseId);
+
+                usableBox += materialDetails.getReceived_quantity();
+                usedBox += materialDetails.getShipped_quantity();
+
+
+        }
+
+        stockOfBox= usableBox-usedBox;
+        dto.setBox(String.valueOf(stockOfBox));
+
+
+        String packName="포장지";
+
+        int usablePack=0;// 사용가능한 포장지
+        int usedPack=0;//사용된 포장지
+        int stockOfPack=0;//현재 포장지 재고
+
+
+        List<Purchase_matarial> Pack = purchaseMatarialRepository.findByRawMaterial(packName);
+
+        // Order ID를 저장할 리스트
+        List<Integer> purchaseIdsOfBox  = new ArrayList<>();
+
+        for (Purchase_matarial pm : Pack) {
+            purchaseIdsOfBox.add(pm.getPurchase_matarial_id());
+        }
+
+        // 각 purchaseId의 값을 모두 더하기
+        for (Integer purchaseId : purchaseIdsOfBox) {
+            Material_details materialDetails = materialDetailsRepository.findByPurchaseId(purchaseId);
+            usablePack += materialDetails.getReceived_quantity();
+            usedPack += materialDetails.getShipped_quantity();
+        }
+
+        stockOfPack= usablePack-usedPack;
+        dto.setPackaging(String.valueOf(stockOfPack));
+
+
+        return dto;
+    }
 }
+
+
