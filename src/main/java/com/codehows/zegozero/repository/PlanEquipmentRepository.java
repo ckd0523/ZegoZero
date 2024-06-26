@@ -27,10 +27,23 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     List<Plan_equipment> findAllByEquipmentEquipmentId(@Param("equipmentId") int equipmentId);
 
     // 오늘 id에 해당하는 설비의 계획을 모두 조회하는 쿼리
-    @Query("SELECT pe FROM Plan_equipment pe WHERE pe.equipment.equipment_id = :equipmentId AND " +
-            "pe.estimated_start_date >= :startOfDay AND pe.estimated_end_date < :endOfDay")
-    List<Plan_equipment> findPlansByEquipmentIdAndDate(@Param("equipmentId") int equipmentId,
-                                                       @Param("startOfDay") LocalDateTime startOfDay,
-                                                       @Param("endOfDay") LocalDateTime endOfDay);
+    @Query("SELECT pe FROM Plan_equipment pe WHERE pe.equipment.equipment_id = :equipmentId AND pe.estimated_start_date >= :startOfDay")
+    List<Plan_equipment> findPlansByEquipmentIdAndStartDate(@Param("equipmentId") int equipmentId,
+                                                            @Param("startOfDay") LocalDateTime startOfDay);
+
+    //가동여부
+    @Query("SELECT pe FROM Plan_equipment pe " +
+            "WHERE pe.equipment.equipment_id = :equipmentId " +
+            "AND pe.start_date IS NOT NULL " +
+            "AND pe.end_date IS NULL")
+    List<Plan_equipment> findUnfinishedPlansByEquipmentId(@Param("equipmentId") int equipmentId);
+
+    @Query("SELECT CASE WHEN COUNT(pe) > 0 THEN true ELSE false END " +
+            "FROM Plan_equipment pe " +
+            "WHERE pe.equipment.equipment_id = :equipmentId " +
+            "AND pe.start_date IS NOT NULL " +
+            "AND pe.end_date IS NULL")
+    boolean hasUnfinishedPlansByEquipmentId(@Param("equipmentId") int equipmentId);
+
 
 }

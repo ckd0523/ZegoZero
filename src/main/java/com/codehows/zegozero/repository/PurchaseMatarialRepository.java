@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-@Repository
+
 public interface PurchaseMatarialRepository  extends JpaRepository<Purchase_matarial, Integer> {
 //    List<Purchase_matarial> findByDelivery_status(String deliveryStatus);
 
