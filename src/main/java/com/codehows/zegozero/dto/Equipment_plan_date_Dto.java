@@ -25,7 +25,7 @@ public class Equipment_plan_date_Dto {
 
 
     public Equipment_plan_date_Dto(Plan_equipment plan_equipment) {
-        this.equipment_plan_id = plan_equipment.getEquipment().getEquipment_id();
+        this.equipment_plan_id = plan_equipment.getEquipment_plan_id();
         this.estimated_start_date = plan_equipment.getEstimated_start_date();
         this.estimated_end_date = plan_equipment.getEstimated_end_date();
         this.input = plan_equipment.getInput();
