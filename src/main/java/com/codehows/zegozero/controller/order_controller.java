@@ -117,6 +117,11 @@ public class order_controller {
         return "shipment_management";
     }
 
+    @GetMapping("/nowOrderProgress")
+    public String nowOrderProgress(){
+        return "nowOrderProgress";
+    }
+
     @PostMapping("/excelorder")
     public String registApiExcelOrder(@RequestParam("file1") MultipartFile file) {
         if (file.isEmpty()) {

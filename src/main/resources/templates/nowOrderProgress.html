@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>원자재 발주</title>
+    <!-- 공통 cdn.css 포함 -->
+    <th:block th:replace="header :: head"></th:block>
+    <link rel="stylesheet" href="/css/material_order_management.css">
+</head>
+<body>
+<header th:replace="header :: header"></header>
+
+<div>
+    <label for="inputNumber">조회할 수 입력:</label>
+    <input type="number" id="inputNumber" name="inputNumber">
+    <button onclick="fetchData()">조회</button>
+</div>
+
+<div class="aaaa">
+    <table id="example" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>수주 번호</th>
+            <th>발주 번호</th>
+            <th>원자재</th>
+            <th>주문량</th>
+            <th>주문일</th>
+            <th>배송 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div class="container mt-3">
+    <div class="row justify-content-end">
+        <!--        <div class="col-auto">-->
+        <!--            <button id="deleteSelected" class="btn btn-danger mt-0">선택된 항목 삭제</button>-->
+        <!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <button class="btn btn-primary ms-2" type="button" id="deliveryOk">배송 완료</button>-->
+<!--        </div>-->
+<!--        <div class="col-auto">-->
+<!--            <button class="btn btn-primary ms-2" type="button" id="openRegistrationPopup">발주 계획 조회</button>-->
+<!--        </div>-->
+    </div>
+</div>
+
+<!-- 공통 cdn.js 포함 -->
+<th:block th:replace="header :: footer"></th:block>
+<script src="/js/nowOrderProgress.js"></script>
+<script>
+
+</script>
+</body>
+</html>
+
+//어제 작성한 마지막 gpt확인하고 작성하기
