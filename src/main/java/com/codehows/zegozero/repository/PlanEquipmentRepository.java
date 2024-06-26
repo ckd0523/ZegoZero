@@ -54,4 +54,7 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     @Query("SELECT pe.estimated_end_date FROM Plan_equipment pe JOIN pe.plan p JOIN pe.equipment e WHERE p.plan_id = :planId AND e.equipment_id = 12")
     LocalDateTime findEndDateByPlanIdAndEquipmentId(@Param("planId") int planId);
 
+    @Query("SELECT pe FROM Plan_equipment pe JOIN FETCH pe.plan p JOIN FETCH pe.equipment e")
+    List<Plan_equipment> findAllWithDetails();
+
 }

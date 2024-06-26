@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PlansRepository extends JpaRepository<Plans, Integer> {
 
     @Query("SELECT p FROM Plans p " +
@@ -22,6 +24,8 @@ public interface PlansRepository extends JpaRepository<Plans, Integer> {
     @Query("SELECT p FROM Plans p WHERE p.plan_id = :planId")
     Plans findByPlanId(@Param("planId") int planId);
 
-
-
+    // order_id가 null인 데이터들을 찾는 쿼리문
+    @Query("SELECT p FROM Plans p WHERE p.order IS NULL")
+    List<Plans> findAllByOrderIsNull();
+    
 }

@@ -53,6 +53,16 @@ public class OrderService {
         ordersRepository.save(orders);
     }
 
+    public void updatePlanOrderId(){
+        int maxOrderId = ordersRepository.findMaxOrderId();
+        List<Plans> plansWithoutOrder = plansRepository.findAllByOrderIsNull();
+
+        for (Plans plan : plansWithoutOrder) {
+            plan.setOrder(ordersRepository.findById(maxOrderId).orElse(null));
+            plansRepository.save(plan);
+        }
+    }
+
     public Orders findById(Integer id) {
         return ordersRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Board not found"));
