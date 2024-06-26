@@ -574,7 +574,7 @@ public class PlanEquipmentService {
     // 발주 계획 생성 메서드
     public Equipment1_plan_date_Dto createEquipment1Plan(LocalDateTime estimatedStartDate, int output) {
 
-        LocalDateTime endTime = estimatedStartDate.minusHours(9).withHour(9);
+        LocalDateTime endTime = estimatedStartDate.minusHours(9).withHour(9).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime startTime = endTime.minusDays(1).minusHours(21);
 
         Equipment equipment = new Equipment();

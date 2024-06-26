@@ -9,9 +9,10 @@ $(document).ready(function () {
         locale: 'ko',
         selectable: false,
         editable: false,
-        eventSources: [
-            'MOCK_DATA4.json'
-        ]
+        events: '/api/fullCalendar'
+        // eventSources: [
+        //     'MOCK_DATA4.json'
+        // ]
     });
     calendar.render();
 });
