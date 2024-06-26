@@ -186,14 +186,15 @@ $(document).ready(function() {
                 // 필요한 다른 필드가 있다면 추가합니다
             };
             var FinishedDto = {
-                order_id : rowData.plan_id,
+                planId : rowData.plan_id,
                 product_name : rowData.product_name,
                 received_quantity : rowData.output,
                 received_date : rowData.start_date
             }
 
             // 박스포장 스탑시
-            if(selectedValue === 12){
+            if(selectedValue === '12'){
+                console.log(FinishedDto.planId);
 
                 // 재고 등록
                 $.ajax({
@@ -222,7 +223,7 @@ $(document).ready(function() {
                     contentType: 'application/json',
                     data: JSON.stringify(equipmentDto),
                     success: function(response) {
-                        alert('Start time updated successfully.');
+                        alert('Stop time updated successfully.');
                         console.log(response);
                         // 테이블 리로드
                         $('#behavior').css('background-color', '#FF5733'); // 빨간색
@@ -235,7 +236,7 @@ $(document).ready(function() {
                     }
                 });
 
-            }else {
+            } else {
 
                 // AJAX 요청 보내기
                 $.ajax({
@@ -244,7 +245,7 @@ $(document).ready(function() {
                     contentType: 'application/json',
                     data: JSON.stringify(equipmentDto),
                     success: function(response) {
-                        alert('Start time updated successfully.');
+                        alert('Stop time updated successfully.');
                         console.log(response);
                         // 테이블 리로드
                         $('#behavior').css('background-color', '#FF5733'); // 빨간색

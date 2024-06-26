@@ -25,7 +25,7 @@ public class finishedProductApiController {
     private final finishedProductService productService;
     private final OrderService orderService;
 
-    // 입고
+    // 완제품 입고
     @PostMapping("/receive")
     public ResponseEntity<?> receive(@RequestBody Finished_product_management_Dto finishedProduct) throws IOException {
 
@@ -34,7 +34,7 @@ public class finishedProductApiController {
         return ResponseEntity.ok().body("saved successfully");
     };
 
-    // 출고
+    // 완제품 출고
     @PostMapping("/shipping")
     public ResponseEntity<?> shipping(@RequestBody Shipment_management_dto shippingProduct) throws IOException {
 
