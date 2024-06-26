@@ -1,12 +1,11 @@
 package com.codehows.zegozero.controller;
 
-import com.codehows.zegozero.dto.OrderUpdateRequest_Dto;
-import com.codehows.zegozero.dto.Order_Dto;
+import com.codehows.zegozero.dto.*;
 
-import com.codehows.zegozero.dto.responsePurchaseMaterial_Dto;
-import com.codehows.zegozero.dto.savePurchaseMaterial_Dto;
+import com.codehows.zegozero.entity.Material_details;
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Purchase_matarial;
+import com.codehows.zegozero.repository.MaterialDetailsRepository;
 import com.codehows.zegozero.service.OrderService;
 import com.codehows.zegozero.service.finishedProductService;
 import jakarta.validation.Valid;
@@ -30,6 +29,7 @@ public class OrderApiController {
 
     private final OrderService orderService;
     private final finishedProductService finishedProductService;
+
     private static final Logger logger = Logger.getLogger(OrderApiController.class.getName());
 
     @PostMapping("/order")
@@ -214,8 +214,64 @@ public class OrderApiController {
         return ResponseEntity.ok().body("All materials saved successfully");
     }
 
+    @GetMapping("/showInventory")
+    public Map<String, Object> showInventory() throws IOException {
+
+        Map<String, Object> detail = new HashMap<String, Object>();
 
 
+        //matarial_details 테이블 생성 후 값을 가져오기
+        List<Material_details> all = orderService.findAllMaterialDetail();
+
+
+        System.out.println(all);
+        detail.put("data",all);
+        System.out.println(all);
+        return detail;
+    }
+
+//    @GetMapping("/getPackagingData")
+//    public List<PackagingData_Dto> getPackagingData() {
+//        // 여기에 데이터베이스에서 데이터를 가져오는 로직을 작성합니다.
+//         orderService.PackagingData();
+//
+//
+//         return
+//    }
+
+
+//    @GetMapping("/getPackagingData")
+//    public ResponseEntity<PackagingData_Dto> getPackagingData() {
+//
+//        PackagingData_Dto packagingData = orderService.getPackagingData();
+//
+//
+//        System.out.println(packagingData.getPackaging());
+//        System.out.println(packagingData.getBox());
+//
+//        return ResponseEntity.ok().body(packagingData);
+//        //박스, 포장지의 현재 개수를 포함한 dto
+//    }
+
+    @GetMapping("/getPackagingData")
+    public ResponseEntity<PackagingData_Dto> getPackagingData() {
+
+        try {
+            PackagingData_Dto packagingData = orderService.getPackagingData();
+
+            if (packagingData == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+
+            System.out.println(packagingData.getPackaging());
+            System.out.println(packagingData.getBox());
+
+            return ResponseEntity.ok().body(packagingData);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
 
 

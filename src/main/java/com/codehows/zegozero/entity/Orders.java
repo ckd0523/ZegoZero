@@ -41,7 +41,7 @@ public class Orders {
 
     private Boolean Delivery_available;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="plan")
     private Plans plan;
 

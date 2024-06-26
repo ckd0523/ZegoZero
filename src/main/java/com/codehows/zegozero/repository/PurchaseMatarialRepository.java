@@ -15,4 +15,7 @@ public interface PurchaseMatarialRepository  extends JpaRepository<Purchase_mata
 
     @Query("SELECT p FROM Purchase_matarial p WHERE p.purchase_matarial_id = :id")
     Purchase_matarial findByPurchaseMaterialId(Integer id);
+
+    @Query("SELECT p FROM Purchase_matarial p WHERE p.raw_material = :rowMaterial")
+    List<Purchase_matarial> findByRawMaterial(String rowMaterial);
 }
