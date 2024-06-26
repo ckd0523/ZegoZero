@@ -83,7 +83,6 @@ $(document).ready(function () {
         var orderQuantity = document.getElementById('orderQuantity').value;
         var stockUsage = document.getElementById('stockUsage').value;
         var productionQuantity = orderQuantity - stockUsage;
-        var expectedShipmentDate = document.getElementById('expectedShipmentDate').value;
         var customer = document.getElementById('customer').value;
         var deliveryAddress = document.getElementById('deliveryAddress').value;
 
@@ -92,7 +91,6 @@ $(document).ready(function () {
         document.getElementById('confirmOrderQuantity').value = orderQuantity;
         document.getElementById('confirmStockUsage').value = stockUsage;
         document.getElementById('confirmProductionQuantity').value = productionQuantity;
-        document.getElementById('confirmExpectedShipmentDate').value = expectedShipmentDate;
         document.getElementById('confirmCustomer').value = customer;
         document.getElementById('confirmDeliveryAddress').value = deliveryAddress;
 
@@ -107,7 +105,6 @@ $(document).ready(function () {
         var quantity = parseInt(document.getElementById('confirmOrderQuantity').value) || 0;
         var used_inventory = parseInt(document.getElementById('confirmStockUsage').value) || 0;
         var production_quantity = quantity - used_inventory;
-        var expected_shipping_date = document.getElementById('confirmExpectedShipmentDate').value;
         var customer_name = document.getElementById('confirmCustomer').value;
         var delivery_address = document.getElementById('confirmDeliveryAddress').value;
 
@@ -116,7 +113,6 @@ $(document).ready(function () {
             quantity: quantity,
             used_inventory: used_inventory,
             production_quantity: production_quantity,
-            expected_shipping_date: expected_shipping_date,
             customer_name: customer_name,
             delivery_address: delivery_address
         };

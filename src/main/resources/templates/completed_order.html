@@ -14,13 +14,6 @@
 <h1>지난수주</h1>
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-end mb-3">
-        <form th:action="@{/excelorder}" method="POST" enctype="multipart/form-data" style="margin-right: 10px">
-            <input type="file" th:name="file1">
-            <input th:type="submit" value="import Excel" />
-        </form>
-        <button class="btn btn-secondary" id="openRegistrationPopup">수주 등록</button>
-    </div>
     <div>
         <table id="myTable" class="display">
             <thead>
@@ -39,94 +32,6 @@
         </table>
     </div>
 </div>
-
-<!-- 팝업 시작 -->
-<div id="registrationPopup" class="popup">
-    <div class="content">
-        <p style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">수주 등록</p>
-        <div style="margin-bottom: 10px;">
-            <table style="width: 100%; border-collapse: collapse; border: 1px solid black; text-align: center;">
-                <thead>
-                <tr>
-                    <th style="border: 1px solid black; padding: 8px;">양배추즙</th>
-                    <th style="border: 1px solid black; padding: 8px;">흑마늘즙</th>
-                    <th style="border: 1px solid black; padding: 8px;">석류젤리</th>
-                    <th style="border: 1px solid black; padding: 8px;">매실젤리</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td th:text="${total1}" style="border: 1px solid black; padding: 8px;"></td>
-                    <td th:text="${total2}" style="border: 1px solid black; padding: 8px;"></td>
-                    <td th:text="${total3}" style="border: 1px solid black; padding: 8px;"></td>
-                    <td th:text="${total4}" style="border: 1px solid black; padding: 8px;"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">제품명 :</label>
-            <select id="productName" style="padding: 5px; border: 1px solid #ccc;">
-                <option value="양배추즙">양배추즙</option>
-                <option value="흑마늘즙">흑마늘즙</option>
-                <option value="석류젤리">석류젤리</option>
-                <option value="매실젤리">매실젤리</option>
-            </select>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">주문수량 :</label><input type="number" id="orderQuantity" style="padding: 5px; border: 1px solid #ccc;">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">재고사용 :</label><input type="number" id="stockUsage" style="padding: 5px; border: 1px solid #ccc;">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">예상출하날짜 :</label><input type="text" id="expectedShipmentDate" style="padding: 5px; border: 0 solid #ccc;" disabled>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">고객사 :</label><input type="text" id="customer" style="padding: 5px; border: 1px solid #ccc;">
-        </div>
-        <div style="margin-bottom: 20px;">
-            <label style="display: inline-block; width: 100px;">배송지 :</label><input type="text" id="deliveryAddress" style="padding: 5px; border: 1px solid #ccc;">
-        </div>
-        <div class="popupbtnarea">
-            <button id="openConfirmationPopup" class="closepopupbtn btn-primary">수주등록</button>
-            <button class="closepopupbtn btn-danger" id="registcancle" >취소</button>
-        </div>
-    </div>
-</div>
-
-<!-- 확인 팝업 -->
-<div id="confirmationPopup" class="popup">
-    <div class="content">
-        <p style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">수주 확인</p>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">제품명 :</label><input type="text" id="confirmProductName" style="padding: 5px; border: 1px solid #ccc;" disabled>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">주문수량 :</label><input type="number" id="confirmOrderQuantity" style="padding: 5px; border: 1px solid #ccc;" disabled>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">재고사용 :</label><input type="number" id="confirmStockUsage" style="padding: 5px; border: 1px solid #ccc;" disabled>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">제작수량 :</label><input type="number" id="confirmProductionQuantity" style="padding: 5px; border: 1px solid #ccc;" disabled>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">예상출하날짜 :</label><input type="text" id="confirmExpectedShipmentDate" style="padding: 5px; border: 0 solid #ccc;" disabled>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label style="display: inline-block; width: 100px;">고객사 :</label><input type="text" id="confirmCustomer" style="padding: 5px; border: 1px solid #ccc;" disabled>
-        </div>
-        <div style="margin-bottom: 20px;">
-            <label style="display: inline-block; width: 100px;">배송지 :</label><input type="text" id="confirmDeliveryAddress" style="padding: 5px; border: 1px solid #ccc;" disabled>
-        </div>
-        <div class="popupbtnarea">
-            <button id="confirm" class="closepopupbtn btn-primary" >확인</button>
-            <button class="closepopupbtn btn-danger" id="confirmcancle" >취소</button>
-        </div>
-    </div>
-</div>
-<!-- 팝업 끝 -->
 
 <!-- 공통 cdn.js 포함 -->
 <th:block th:replace="header :: footer"></th:block>
