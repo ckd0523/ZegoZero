@@ -304,41 +304,12 @@ $(document).ready(function () {
     // 발주 계획 잡기
     function id1Plan(id2StartDate, id1Input) {
 
-        var id1EndDate; // 발주 종료 시간을 저장할 변수
-
-        // 세척 공정 시작 시간(id2StartDate)을 Date 객체로 변환
-        var startDate = new Date(id2StartDate);
-        startDate.setTime(startDate.getTime() + (9 * 60 * 60 * 1000)); // 9시간을 더함
-
-        // 세척 공정 시작 날짜의 오전 9시 시간
-        var cleaningStart9AM = new Date(startDate);
-        cleaningStart9AM.setHours(9, 0, 0, 0); // 세척 공정 시작일의 09:00:00
-
-        // 세척 공정 시작 날짜의 1일 전 오전 9시 시간
-        var cleaningStartYesterday9AM = new Date(cleaningStart9AM);
-        cleaningStartYesterday9AM.setDate(cleaningStart9AM.getDate() - 1); // 전날 09:00:00
-
-        // 설비2가 시작하는 시간이 오늘 오전 9시 이전이면
-        if (startDate < cleaningStart9AM) {
-            id1EndDate = new Date(cleaningStartYesterday9AM.getTime()); // 전날 09:00:00에서
-        } else {
-            id1EndDate = new Date(cleaningStart9AM.getTime()); // 오늘 09:00:00에서
-        }
-
-        // 발주 시작 시간은 발주 종료 시간에서 1일 21시간 후의 시간으로 설정
-        var id1StartDate = new Date(id1EndDate.getTime() - (24 * 60 * 60 * 1000) - (21 * 60 * 60 * 1000));
-
-        // 날짜를 ISO 8601 형식으로 변환
-        var isoEstimatedStartDate = id1StartDate.toISOString();
-        var isoEstimatedEndDate = id1EndDate.toISOString();
-
         // AJAX 요청을 통해 데이터를 백엔드로 전송하고 응답을 받음
         $.ajax({
             url: '/api/id1Plan',
             type: 'GET',
             data: {
-                estimatedStartDate: isoEstimatedStartDate,
-                estimatedEndDate: isoEstimatedEndDate,
+                estimatedStartDate: id2StartDate,
                 output: id1Input // 발주 산출량 설정
             },
             success: function (data) {
@@ -346,8 +317,8 @@ $(document).ready(function () {
                 // 콘솔에 출력
                 console.log("발주 계획");
                 console.log("설비 번호: " + data.equipmentId);
-                console.log("발주 시작 시간: " + convertToKoreanTime(data.estimatedStartDate));
-                console.log("발주 종료 시간: " + convertToKoreanTime(data.estimatedEndDate));
+                console.log("발주 시작 시간: " );
+                console.log("발주 종료 시간: " );
                 console.log("발주 산출량: " + data.output);
             },
             error: function (xhr, status, error) {

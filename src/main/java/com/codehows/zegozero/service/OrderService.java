@@ -44,7 +44,7 @@ public class OrderService {
         orders.setQuantity(Orderdata.getQuantity());
         orders.setUsed_inventory(Orderdata.getUsed_inventory());
         orders.setProduction_quantity(Orderdata.getProduction_quantity());
-        orders.setOrder_date(LocalDateTime.now());
+        orders.setOrder_date(date);
         orders.setExpected_shipping_date(expectedShippingDate);
         orders.setCustomer_name(Orderdata.getCustomer_name());
         orders.setDelivery_address(Orderdata.getDelivery_address());

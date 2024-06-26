@@ -24,7 +24,7 @@ public class ServerStartListener {
     @EventListener(ApplicationReadyEvent.class)
     public void logServerStartTime() {
         System_time serverStartTime = new System_time();
-        serverStartTime.setTime(LocalDateTime.now()); // 현재 시간을 LocalDateTime으로 설정
+        serverStartTime.setTime(LocalDateTime.now().withSecond(0).withNano(0)); // 현재 시간을 LocalDateTime으로 설정
         serverStartTimeRepository.save(serverStartTime);
         System.out.println("서버 시작 시간: " + serverStartTime.getTime());
     }

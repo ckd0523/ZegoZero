@@ -46,7 +46,8 @@ public class PlanEquipmentService {
     // 젤리 계획 잡기
     public void zeliPlan(String productName, int input7) {
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        //LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime currentDateTime = timeService.getDateTimeFromDB().getTime();
         LocalDateTime estimatedStartDate7;
         LocalDateTime estimatedEndDate7;
         LocalDateTime id1StartTime;
@@ -302,7 +303,8 @@ public class PlanEquipmentService {
         int output = (inputCalculated * 1000) / 5;
 
         // 현재 한국 시간
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        LocalDateTime now = timeService.getDateTimeFromDB().getTime();
+        //LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
 
         // 설비 3과 설비 4 모두 데이터가 없는 경우
         if (equipment1Optional.isEmpty() && equipment2Optional.isEmpty()) {
@@ -570,20 +572,24 @@ public class PlanEquipmentService {
     }
 
     // 발주 계획 생성 메서드
-    public Equipment1_plan_date_Dto createEquipment1Plan(LocalDateTime estimatedStartDate, LocalDateTime estimatedEndDate, int output) {
+    public Equipment1_plan_date_Dto createEquipment1Plan(LocalDateTime estimatedStartDate, int output) {
+
+        LocalDateTime endTime = estimatedStartDate.minusHours(9).withHour(9);
+        LocalDateTime startTime = endTime.minusDays(1).minusHours(21);
+
         Equipment equipment = new Equipment();
         equipment.setEquipment_id(1);
 
         Plan_equipment plan = new Plan_equipment();
         plan.setEquipment(equipment);
-        plan.setEstimated_start_date(estimatedStartDate);
-        plan.setEstimated_end_date(estimatedEndDate);
+        plan.setEstimated_start_date(startTime);
+        plan.setEstimated_end_date(endTime);
         plan.setInput(0);
         plan.setOutput(output);
         temporaryPlans.add(plan);
 
         // DTO 반환
-        return new Equipment1_plan_date_Dto(1, estimatedStartDate, estimatedEndDate, 0, output);
+        return new Equipment1_plan_date_Dto(1, startTime, endTime, 0, output);
     }
 
     // 여과기 계획 생성 메서드
