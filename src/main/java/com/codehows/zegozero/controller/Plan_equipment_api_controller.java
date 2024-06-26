@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -212,5 +213,53 @@ public class Plan_equipment_api_controller {
         return ResponseEntity.ok(hasUnfinishedPlans);
     }
 
+    // 시작시간이 있고 종료시간이 없는 데이터 가져오기
+    @GetMapping("/running")
+    public ResponseEntity<List<Integer>> getRunningEquipments() {
+        List<Plan_equipment> runningEquipments = planEquipmentService.getRunningEquipments();
+        List<Integer> equipmentIds = runningEquipments.stream()
+                .map(pe -> pe.getEquipment().getEquipment_id())
+                .toList();
+        return ResponseEntity.ok(equipmentIds);
+    }
+
+    @GetMapping("/runningTable")
+    public List<Map<String, Object>> getRunningTableData() {
+        List<Plan_equipment> runningPlanEquipments = planEquipmentService.getRunningPlanEquipments();
+        LocalDateTime currentTime = timeService.getDateTimeFromDB().getTime();
+
+        return runningPlanEquipments.stream().map(pe -> {
+            double production = calculateProductionPercentage(pe, currentTime);
+            return Map.<String, Object>of(
+                    "order_id", pe.getPlan().getOrder().getOrderId(),
+                    "equipment_name", pe.getEquipment().getEquipment_name(),
+                    "production", production,
+                    "customer_name", pe.getPlan().getOrder().getCustomer_name(),
+                    "expected_shipping_date", pe.getPlan().getOrder().getExpected_shipping_date()
+            );
+        }).collect(Collectors.toList());
+    }
+
+    private double calculateProductionPercentage(Plan_equipment pe, LocalDateTime currentTime) {
+        LocalDateTime estimatedStart = pe.getEstimated_start_date();
+        LocalDateTime estimatedEnd = pe.getEstimated_end_date();
+
+        if (estimatedStart == null || estimatedEnd == null) {
+            return 0.0;
+        }
+
+        Duration totalDuration = Duration.between(estimatedStart, estimatedEnd);
+        Duration elapsedDuration = Duration.between(estimatedStart, currentTime);
+
+        if (elapsedDuration.isNegative() || totalDuration.isZero()) {
+            return 0.0;
+        } else if (elapsedDuration.compareTo(totalDuration) > 0) {
+            return 100.0;
+        }
+
+        // 소수점 버림
+        double percentage = (double) elapsedDuration.toMillis() / totalDuration.toMillis() * 100;
+        return Math.floor(percentage); // 소수점 버림 처리
+    }
 
 }

@@ -57,4 +57,8 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     @Query("SELECT pe FROM Plan_equipment pe JOIN FETCH pe.plan p JOIN FETCH pe.equipment e")
     List<Plan_equipment> findAllWithDetails();
 
+    // 시작시간이 있고 종료시간이 없는 데이터 가져오기
+    @Query("SELECT pe FROM Plan_equipment pe WHERE pe.start_date IS NOT NULL AND pe.end_date IS NULL")
+    List<Plan_equipment> findRunningEquipments();
+
 }
