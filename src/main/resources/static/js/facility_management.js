@@ -202,7 +202,7 @@ $(document).ready(function() {
                     contentType: 'application/json',
                     data: JSON.stringify(FinishedDto),
                     success: function(response) {
-                        alert('Start time updated successfully.');
+                        alert('Stop time updated successfully.');
                         console.log(response);
                         // 테이블 리로드
                         $('#behavior').css('background-color', '#FF5733'); // 빨간색
