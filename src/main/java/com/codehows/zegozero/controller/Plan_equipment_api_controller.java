@@ -7,6 +7,7 @@ import com.codehows.zegozero.service.PlanEquipmentService;
 import com.codehows.zegozero.service.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -149,13 +150,13 @@ public class Plan_equipment_api_controller {
     @GetMapping("/equipment/{equipmentId}")
     public Map<String, Object> getTodayPlansByEquipment(@PathVariable int equipmentId ) {
 
-        LocalDate date = timeService.getDateTimeFromDB().getTime().toLocalDate();
+        LocalDateTime date = timeService.getDateTimeFromDB().getTime();
 
 
         Map<String, Object> equipmentPlanResponse = new HashMap<>();
 
         // equipmentId와 date에 해당하는 계획을 조회하여 DTO로 매핑
-        List<Equipment_plan_date_Dto> equipmentPlans = planEquipmentService.getPlansByEquipmentIdAndDate(equipmentId, date)
+        List<Equipment_plan_date_Dto> equipmentPlans = planEquipmentService.getPlansByEquipmentIdAndStartDate(equipmentId, date)
                 .stream()
                 .map(Equipment_plan_date_Dto::new) // Entity를 DTO로 변환
                 .collect(Collectors.toList());
@@ -163,6 +164,33 @@ public class Plan_equipment_api_controller {
         equipmentPlanResponse.put("data", equipmentPlans);
 
         return equipmentPlanResponse;
+    }
+
+    @PostMapping("/equipment/start")
+    public ResponseEntity<String> startEquipment(@RequestBody Equipment_Dto equipmentDto) {
+        try {
+            planEquipmentService.start(equipmentDto);
+            return ResponseEntity.ok("Equipment start time updated successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/equipment/stop")
+    public ResponseEntity<String> stopEquipment(@RequestBody Equipment_Dto equipmentDto) {
+        try {
+            planEquipmentService.stop(equipmentDto);
+            return ResponseEntity.ok("Equipment stop time updated successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // 가동여부
+    @GetMapping("/behavior/{equipmentId}")
+    public ResponseEntity<Boolean> hasUnfinishedPlansByEquipmentId(@PathVariable("equipmentId") int equipmentId) {
+        boolean hasUnfinishedPlans = planEquipmentService.hasUnfinishedPlansByEquipmentId(equipmentId);
+        return ResponseEntity.ok(hasUnfinishedPlans);
     }
 
 

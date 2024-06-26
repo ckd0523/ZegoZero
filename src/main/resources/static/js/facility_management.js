@@ -92,15 +92,18 @@ $(document).ready(function() {
         $('#myTable').on('click', '.colVisButton', function() {
             table.buttons(['.buttons-colvis']).trigger();
         });
+
     }
 
     // 셀렉트 박스 변경 이벤트 리스너
     $('#equipmentSelect').on('change', function() {
         var selectedValue = $(this).val();
+        console.log(selectedValue);
 
         // 선택된 값에 따라 JSON 데이터 URL 변경
         var jsonUrl = '/api/equipment/' + selectedValue;
 
+        behavior(selectedValue);
         // DataTable 초기화 함수 호출
         initializeDataTable(jsonUrl);
     });
@@ -108,6 +111,7 @@ $(document).ready(function() {
     var selectedValue1 = $(equipmentSelect).val();
     // 페이지 로드 시 초기화
     initializeDataTable('/api/equipment/'+ selectedValue1 ); // 초기에는 기본 데이터로 초기화
+    behavior(selectedValue1);
 
     // START 버튼 클릭 시 이벤트 처리
     $('#startButton').on('click', function() {
@@ -122,9 +126,38 @@ $(document).ready(function() {
             console.log('선택된 행의 데이터:', rowData);
             console.log('선택된 설비 start :', selectedValue);
 
-            // 여기서 선택된 데이터에 대한 추가적인 동작을 수행할 수 있습니다.
-            // 예: 선택된 데이터를 서버로 전송하여 처리하는 등의 작업
+            // equipmentDto 객체 생성
+            var equipmentDto = {
+                equipmentPlanId: rowData.equipment_plan_id,  // rowData에서 id 필드 가져오기
+                // 필요한 다른 필드가 있다면 추가합니다
+            };
 
+            if (selectedValue === 2){
+
+                //세척공정 로직
+
+            } else {
+
+                // AJAX 요청 보내기
+                $.ajax({
+                    url: '/api/equipment/start',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function (response) {
+                        alert('Start time updated successfully.');
+                        console.log(response);
+                        // 테이블 리로드
+                        $('#behavior').css('background-color', '#4CAF50'); // 초록색
+                        $('#statusText').text('가동중');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+            }
 
         } else {
             alert('하나의 행을 선택해야 합니다.');
@@ -147,28 +180,111 @@ $(document).ready(function() {
             // 여기서 선택된 데이터에 대한 추가적인 동작을 수행할 수 있습니다.
             // 예: 선택된 데이터를 서버로 전송하여 처리하는 등의 작업
 
-            if (selectedValue == '12') {
-                var finishData = {
-                    order_id: rowData.plan_id,
-                    received_quantity: rowData.quantity
-                };
+            // equipmentDto 객체 생성
+            var equipmentDto = {
+                equipmentPlanId: rowData.equipment_plan_id,  // rowData에서 id 필드 가져오기
+                // 필요한 다른 필드가 있다면 추가합니다
+            };
+            var FinishedDto = {
+                order_id : rowData.plan_id,
+                product_name : rowData.product_name,
+                received_quantity : rowData.output,
+                received_date : rowData.start_date
+            }
 
+            // 박스포장 스탑시
+            if(selectedValue === 12){
+
+                // 재고 등록
                 $.ajax({
-                    type: "POST",
-                    url: "/api/receive",
-                    data: JSON.stringify(finishData),
-                    contentType: "application/json",
+                    url: '/api/receive',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(FinishedDto),
                     success: function(response) {
-                        alert("박스 포장 종료, 완재품 재고로 입고되었습니다.");
+                        alert('Start time updated successfully.');
+                        console.log(response);
+                        // 테이블 리로드
+                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
+                        $('#statusText').text('대기중');
+                        table.ajax.reload(null, false);
                     },
                     error: function(xhr, status, error) {
-                        alert("시간 저장 중 오류가 발생했습니다.");
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
                     }
                 });
+
+                // 설비 스탑시 로직
+                $.ajax({
+                    url: '/api/equipment/stop',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        alert('Start time updated successfully.');
+                        console.log(response);
+                        // 테이블 리로드
+                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
+                        $('#statusText').text('대기중');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }else {
+
+                // AJAX 요청 보내기
+                $.ajax({
+                    url: '/api/equipment/stop',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        alert('Start time updated successfully.');
+                        console.log(response);
+                        // 테이블 리로드
+                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
+                        $('#statusText').text('대기중');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
             }
+
         } else {
             alert('하나의 행을 선택해야 합니다.');
         }
     });
+
+    function behavior(select) {
+        $.ajax({
+            url: '/api/behavior/' + select,
+            type: 'GET',
+            contentType: 'application/json',
+            data: JSON.stringify(select),
+            success: function(response) {
+                if (response === true) {
+                    $('#behavior').css('background-color', '#4CAF50'); // 초록색
+                    $('#statusText').text('가동중');
+                } else {
+                    $('#behavior').css('background-color', '#FF5733'); // 빨간색
+                    $('#statusText').text('대기중');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Error: ' + xhr.responseText);
+                console.log(error);
+            }
+        });
+    }
+
 
 });

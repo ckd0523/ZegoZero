@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -11,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class Equipment_Dto {
 
-    private int equipment_id;
-    private Date start_date;
-    private Date end_date;
+    private int equipmentPlanId;
+    private LocalDateTime start_date;
+    private LocalDateTime end_date;
 
 }

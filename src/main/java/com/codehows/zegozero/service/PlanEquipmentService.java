@@ -2,6 +2,7 @@ package com.codehows.zegozero.service;
 
 import com.codehows.zegozero.dto.*;
 import com.codehows.zegozero.entity.Equipment;
+import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plan_equipment;
 import com.codehows.zegozero.entity.Plans;
 import com.codehows.zegozero.repository.PlanEquipmentRepository;
@@ -26,6 +27,7 @@ public class PlanEquipmentService {
 
     private final PlanEquipmentRepository planEquipmentRepository;
     private final PlansRepository plansRepository;
+    private final TimeService timeService;
 
     private final List<Plans> Plans = new ArrayList<>();
 
@@ -709,11 +711,56 @@ public class PlanEquipmentService {
     }
 
     // 창현 : 오늘에 따른 장비별 계획 조회
-    public List<Plan_equipment> getPlansByEquipmentIdAndDate(int equipmentId, LocalDate date) {
-        LocalDateTime startOfDay = date.atStartOfDay();
-        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+    public List<Plan_equipment> getPlansByEquipmentIdAndStartDate(int equipmentId, LocalDateTime startOfDay) {
+        return planEquipmentRepository.findPlansByEquipmentIdAndStartDate(equipmentId, startOfDay);
+    }
 
-        return planEquipmentRepository.findPlansByEquipmentIdAndDate(equipmentId, startOfDay, endOfDay);
+    // 창현 : start 버튼 누르면 시간 나오도록
+    public void start(Equipment_Dto equipmentDto) {
+        Optional<Plan_equipment> equipmentPlan = planEquipmentRepository.findById(equipmentDto.getEquipmentPlanId());
+
+        LocalDateTime date = timeService.getDateTimeFromDB().getTime();
+
+        if (equipmentPlan.isPresent()) {
+            Plan_equipment planEquipment = equipmentPlan.get();
+
+            // 수정할 필드만 설정
+            planEquipment.setStart_date(date);
+
+            // 저장
+            planEquipmentRepository.save(planEquipment);
+        } else {
+            throw new RuntimeException("planEquipment not found with id");
+        }
+
+    }
+
+    // 창현 : start 버튼 누르면 시간 나오도록
+    public void stop(Equipment_Dto equipmentDto) {
+        Optional<Plan_equipment> equipmentPlan = planEquipmentRepository.findById(equipmentDto.getEquipmentPlanId());
+
+        LocalDateTime date = timeService.getDateTimeFromDB().getTime();
+
+        if (equipmentPlan.isPresent()) {
+            Plan_equipment planEquipment = equipmentPlan.get();
+
+            // 수정할 필드만 설정
+            planEquipment.setEnd_date(date);
+
+            // 저장
+            planEquipmentRepository.save(planEquipment);
+        } else {
+            throw new RuntimeException("planEquipment not found with id");
+        }
+
+    }
+
+    // 설비별 작동 여부
+    public List<Plan_equipment> findUnfinishedPlansByEquipmentId(int equipmentId) {
+        return planEquipmentRepository.findUnfinishedPlansByEquipmentId(equipmentId);
+    }
+    public boolean hasUnfinishedPlansByEquipmentId(int equipmentId) {
+        return planEquipmentRepository.hasUnfinishedPlansByEquipmentId(equipmentId);
     }
 
 }
