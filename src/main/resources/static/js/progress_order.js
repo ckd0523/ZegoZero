@@ -130,6 +130,7 @@ $(document).ready(function () {
                 success: function (response) {
                     closePopup("registrationPopup");
                     closePopup("confirmationPopup");
+                    alert('수주를 등록하였습니다');
                     table.ajax.reload(); // 테이블 새로고침
                     location.reload();
                 },
