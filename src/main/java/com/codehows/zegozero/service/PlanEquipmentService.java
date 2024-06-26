@@ -14,8 +14,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,6 +30,7 @@ public class PlanEquipmentService {
     private final PlanEquipmentRepository planEquipmentRepository;
     private final PlansRepository plansRepository;
 
+    // 생산계획 Dto를 담을 리스트
     private final List<Plans> Plans = new ArrayList<>();
 
     // 설비별 Dto를 담을 리스트
@@ -35,6 +38,8 @@ public class PlanEquipmentService {
 
     // 설비별 Dto를 담을 리스트
     private final List<Plan_equipment> temporaryPlans2 = new CopyOnWriteArrayList<>();
+
+
 
     // 젤리 계획 잡기
     public void zeliPlan(String productName, int input7) {
@@ -936,6 +941,20 @@ public class PlanEquipmentService {
         planEquipmentRepository.saveAll(temporaryPlans);
 
         temporaryPlans.clear(); // 저장 후 임시 리스트 초기화
+
+        // 설비3인 칼럼에서 시작시간 가져오기
+        LocalDateTime startDate = planEquipmentRepository.findStartDateByPlanIdAndEquipmentId(maxPlanId);
+
+        // 설비12인 칼럼에서 종료시간 가져오기
+        LocalDateTime endDate = planEquipmentRepository.findEndDateByPlanIdAndEquipmentId(maxPlanId);
+
+        // Plans 엔티티 업데이트
+        Plans planToUpdate = plansRepository.findByPlanId(maxPlanId);
+        planToUpdate.setStart_date(startDate);
+        planToUpdate.setCompletion_date(endDate);
+
+        // 업데이트된 Plans 저장
+        plansRepository.save(planToUpdate);
     }
 
     // 데이터베이스에 임시 계획을 한꺼번에 저장하는 메서드
@@ -953,6 +972,7 @@ public class PlanEquipmentService {
 
         // 저장 후에 임시 리스트 비우기
         temporaryPlans2.clear();
+
     }
 
     // 생산계획 가장 높은 id 값 가져오기

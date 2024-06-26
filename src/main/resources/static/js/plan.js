@@ -178,6 +178,9 @@ $(document).ready(function () {
                 input: id34Input
             },
             success: function (data) {
+                // 전역 변수 설정
+                input = new Date(data.input);
+
                 // DTO를 컨트롤러로 전달하고, 콘솔에 출력
                 var equipmentDto = data; // 예상되는 DTO 형식에 맞게 데이터를 가공
 

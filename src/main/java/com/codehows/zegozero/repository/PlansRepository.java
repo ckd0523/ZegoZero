@@ -19,6 +19,9 @@ public interface PlansRepository extends JpaRepository<Plans, Integer> {
     @Query("SELECT MAX(p.plan_id) FROM Plans p")
     Integer getMaxPlanId();
 
+    @Query("SELECT p FROM Plans p WHERE p.plan_id = :planId")
+    Plans findByPlanId(@Param("planId") int planId);
+
 
 
 }

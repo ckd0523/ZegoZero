@@ -33,4 +33,12 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
                                                        @Param("startOfDay") LocalDateTime startOfDay,
                                                        @Param("endOfDay") LocalDateTime endOfDay);
 
+    // 설비1에서 시작 시간 가져오기
+    @Query("SELECT pe.estimated_start_date FROM Plan_equipment pe JOIN pe.plan p JOIN pe.equipment e WHERE p.plan_id = :planId AND e.equipment_id = 1")
+    LocalDateTime findStartDateByPlanIdAndEquipmentId(@Param("planId") int planId);
+
+    // 설비12에서 종료 시간 가져오기
+    @Query("SELECT pe.estimated_end_date FROM Plan_equipment pe JOIN pe.plan p JOIN pe.equipment e WHERE p.plan_id = :planId AND e.equipment_id = 12")
+    LocalDateTime findEndDateByPlanIdAndEquipmentId(@Param("planId") int planId);
+
 }
