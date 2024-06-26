@@ -29,4 +29,7 @@ public interface FinishProductRepository extends JpaRepository<Finish_product, I
     @Query("SELECT SUM(fp.shipped_quantity) FROM Finish_product fp WHERE fp.order_id IS NULL AND fp.product_name = :productName")
     Integer sumShippedQuantityByProductNameAndNullOrderId(String productName);
 
+    @Query("SELECT SUM(fp.received_quantity) FROM Finish_product fp WHERE fp.order_id.orderId = :orderId")
+    Integer sumReceivedQuantityByOrderId(int orderId);
+
 }

@@ -89,10 +89,10 @@ $(document).ready(function () {
         if (!productName) {
             errorMessage += "제품명을 선택하세요.\n";
         }
-        if (!orderQuantity || orderQuantity < 0) {
+        if (orderQuantity > 1000 || orderQuantity < 0) {
             errorMessage += "유효한 주문수량을 입력하세요.\n";
         }
-        if (!stockUsage || stockUsage < 0) {
+        if (stockUsage < 0) {
             errorMessage += "유효한 재고사용량을 입력하세요.\n";
         }
         if (!customer) {

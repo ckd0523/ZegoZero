@@ -29,7 +29,6 @@ public class finishedProductApiController {
     @PostMapping("/receive")
     public ResponseEntity<?> receive(@RequestBody Finished_product_management_Dto finishedProduct) throws IOException {
 
-        orderService.update2(finishedProduct);
         productService.receivesave(finishedProduct);
         return ResponseEntity.ok().body("saved successfully");
     };

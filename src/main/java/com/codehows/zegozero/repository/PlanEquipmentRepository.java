@@ -27,7 +27,7 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     List<Plan_equipment> findAllByEquipmentEquipmentId(@Param("equipmentId") int equipmentId);
 
     // 오늘 id에 해당하는 설비의 계획을 모두 조회하는 쿼리
-    @Query("SELECT pe FROM Plan_equipment pe WHERE pe.equipment.equipment_id = :equipmentId AND pe.estimated_start_date >= :startOfDay")
+    @Query("SELECT pe FROM Plan_equipment pe WHERE pe.equipment.equipment_id = :equipmentId AND pe.estimated_end_date >= :startOfDay")
     List<Plan_equipment> findPlansByEquipmentIdAndStartDate(@Param("equipmentId") int equipmentId,
                                                             @Param("startOfDay") LocalDateTime startOfDay);
 

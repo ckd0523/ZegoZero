@@ -112,12 +112,10 @@ public class OrderService {
     // 출하가능하도록 변경
     public void update2(Finished_product_management_Dto finishedProductManagementDto) {
 
-        Orders order = planService.getOrderByPlanId(finishedProductManagementDto.getPlanId());
-
+            Orders order = planService.getOrderByPlanId(finishedProductManagementDto.getPlanId());
 
             // 수정할 필드만 설정
             order.setDelivery_available(true);
-
             // 저장
             ordersRepository.save(order);
 

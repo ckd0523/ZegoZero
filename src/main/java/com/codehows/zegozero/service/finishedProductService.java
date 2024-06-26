@@ -24,23 +24,40 @@ public class finishedProductService {
     private final OrdersRepository ordersRepository;
     private final PlanService planService;
     private final TimeService timeService;
+    private final OrderService orderService;
+
+
+    public Integer sumReceivedQuantityByOrderId(int orderId) {
+        Integer sumquantity = finishProductRepository.sumReceivedQuantityByOrderId(orderId);
+        return sumquantity != null ? sumquantity.intValue() : 0;
+    }
 
     public void receivesave(Finished_product_management_Dto productDto) {
         Orders order = planService.getOrderByPlanId(productDto.getPlanId());
+
         LocalDateTime date = timeService.getDateTimeFromDB().getTime();
 
 
-
+            //주문 수량
            Integer production_quantity = order.getQuantity();
+           // 지금 까지 입고된 수량
+           Integer sumquantity = sumReceivedQuantityByOrderId(order.getOrderId());
+           // 한 계획의 나온 수량
            Integer real_quantity = productDto.getReceived_quantity();
-           Integer inventory_quantity = real_quantity - production_quantity;
+           // 지금 까지 입고된 수량+한 계획의 나온 수량
+           Integer total = sumquantity+real_quantity;
+           // 재고가 될 수량
+           Integer inventory_quantity = total - production_quantity;
+           // 재고가 나간후 이번 계획에 들어갈 수량
+           Integer real_receive_quantity = real_quantity-inventory_quantity;
 
-           if (inventory_quantity > 0) {
+
+           if (production_quantity < total) {
                // 입고
                Finish_product finishProduct = new Finish_product();
                finishProduct.setProduct_name(productDto.getProduct_name());
                finishProduct.setOrder_id(order);
-               finishProduct.setReceived_quantity(production_quantity);
+               finishProduct.setReceived_quantity(real_receive_quantity);
                finishProduct.setReceived_date(date);
                finishProductRepository.save(finishProduct);
 
@@ -49,13 +66,14 @@ public class finishedProductService {
                finishProduct2.setReceived_quantity(inventory_quantity);
                finishProduct2.setReceived_date(date);
                finishProductRepository.save(finishProduct2);
+               orderService.update2(productDto);
 
            } else {
                // 입고
                Finish_product finishProduct = new Finish_product();
                finishProduct.setProduct_name(productDto.getProduct_name());
                finishProduct.setOrder_id(order);
-               finishProduct.setReceived_quantity(production_quantity);
+               finishProduct.setReceived_quantity(real_quantity);
                finishProduct.setReceived_date(date);
                finishProductRepository.save(finishProduct);
            }
