@@ -22,12 +22,13 @@ public class Finished_product_management_Dto {
     private LocalDateTime received_date;
     private Integer shipped_quantity;
     private LocalDateTime shipped_date;
+    private Integer planId;
+
 
     public Finished_product_management_Dto(Finish_product finish_product) {
 
-        if (finish_product.getOrder_id() != null) {
-            this.order_id = finish_product.getOrder_id().getOrderId();
-        }
+        this.order_id = finish_product.getOrder_id().getOrderId();
+        this.planId = finish_product.getOrder_id().getPlan().getPlan_id();
         this.product_name = finish_product.getProduct_name();
         this.received_quantity = finish_product.getReceived_quantity();
         this.received_date = finish_product.getReceived_date();
