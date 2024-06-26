@@ -111,19 +111,15 @@ public class OrderService {
 
     // 출하가능하도록 변경
     public void update2(Finished_product_management_Dto finishedProductManagementDto) {
-        Optional<Orders> optionalOrder = ordersRepository.findById(finishedProductManagementDto.getOrder_id());
 
-        if (optionalOrder.isPresent()) {
-            Orders order = optionalOrder.get();
+        Orders order = planService.getOrderByPlanId(finishedProductManagementDto.getPlanId());
+
 
             // 수정할 필드만 설정
             order.setDelivery_available(true);
 
             // 저장
             ordersRepository.save(order);
-        } else {
-            throw new RuntimeException("Order not found with id");
-        }
 
     }
 

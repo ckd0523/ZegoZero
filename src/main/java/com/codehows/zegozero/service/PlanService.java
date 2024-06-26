@@ -60,4 +60,8 @@ public class PlanService {
         return plansRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Board not found"));
     }
+
+    public Orders getOrderByPlanId(int planId) {
+        return plansRepository.findOrderByPlanId(planId);
+    }
 }

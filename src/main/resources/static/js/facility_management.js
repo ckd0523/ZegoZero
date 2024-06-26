@@ -195,7 +195,25 @@ $(document).ready(function() {
             // 박스포장 스탑시
             if(selectedValue === '12'){
                 console.log(FinishedDto.planId);
-
+                // 설비 스탑시 로직
+                $.ajax({
+                    url: '/api/equipment/stop',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        alert('Stop time updated successfully.');
+                        console.log(response);
+                        // 테이블 리로드
+                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
+                        $('#statusText').text('대기중');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
                 // 재고 등록
                 $.ajax({
                     url: '/api/receive',
@@ -216,25 +234,6 @@ $(document).ready(function() {
                     }
                 });
 
-                // 설비 스탑시 로직
-                $.ajax({
-                    url: '/api/equipment/stop',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(equipmentDto),
-                    success: function(response) {
-                        alert('Stop time updated successfully.');
-                        console.log(response);
-                        // 테이블 리로드
-                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
-                        $('#statusText').text('대기중');
-                        table.ajax.reload(null, false);
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Error: ' + xhr.responseText);
-                        console.log(error);
-                    }
-                });
 
             } else {
 

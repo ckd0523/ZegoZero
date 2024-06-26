@@ -1,5 +1,6 @@
 package com.codehows.zegozero.repository;
 
+import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plans;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,5 +28,8 @@ public interface PlansRepository extends JpaRepository<Plans, Integer> {
     // order_id가 null인 데이터들을 찾는 쿼리문
     @Query("SELECT p FROM Plans p WHERE p.order IS NULL")
     List<Plans> findAllByOrderIsNull();
+
+    @Query("SELECT p.order FROM Plans p WHERE p.plan_id = :planId")
+    Orders findOrderByPlanId(@Param("planId") int planId);
     
 }

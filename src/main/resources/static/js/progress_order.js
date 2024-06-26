@@ -85,6 +85,52 @@ $(document).ready(function () {
         var productionQuantity = orderQuantity - stockUsage;
         var customer = document.getElementById('customer').value;
         var deliveryAddress = document.getElementById('deliveryAddress').value;
+        var errorMessage = "";
+        if (!productName) {
+            errorMessage += "제품명을 선택하세요.\n";
+        }
+        if (!orderQuantity || orderQuantity < 0) {
+            errorMessage += "유효한 주문수량을 입력하세요.\n";
+        }
+        if (!stockUsage || stockUsage < 0) {
+            errorMessage += "유효한 재고사용량을 입력하세요.\n";
+        }
+        if (!customer) {
+            errorMessage += "고객사를 입력하세요.\n";
+        }
+        if (!deliveryAddress) {
+            errorMessage += "배송지를 입력하세요.\n";
+        }
+
+        // 재고 확인
+        var finishProductStock = 0;
+        switch (productName) {
+            case '양배추즙':
+                finishProductStock = parseInt(document.getElementById('finishedProduct1').innerText);
+                break;
+            case '흑마늘즙':
+                finishProductStock = parseInt(document.getElementById('finishedProduct2').innerText);
+                break;
+            case '석류젤리':
+                finishProductStock = parseInt(document.getElementById('finishedProduct3').innerText);
+                break;
+            case '매실젤리':
+                finishProductStock = parseInt(document.getElementById('finishedProduct4').innerText);
+                break;
+        }
+
+        if (isNaN(finishProductStock)) {
+            errorMessage += "보유중인 재고를 확인할 수 없습니다.\n";
+        } else {
+            if (finishProductStock < stockUsage) {
+                errorMessage += "보유중인 재고가 충분하지 않습니다.\n";
+            }
+        }
+
+        if (errorMessage) {
+            alert(errorMessage);
+            return;
+        }
 
         // Confirm 팝업에 값 설정
         document.getElementById('confirmProductName').value = productName;

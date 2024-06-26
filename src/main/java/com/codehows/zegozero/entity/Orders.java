@@ -41,9 +41,6 @@ public class Orders {
 
     private Boolean Delivery_available;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="plan")
-    private Plans plan;
 
     //원자재 발주 여부 추가.
     private Boolean ordered;

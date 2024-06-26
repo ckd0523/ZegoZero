@@ -22,18 +22,19 @@ public class finishedProductService {
 
     private final FinishProductRepository finishProductRepository;
     private final OrdersRepository ordersRepository;
+    private final PlanService planService;
     private final TimeService timeService;
 
     public void receivesave(Finished_product_management_Dto productDto) {
-        Optional<Orders> optionalOrder = ordersRepository.findById(productDto.getOrder_id());
+        Orders order = planService.getOrderByPlanId(productDto.getPlanId());
         LocalDateTime date = timeService.getDateTimeFromDB().getTime();
 
-        if (optionalOrder.isPresent()) {
-           Orders order = optionalOrder.get();
+
 
            Integer production_quantity = order.getQuantity();
            Integer real_quantity = productDto.getReceived_quantity();
            Integer inventory_quantity = real_quantity - production_quantity;
+
            if (inventory_quantity > 0) {
                // 입고
                Finish_product finishProduct = new Finish_product();
@@ -59,7 +60,7 @@ public class finishedProductService {
                finishProductRepository.save(finishProduct);
            }
 
-        }
+
     }
 
     // 출하시 출고내역 등록
