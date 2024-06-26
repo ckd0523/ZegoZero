@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,19 @@ public class Plan_equipment_api_controller {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // 젤리 계획 잡기
+    @GetMapping("/zeliPlan")
+    public ResponseEntity<Void> zeliPlan(
+            @RequestParam String productName,
+            @RequestParam int input){
+
+        planEquipmentService.clearTemporaryPlans();
+
+        planEquipmentService.zeliPlan(productName, input);
+
+        return ResponseEntity.ok().build();
     }
 
     // 설비2 계획 잡기
@@ -142,6 +156,12 @@ public class Plan_equipment_api_controller {
     @PostMapping("/saveAllEquipmentPlans")
     public ResponseEntity<Void> saveAllEquipmentPlans() {
         planEquipmentService.savePlanEquipments();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/saveAllEquipmentPlans2")
+    public ResponseEntity<Void> saveAllEquipmentPlans2() {
+        planEquipmentService.savePlanEquipments2();
         return ResponseEntity.ok().build();
     }
 
