@@ -30,10 +30,14 @@ public class OrderService {
     private final MaterialDetailsRepository materialDetailsRepository;
     private final TimeService timeService;
     private final PlanService planService;
+    private final PlansRepository plansRepository;
 
     public void save(Order_Dto Orderdata) {
-
+        int maxPlanId = plansRepository.getMaxPlanId();
         LocalDateTime date = timeService.getDateTimeFromDB().getTime();
+        Plans plans = plansRepository.findByPlanId(maxPlanId);
+
+        LocalDateTime expectedShippingDate = plans.getCompletion_date();
 
         Orders orders = new Orders();
         orders.setProduct_name(Orderdata.getProduct_name());
@@ -41,7 +45,7 @@ public class OrderService {
         orders.setUsed_inventory(Orderdata.getUsed_inventory());
         orders.setProduction_quantity(Orderdata.getProduction_quantity());
         orders.setOrder_date(LocalDateTime.now());
-        orders.setExpected_shipping_date(Orderdata.getExpected_shipping_date());
+        orders.setExpected_shipping_date(expectedShippingDate);
         orders.setCustomer_name(Orderdata.getCustomer_name());
         orders.setDelivery_address(Orderdata.getDelivery_address());
         orders.setDeletable(true);
