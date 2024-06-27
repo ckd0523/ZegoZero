@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -125,19 +122,64 @@ public class plan_api_controller {
 //                .body(Dto);
 //    }
 
+//    @GetMapping("/nowOrderProgress/{inputValue}")
+//    public Map<String,Object> findnowOrderProgess(@PathVariable Integer inputValue) {
+//        Map<String, Object> A = new HashMap<>();
+//
+//        try {
+//            Orders orders = orderService.findById(inputValue);
+//
+//            if (orders != null) {
+//                List<Equipment_plan_date_Dto> Dto = planService.findByOrderId(orders);
+//                A.put("Data", Dto);
+//
+//                return A;
+//            }
+//
+//        }catch (Exception e) {
+//            A.put("message", "등록되지 않은 수주 번호입니다");
+//            A.put("error", e.getMessage());
+//        }
+//        return A;
+//    }
     @GetMapping("/nowOrderProgress/{inputValue}")
-    public Map<String,Object> findnowOrderProgess(@PathVariable Integer inputValue) {
+    public Map<String, Object> findnowOrderProgress(@PathVariable(required = false) String inputValue) {
+        Map<String, Object> response = new HashMap<>();
 
-        Map<String,Object> A = new HashMap<>();
-        Orders orders = orderService.findById(inputValue);
+        try {
 
-        List<Equipment_plan_date_Dto> Dto= planService.findByOrderId(orders);
+            // 입력 값이 없는 경우 예외 처리
+            if (inputValue == null || inputValue.isEmpty()) {
+                throw new IllegalArgumentException("입력 값이 없습니다");
+            }
 
-        A.put("Data",Dto);
+            Integer orderId = Integer.parseInt(inputValue); // 입력 값 파싱
 
+            Orders orders = orderService.findById(orderId);
+            //findById매서드에서 예외를 던져주기 때문에, 여기서는 else구문이 작동할 여지가 없음
 
-        return A;
+            if (orders != null) {
+                List<Equipment_plan_date_Dto> dto = planService.findByOrderId(orders);
+                response.put("Data", dto);
+            }
+
+        } catch (Exception e) {
+            response.put("Data", new ArrayList<>()); // 빈 리스트 반환
+            response.put("message", "등록되지 않은 수주 번호입니다");
+            response.put("error", e.getMessage());
+        }
+
+        return response;
     }
+
+//    @GetMapping("/api/nowOrderProgress")
+//    public Map<String, Object> handleMissingInputValue() {
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("Data", new ArrayList<>()); // 빈 리스트 반환
+//        response.put("message", "입력 값이 필요합니다");
+//        return response;
+//    }
+
 
 
 }
