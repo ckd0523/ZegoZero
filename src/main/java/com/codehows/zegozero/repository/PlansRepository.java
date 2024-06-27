@@ -31,5 +31,11 @@ public interface PlansRepository extends JpaRepository<Plans, Integer> {
 
     @Query("SELECT p.order FROM Plans p WHERE p.plan_id = :planId")
     Orders findOrderByPlanId(@Param("planId") int planId);
+
+    // Orders 테이블의 shipping_date가 null인 Plans 데이터들을 찾는 쿼리문
+    @Query("SELECT p FROM Plans p " +
+            "JOIN p.order o " +
+            "WHERE o.shipping_date IS NULL")
+    List<Plans> findAllByOrderShippingDateIsNull();
     
 }

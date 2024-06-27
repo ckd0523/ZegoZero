@@ -32,4 +32,10 @@ public interface FinishProductRepository extends JpaRepository<Finish_product, I
     @Query("SELECT SUM(fp.received_quantity) FROM Finish_product fp WHERE fp.order_id.orderId = :orderId")
     Integer sumReceivedQuantityByOrderId(int orderId);
 
+    // 날짜별로 수량을 합산하는 쿼리문
+    @Query("SELECT SUM(fp.received_quantity), CAST(fp.received_date AS date) " +
+            "FROM Finish_product fp " +
+            "GROUP BY CAST(fp.received_date AS date)")
+    List<Object[]> findTotalReceivedQuantityByDate();
+
 }

@@ -2,6 +2,7 @@ package com.codehows.zegozero.controller;
 
 import com.codehows.zegozero.dto.Output_Dto;
 import com.codehows.zegozero.dto.Production_performance_Dto;
+import com.codehows.zegozero.repository.FinishProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,29 +19,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class chart_api_controller {
 
+    private final FinishProductRepository finishProductRepository;
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     // 일별생산량 데이터
     @GetMapping("/dailyProduction")
     public List<Output_Dto> getDailyProduction(@RequestParam int month) throws ParseException {
-        List<Output_Dto> dailyData = Arrays.asList(
-                new Output_Dto(50, sdf.parse("2024-06-10")),
-                new Output_Dto(70, sdf.parse("2024-06-11")),
-                new Output_Dto(80, sdf.parse("2024-06-12")),
-                new Output_Dto(60, sdf.parse("2024-06-13")),
-                new Output_Dto(90, sdf.parse("2024-06-14")),
-                new Output_Dto(40, sdf.parse("2024-06-15")),
-                new Output_Dto(100, sdf.parse("2024-06-16")),
-                new Output_Dto(90, sdf.parse("2024-07-16")),
-                new Output_Dto(40, sdf.parse("2024-07-15")),
-                new Output_Dto(100, sdf.parse("2024-07-15")),
-                new Output_Dto(120, sdf.parse("2024-07-16")),
-                new Output_Dto(60, sdf.parse("2024-07-24")),
-                new Output_Dto(20, sdf.parse("2024-07-06")),
-                new Output_Dto(40, sdf.parse("2024-07-01")),
-                new Output_Dto(80, sdf.parse("2024-07-28"))
 
-        );
+        List<Object[]> results = finishProductRepository.findTotalReceivedQuantityByDate();
+
+        // 결과를 Output_Dto 리스트로 변환
+        List<Output_Dto> dailyData = new ArrayList<>();
+        for (Object[] result : results) {
+            Long totalQuantity = (Long) result[0];
+            java.sql.Date date = (java.sql.Date) result[1];
+            dailyData.add(new Output_Dto(totalQuantity.intValue(), date));
+        }
 
         // 월별 데이터 필터링
         List<Output_Dto> filteredData = dailyData.stream()

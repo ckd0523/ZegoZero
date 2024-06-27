@@ -35,7 +35,13 @@ $(document).ready( function () {
         lengthChange: false,   // Entries per page 드롭다운 비활성화
         columns: [
             { data: 'order_id'},
-            { data: 'equipment_name'},
+            { data: 'plan_id'},
+            {
+                data: 'equipment_name',
+                render: function(data, type, row){
+                    return data === 'planned' ? '대기중' : data;
+                }
+            },
             {
                 data: 'production',
                 render: function(data, type, row) {
@@ -105,6 +111,8 @@ document.getElementById('dailyButton').addEventListener('click', function() {
     // 이전, 다음 버튼 나타내기
     document.getElementById('prevPageButton').style.display = 'block';
     document.getElementById('nextPageButton').style.display = 'block';
+
+
 
     fetch(`/api/dailyProduction?month=${currentMonth}`)
         .then(response => response.json())

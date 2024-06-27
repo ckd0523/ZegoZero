@@ -4,14 +4,18 @@ import com.codehows.zegozero.entity.Plan_equipment;
 import com.codehows.zegozero.entity.Plans;
 import com.codehows.zegozero.service.FullCalendarService;
 import com.codehows.zegozero.service.PlanService;
+import com.codehows.zegozero.service.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -20,6 +24,7 @@ public class plan_api_controller {
 
     private final PlanService planService;
     private final FullCalendarService fullCalendarService;
+    private final TimeService timeService;
 
     // 생산계획 개수와 제작수량 계산
     @GetMapping("/calculateProductionQuantity")
@@ -57,6 +62,47 @@ public class plan_api_controller {
             case 9: return "#f3ff33";
             default: return "#000000";
         }
+    }
+
+    // 수주번호, 계획번호에 따른 현황 테이블
+    @GetMapping("/runningTable")
+    public List<Map<String, Object>> getRunningTableData() {
+        List<Plans> runningPlans = planService.getRunningPlanEquipments();
+        LocalDateTime currentTime = timeService.getDateTimeFromDB().getTime();
+
+        return runningPlans.stream().map(p -> {
+            double production = calculateProductionPercentage(p, currentTime);
+            return Map.<String, Object>of(
+                    "order_id", p.getOrder().getOrderId(),
+                    "plan_id", p.getPlan_id(),
+                    "equipment_name", p.getStatus(),
+                    "production", production,
+                    "customer_name", p.getOrder().getCustomer_name(),
+                    "expected_shipping_date", p.getCompletion_date()
+            );
+        }).collect(Collectors.toList());
+    }
+
+    private double calculateProductionPercentage(Plans p, LocalDateTime currentTime) {
+        LocalDateTime estimatedStart = p.getStart_date();
+        LocalDateTime estimatedEnd = p.getCompletion_date();
+
+        if (estimatedStart == null || estimatedEnd == null) {
+            return 0.0;
+        }
+
+        Duration totalDuration = Duration.between(estimatedStart, estimatedEnd);
+        Duration elapsedDuration = Duration.between(estimatedStart, currentTime);
+
+        if (elapsedDuration.isNegative() || totalDuration.isZero()) {
+            return 0.0;
+        } else if (elapsedDuration.compareTo(totalDuration) > 0) {
+            return 100.0;
+        }
+
+        // 소수점 버림
+        double percentage = (double) elapsedDuration.toMillis() / totalDuration.toMillis() * 100;
+        return Math.floor(percentage); // 소수점 버림 처리
     }
 
 

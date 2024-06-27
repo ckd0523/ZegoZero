@@ -1060,9 +1060,4 @@ public class PlanEquipmentService {
         return planEquipmentRepository.findRunningEquipments();
     }
 
-    // 가동중인 설비 현황 테이블 데이터 가져오기
-    public List<Plan_equipment> getRunningPlanEquipments(){
-        return planEquipmentRepository.findRunningEquipments();
-    }
-
 }
