@@ -1,6 +1,7 @@
 package com.codehows.zegozero.repository;
 
 import com.codehows.zegozero.entity.Plan_equipment;
+import com.codehows.zegozero.entity.Plans;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -60,5 +61,10 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     // 시작시간이 있고 종료시간이 없는 데이터 가져오기
     @Query("SELECT pe FROM Plan_equipment pe WHERE pe.start_date IS NOT NULL AND pe.end_date IS NULL")
     List<Plan_equipment> findRunningEquipments();
+
+
+
+    @Query("SELECT pe FROM Plan_equipment pe WHERE pe.plan = :plan")
+    List<Plan_equipment> findByPlans(Plans plan);
 
 }

@@ -1,14 +1,19 @@
 package com.codehows.zegozero.service;
 
+import com.codehows.zegozero.dto.Equipment_plan_date_Dto;
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plan_equipment;
 import com.codehows.zegozero.entity.Plans;
+import com.codehows.zegozero.entity.Purchase_matarial;
+import com.codehows.zegozero.repository.PlanEquipmentRepository;
 import com.codehows.zegozero.repository.PlansRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +22,8 @@ import java.util.List;
 public class PlanService {
 
     private final PlansRepository plansRepository;
+    private final PlanEquipmentRepository planEquipmentRepository;
+    private final TimeService timeService;
 
     int latestPlanQuantity = 0; // 기존 마지막 계획에 잡혀있는 수량
     int totalProductionQuantity = 0; // 실제작수량
@@ -70,4 +77,53 @@ public class PlanService {
     public List<Plans> getRunningPlanEquipments(){
         return plansRepository.findAllByOrderShippingDateIsNull();
     }
+
+    public List<Equipment_plan_date_Dto> findByOrderId(Orders orders){
+
+        double Processing;
+        LocalDateTime currentTime = timeService.getDateTimeFromDB().getTime();
+
+
+        List<Equipment_plan_date_Dto> nowProcessing = new ArrayList<>();
+        List<Plans> byOrderId = plansRepository.findByOrderId(orders);
+
+
+        for(Plans plan : byOrderId){
+            List<Plan_equipment> plans = planEquipmentRepository.findByPlans(plan);
+            Processing = calculateProductionPercentage(plan,currentTime);
+            for (Plan_equipment planEquipment : plans) {
+                Equipment_plan_date_Dto Dto = new Equipment_plan_date_Dto(planEquipment, orders.getOrderId(),Processing);
+                nowProcessing.add(Dto);
+            }
+        }
+
+        System.out.println(nowProcessing);
+
+        return nowProcessing;
+    }
+
+    private double calculateProductionPercentage(Plans p, LocalDateTime currentTime) {
+        LocalDateTime estimatedStart = p.getStart_date();
+        LocalDateTime estimatedEnd = p.getCompletion_date();
+
+        if (estimatedStart == null || estimatedEnd == null) {
+            return 0.0;
+        }
+
+        Duration totalDuration = Duration.between(estimatedStart, estimatedEnd);
+        Duration elapsedDuration = Duration.between(estimatedStart, currentTime);
+
+        if (elapsedDuration.isNegative() || totalDuration.isZero()) {
+            return 0.0;
+        } else if (elapsedDuration.compareTo(totalDuration) > 0) {
+            return 100.0;
+        }
+
+        // 소수점 버림
+        double percentage = (double) elapsedDuration.toMillis() / totalDuration.toMillis() * 100;
+        return Math.floor(percentage); // 소수점 버림 처리
+    }
+
+
 }
+

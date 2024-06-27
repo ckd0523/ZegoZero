@@ -2,6 +2,7 @@ package com.codehows.zegozero.repository;
 
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plans;
+import com.codehows.zegozero.entity.Purchase_matarial;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,5 +38,7 @@ public interface PlansRepository extends JpaRepository<Plans, Integer> {
             "JOIN p.order o " +
             "WHERE o.shipping_date IS NULL")
     List<Plans> findAllByOrderShippingDateIsNull();
+    @Query("SELECT p FROM Plans p WHERE p.order = :order")
+    List<Plans> findByOrderId(Orders order);
     
 }

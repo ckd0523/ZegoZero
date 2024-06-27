@@ -1,5 +1,6 @@
 package com.codehows.zegozero.repository;
 
+import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Purchase_matarial;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,6 @@ public interface PurchaseMatarialRepository  extends JpaRepository<Purchase_mata
 
     @Query("SELECT p FROM Purchase_matarial p WHERE p.raw_material = :rowMaterial")
     List<Purchase_matarial> findByRawMaterial(String rowMaterial);
+
+
 }
