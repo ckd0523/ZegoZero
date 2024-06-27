@@ -254,6 +254,11 @@ public class OrderService {
 
         return dto;
     }
+
+    // 수주번호, 계획번호에 따른 현황 테이블
+    public List<Orders> getRunningPlanEquipments(){
+        return ordersRepository.findAllByShippingDateIsNull();
+    }
 }
 
 

@@ -3,6 +3,7 @@ package com.codehows.zegozero.service;
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plan_equipment;
 import com.codehows.zegozero.entity.Plans;
+import com.codehows.zegozero.repository.OrdersRepository;
 import com.codehows.zegozero.repository.PlansRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -64,10 +65,5 @@ public class PlanService {
 
     public Orders getOrderByPlanId(int planId) {
         return plansRepository.findOrderByPlanId(planId);
-    }
-
-    // 수주번호, 계획번호에 따른 현황 테이블
-    public List<Plans> getRunningPlanEquipments(){
-        return plansRepository.findAllByOrderShippingDateIsNull();
     }
 }
