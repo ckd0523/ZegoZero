@@ -115,7 +115,6 @@ $(document).ready(function() {
 
     // START 버튼 클릭 시 이벤트 처리
     $('#startButton').on('click', function() {
-        // 체크된 체크박스 가져오기
         var checkedBox = $('.checkbox:checked');
 
         if (checkedBox.length === 1) {
@@ -124,62 +123,56 @@ $(document).ready(function() {
             var selectedValue = $('#equipmentSelect').val();
 
             console.log('선택된 행의 데이터:', rowData);
-            console.log('선택된 설비 start :', selectedValue);
+            console.log('선택된 설비 start:', selectedValue);
 
-            // equipmentDto 객체 생성
             var equipmentDto = {
-                equipmentPlanId: rowData.equipment_plan_id,  // rowData에서 id 필드 가져오기
-                // 필요한 다른 필드가 있다면 추가합니다
+                equipmentPlanId: rowData.equipment_plan_id,
             };
 
-            if (selectedValue === 2){
+            var inputDto = {
+                shipped_quantity: rowData.input,
+                planId: rowData.plan_id
+            };
 
-                //세척공정 로직
+            if (selectedValue === '2') {
 
+                // inputDto 확인을 위한 console.log 추가
+                console.log('전송할 inputDto 데이터:', inputDto.shipped_quantity);
 
-                // AJAX 요청 보내기
                 $.ajax({
-                    url: '/api/equipment/start',
+                    url: '/api/cleaning',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(equipmentDto),
-                    success: function (response) {
-                        alert('Start time updated successfully.');
+                    data: JSON.stringify(inputDto),
+                    success: function(response) {
+                        alert('Cleaning process started successfully.');
                         console.log(response);
-                        // 테이블 리로드
-                        $('#behavior').css('background-color', '#4CAF50'); // 초록색
-                        $('#statusText').text('가동중');
                         table.ajax.reload(null, false);
                     },
-                    error: function (xhr, status, error) {
-                        alert('Error: ' + xhr.responseText);
-                        console.log(error);
-                    }
-                });
-
-            } else {
-
-                // AJAX 요청 보내기
-                $.ajax({
-                    url: '/api/equipment/start',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(equipmentDto),
-                    success: function (response) {
-                        alert('Start time updated successfully.');
-                        console.log(response);
-                        // 테이블 리로드
-                        $('#behavior').css('background-color', '#4CAF50'); // 초록색
-                        $('#statusText').text('가동중');
-                        table.ajax.reload(null, false);
-                    },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         alert('Error: ' + xhr.responseText);
                         console.log(error);
                     }
                 });
             }
 
+            $.ajax({
+                url: '/api/equipment/start',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(equipmentDto),
+                success: function(response) {
+                    alert('Start time updated successfully.');
+                    console.log(response);
+                    $('#behavior').css('background-color', '#4CAF50');
+                    $('#statusText').text('가동중');
+                    table.ajax.reload(null, false);
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + xhr.responseText);
+                    console.log(error);
+                }
+            });
         } else {
             alert('하나의 행을 선택해야 합니다.');
         }
