@@ -1005,11 +1005,14 @@ public class PlanEquipmentService {
     public void start(Equipment_Dto equipmentDto) {
         Optional<Plan_equipment> equipmentPlan = planEquipmentRepository.findById(equipmentDto.getEquipmentPlanId());
 
+
         LocalDateTime date = timeService.getDateTimeFromDB().getTime();
 
         if (equipmentPlan.isPresent()) {
             Plan_equipment planEquipment = equipmentPlan.get();
-
+            Plans plan = planEquipment.getPlan();
+            plan.setStatus(planEquipment.getEquipment().getEquipment_name()+"시작");
+            plansRepository.save(plan);
             // 수정할 필드만 설정
             planEquipment.setStart_date(date);
 
@@ -1029,6 +1032,9 @@ public class PlanEquipmentService {
 
         if (equipmentPlan.isPresent()) {
             Plan_equipment planEquipment = equipmentPlan.get();
+            Plans plan = planEquipment.getPlan();
+            plan.setStatus(planEquipment.getEquipment().getEquipment_name()+"종료");
+            plansRepository.save(plan);
 
             // 수정할 필드만 설정
             planEquipment.setEnd_date(date);

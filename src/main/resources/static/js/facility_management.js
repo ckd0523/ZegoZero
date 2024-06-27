@@ -136,6 +136,27 @@ $(document).ready(function() {
 
                 //세척공정 로직
 
+
+                // AJAX 요청 보내기
+                $.ajax({
+                    url: '/api/equipment/start',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function (response) {
+                        alert('Start time updated successfully.');
+                        console.log(response);
+                        // 테이블 리로드
+                        $('#behavior').css('background-color', '#4CAF50'); // 초록색
+                        $('#statusText').text('가동중');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
             } else {
 
                 // AJAX 요청 보내기
