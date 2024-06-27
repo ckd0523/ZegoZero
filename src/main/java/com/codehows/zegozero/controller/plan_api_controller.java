@@ -30,7 +30,6 @@ public class plan_api_controller {
     private final OrderService orderService;
     private final FullCalendarService fullCalendarService;
     private final TimeService timeService;
-    private final OrderService orderService;
 
     // 생산계획 개수와 제작수량 계산
     @GetMapping("/calculateProductionQuantity")

@@ -35,6 +35,7 @@ public interface FinishProductRepository extends JpaRepository<Finish_product, I
     // 날짜별로 수량을 합산하는 쿼리문
     @Query("SELECT SUM(fp.received_quantity), CAST(fp.received_date AS date) " +
             "FROM Finish_product fp " +
+            "WHERE fp.received_date IS NOT NULL " +  // received_date가 null이 아닌 경우만 선택
             "GROUP BY CAST(fp.received_date AS date)")
     List<Object[]> findTotalReceivedQuantityByDate();
 
