@@ -7,8 +7,7 @@ import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plans;
 import com.codehows.zegozero.entity.Purchase_matarial;
 import com.codehows.zegozero.repository.MaterialDetailsRepository;
-import com.codehows.zegozero.service.OrderService;
-import com.codehows.zegozero.service.finishedProductService;
+import com.codehows.zegozero.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -30,8 +28,11 @@ public class OrderApiController {
 
     private final OrderService orderService;
     private final finishedProductService finishedProductService;
+    private final MaterialDetailsService materialDetailsService;
 
     private static final Logger logger = Logger.getLogger(OrderApiController.class.getName());
+    private final PlanService planService;
+    private final TimeService timeService;
 
     @PostMapping("/order")
     public ResponseEntity<?> registApiOrder(@Valid @RequestBody Order_Dto Orderdata, BindingResult bindingResult) throws IOException {
@@ -46,7 +47,7 @@ public class OrderApiController {
             return ResponseEntity.badRequest().body("주문수량보다 재고가 많을수는 없습니다.");
         }
 
-        if(finishedProductService.totalProduct(Orderdata.getProduct_name()) < Orderdata.getUsed_inventory()){
+        if (finishedProductService.totalProduct(Orderdata.getProduct_name()) < Orderdata.getUsed_inventory()) {
             return ResponseEntity.badRequest().body("필요한 재고가 부족합니다.");
         }
 
@@ -69,10 +70,10 @@ public class OrderApiController {
         Map<String, Object> Order_DtoList1 = new HashMap<String, Object>();
 
         List<Order_Dto> Order_DtoList = orderService.findAllByShippingDateIsNull().stream()
-                        .map(a ->new Order_Dto(a))
-                        .collect(Collectors.toList());
+                .map(a -> new Order_Dto(a))
+                .collect(Collectors.toList());
 
-        Order_DtoList1.put("data",Order_DtoList);
+        Order_DtoList1.put("data", Order_DtoList);
 
         // 원하는 작업 후 데이터를 담은 객체를 반환
         return Order_DtoList1;
@@ -84,10 +85,10 @@ public class OrderApiController {
         Map<String, Object> Order_DtoList1 = new HashMap<String, Object>();
 
         List<Order_Dto> Order_DtoList = orderService.findAllByShippingDateIsNotNull().stream()
-                .map(a ->new Order_Dto(a))
+                .map(a -> new Order_Dto(a))
                 .collect(Collectors.toList());
 
-        Order_DtoList1.put("data",Order_DtoList);
+        Order_DtoList1.put("data", Order_DtoList);
 
         // 원하는 작업 후 데이터를 담은 객체를 반환
         return Order_DtoList1;
@@ -113,12 +114,12 @@ public class OrderApiController {
 
         List<Order_Dto> orderPlan1 = orderService.findByDeletable(deletable)
                 .stream()
-                .map(a ->new Order_Dto(a))
+                .map(a -> new Order_Dto(a))
                 .collect(Collectors.toList());
 
         System.out.println("123");
 
-        orderPlan.put("data",orderPlan1);
+        orderPlan.put("data", orderPlan1);
 
         System.out.println("12333");
         // 원하는 작업 후 데이터를 담은 객체를 반환
@@ -137,7 +138,7 @@ public class OrderApiController {
 //
 //    }
 
-    
+
     //원자재 구매 테이블에서 orders의 데이터를 가져오기
 
 //    @GetMapping("/delivered")
@@ -172,16 +173,16 @@ public class OrderApiController {
 
         List<responsePurchaseMaterial_Dto> delivered1 = orderService.findByDelivery_status(deliveryStatus)
                 .stream()
-                .map(a ->new responsePurchaseMaterial_Dto(a))
+                .map(a -> new responsePurchaseMaterial_Dto(a))
                 .collect(Collectors.toList());
 
-        delivered.put("data",delivered1);
+        delivered.put("data", delivered1);
 
         return delivered;
     }
 
     @PostMapping("savePurchaseMaterial")
-    public ResponseEntity<?> savePurchaseMaterial(@RequestBody List<savePurchaseMaterial_Dto> saveList){
+    public ResponseEntity<?> savePurchaseMaterial(@RequestBody List<savePurchaseMaterial_Dto> saveList) {
 
         //deletable로 변환하는 매서드 추가
         Boolean deletable = false;
@@ -194,13 +195,12 @@ public class OrderApiController {
     }
 
 
-
     //1.발주번호를 바탕으로 '배송중'을 '배송완료'로 변경한다.
     //2.원자재 내역 테이블에 발주번호를 등록한다.
     //3. 원자재 입고량을 구하는 방법- '주문량'(원자재발주tbl)을 가져와 '입고량'(원자재내역tbl)으로 등록한다.
     //4.dto에 현재 날짜를 등록하여 함께 저장한다.
     @PostMapping("deliveryOk")
-    public ResponseEntity<?> deliveryOk(@RequestBody Integer[] deliveryOk){
+    public ResponseEntity<?> deliveryOk(@RequestBody Integer[] deliveryOk) {
         //deliveryOk는 발주번호를 가진 배열
 
 
@@ -228,7 +228,7 @@ public class OrderApiController {
 
 
         System.out.println(all);
-        detail.put("data",all);
+        detail.put("data", all);
         System.out.println(all);
         return detail;
     }
@@ -276,11 +276,74 @@ public class OrderApiController {
         }
     }
 
+    @PostMapping("/cleaning")
+    public String getMaterialDetailsByPurchaseId(@RequestBody CleaningDto cleaningDto) {
+        // Debugging information
+        System.out.println("Received planId: " + cleaningDto.getPlanId());
+        System.out.println("Received shipped_quantity: " + cleaningDto.getShipped_quantity());
+
+        Plans plan = planService.findById(cleaningDto.getPlanId());
+
+        // planId와 shipped_quantity를 가져옵니다.
+        Integer planId = cleaningDto.getPlanId();
+        Integer shippedQuantity = plan.getPlanned_quantity();
+        int material1 = shippedQuantity * 4;
+        int material2 = (int) Math.ceil(shippedQuantity * 0.15);
+        int material3 = shippedQuantity * 125;
+        int material4 = (int) Math.ceil(shippedQuantity * 0.05);
+        // 시간
+        LocalDateTime time = timeService.getDateTimeFromDB().getTime();
+
+        // planId를 이용하여 관련된 주문을 찾습니다.
+        Orders order = planService.getOrderByPlanId(planId);
+        List<Purchase_matarial> purchaseMatarials = materialDetailsService.findByOrderId(order.getOrderId());
+
+        List<Material_details> materialDetailsList = new ArrayList<>();
 
 
 
+        for (Purchase_matarial purchaseMatarial : purchaseMatarials) {
+            Material_details material_details = new Material_details();
+            material_details.setPurchase_matarial(purchaseMatarial);
+            material_details.setShipped_date(time);
 
+            switch (purchaseMatarial.getRaw_material()) {
+                case "양배추":
+                case "흑마늘":
+                    material_details.setShipped_quantity(material1);
+                    break;
+                case "꿀":
+                    material_details.setShipped_quantity(material2);
+                    break;
+                case "석류":
+                case "매실":
+                    material_details.setShipped_quantity(material3);
+                    break;
+                case "콜라겐":
+                    material_details.setShipped_quantity(material4);
+                    break;
+                default:
+                    // 만약 예상치 못한 값이 들어왔을 경우 기본값을 설정할 수도 있습니다.
+                    material_details.setShipped_quantity(0);
+                    break;
+            }
 
+            // 리스트에 추가
+            materialDetailsList.add(material_details);
+        }
 
+                // 생성된 Material_details 객체들을 데이터베이스에 저장합니다.
+                for (Material_details details : materialDetailsList) {
+                    materialDetailsService.saveMaterialDetails(details);
+                }
 
+        // 반환할 값이 있다면 설정해줍니다.
+                if (materialDetailsList.isEmpty()) {
+                    return "Not Found";
+                } else {
+                    return "Success";
+                }
+    }
 }
+
+
