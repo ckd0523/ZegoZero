@@ -34,11 +34,11 @@ public class Plan_equipment {
 
     private int output;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="plan")
     private Plans plan;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="equipment")
     private Equipment equipment;
 

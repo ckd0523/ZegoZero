@@ -2,6 +2,7 @@ package com.codehows.zegozero.repository;
 
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plans;
+import com.codehows.zegozero.entity.Purchase_matarial;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,5 +32,8 @@ public interface PlansRepository extends JpaRepository<Plans, Integer> {
 
     @Query("SELECT p.order FROM Plans p WHERE p.plan_id = :planId")
     Orders findOrderByPlanId(@Param("planId") int planId);
+
+    @Query("SELECT p FROM Plans p WHERE p.order = :order")
+    List<Plans> findByOrderId(Orders order);
     
 }

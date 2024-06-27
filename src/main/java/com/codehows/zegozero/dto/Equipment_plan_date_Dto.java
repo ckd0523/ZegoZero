@@ -21,6 +21,11 @@ public class Equipment_plan_date_Dto {
     private LocalDateTime start_date;
     private LocalDateTime end_date;
     private int plan_id;
+    private int equipment_id;
+    private int order_id;
+    private double nowProcessing;
+
+
 
 
 
@@ -34,6 +39,21 @@ public class Equipment_plan_date_Dto {
         this.start_date = plan_equipment.getStart_date();
         this.end_date = plan_equipment.getEnd_date();
         this.plan_id = plan_equipment.getPlan().getPlan_id();
+        this.equipment_id=plan_equipment.getEquipment_plan_id();
+    }
+    public Equipment_plan_date_Dto(Plan_equipment plan_equipment, int orderId, double Processing) {
+        this.equipment_plan_id = plan_equipment.getEquipment_plan_id();
+        this.estimated_start_date = plan_equipment.getEstimated_start_date();
+        this.estimated_end_date = plan_equipment.getEstimated_end_date();
+        this.input = plan_equipment.getInput();
+        this.output = plan_equipment.getOutput();
+        this.product_name = plan_equipment.getPlan().getProduct_name();
+        this.start_date = plan_equipment.getStart_date();
+        this.end_date = plan_equipment.getEnd_date();
+        this.plan_id = plan_equipment.getPlan().getPlan_id();
+        this.equipment_id=plan_equipment.getEquipment_plan_id();
+        this.order_id=orderId;
+        this.nowProcessing=Processing;
     }
 
 }

@@ -1,8 +1,12 @@
 package com.codehows.zegozero.controller;
 
+import com.codehows.zegozero.dto.Equipment_plan_date_Dto;
+
+import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plan_equipment;
 import com.codehows.zegozero.entity.Plans;
 import com.codehows.zegozero.service.FullCalendarService;
+import com.codehows.zegozero.service.OrderService;
 import com.codehows.zegozero.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,7 @@ import java.util.Map;
 public class plan_api_controller {
 
     private final PlanService planService;
+    private final OrderService orderService;
     private final FullCalendarService fullCalendarService;
 
     // 생산계획 개수와 제작수량 계산
@@ -59,6 +64,34 @@ public class plan_api_controller {
         }
     }
 
+
+//    @GetMapping("/nowOrderProgress/{inputValue}")
+//    public ResponseEntity<List<Equipment_plan_date_Dto>> findnowOrderProgess(@PathVariable Integer inputValue) {
+//
+//
+//        Orders orders = orderService.findById(inputValue);
+//
+//        List<Equipment_plan_date_Dto> Dto= planService.findByOrderId(orders);
+//
+//        System.out.println(Dto.get(0));
+//
+//        return ResponseEntity.ok()
+//                .body(Dto);
+//    }
+
+    @GetMapping("/nowOrderProgress/{inputValue}")
+    public Map<String,Object> findnowOrderProgess(@PathVariable Integer inputValue) {
+
+        Map<String,Object> A = new HashMap<>();
+        Orders orders = orderService.findById(inputValue);
+
+        List<Equipment_plan_date_Dto> Dto= planService.findByOrderId(orders);
+
+        A.put("Data",Dto);
+
+
+        return A;
+    }
 
 
 }
