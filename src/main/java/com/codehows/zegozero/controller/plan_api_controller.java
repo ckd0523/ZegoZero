@@ -30,6 +30,7 @@ public class plan_api_controller {
     private final OrderService orderService;
     private final FullCalendarService fullCalendarService;
     private final TimeService timeService;
+    private final OrderService orderService;
 
     // 생산계획 개수와 제작수량 계산
     @GetMapping("/calculateProductionQuantity")
@@ -72,25 +73,23 @@ public class plan_api_controller {
     // 수주번호, 계획번호에 따른 현황 테이블
     @GetMapping("/runningTable")
     public List<Map<String, Object>> getRunningTableData() {
-        List<Plans> runningPlans = planService.getRunningPlanEquipments();
+        List<Orders> runningPlans = orderService.getRunningPlanEquipments();
         LocalDateTime currentTime = timeService.getDateTimeFromDB().getTime();
 
-        return runningPlans.stream().map(p -> {
-            double production = calculateProductionPercentage(p, currentTime);
+        return runningPlans.stream().map(o -> {
+            double production = calculateProductionPercentage(o, currentTime);
             return Map.<String, Object>of(
-                    "order_id", p.getOrder().getOrderId(),
-                    "plan_id", p.getPlan_id(),
-                    "equipment_name", p.getStatus(),
+                    "order_id", o.getOrderId(),
                     "production", production,
-                    "customer_name", p.getOrder().getCustomer_name(),
-                    "expected_shipping_date", p.getCompletion_date()
+                    "customer_name", o.getCustomer_name(),
+                    "expected_shipping_date", o.getExpected_shipping_date()
             );
         }).collect(Collectors.toList());
     }
 
-    private double calculateProductionPercentage(Plans p, LocalDateTime currentTime) {
-        LocalDateTime estimatedStart = p.getStart_date();
-        LocalDateTime estimatedEnd = p.getCompletion_date();
+    private double calculateProductionPercentage(Orders o, LocalDateTime currentTime) {
+        LocalDateTime estimatedStart = o.getOrder_date();
+        LocalDateTime estimatedEnd = o.getExpected_shipping_date();
 
         if (estimatedStart == null || estimatedEnd == null) {
             return 0.0;

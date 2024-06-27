@@ -35,13 +35,6 @@ $(document).ready( function () {
         lengthChange: false,   // Entries per page 드롭다운 비활성화
         columns: [
             { data: 'order_id'},
-            { data: 'plan_id'},
-            {
-                data: 'equipment_name',
-                render: function(data, type, row){
-                    return data === 'planned' ? '대기중' : data;
-                }
-            },
             {
                 data: 'production',
                 render: function(data, type, row) {
