@@ -73,36 +73,72 @@ $(document).ready(function() {
     });
 
 
+    // window.fetchData = function() {
+    //     const inputValue = $('#inputNumber').val(); // 입력된 수를 가져옴
+    //
+    //
+    //     $.ajax({
+    //         url: `/api/nowOrderProgress/${inputValue}`, // URL을 동적으로 생성
+    //         type: 'GET',
+    //         success: function(response) {
+    //             // 테이블 데이터 초기화
+    //             aa.clear();
+    //
+    //             // 데이터를 테이블에 추가
+    //             response.Data.forEach(function(item) {
+    //                 aa.row.add(item).draw();
+    //             });
+    //         },
+    //
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             console.error('Error fetching data:', errorThrown);
+    //
+    //             // 서버에서 반환된 에러 메시지
+    //             const errorMessage = jqXHR.responseJSON ? jqXHR.responseJSON.message : 'An unknown error occurred';
+    //
+    //             // 에러 메시지를 alert로 표시
+    //             alert(`Error: ${errorMessage}`);
+    //         }
+    //     });
+    // };
+
     window.fetchData = function() {
         const inputValue = $('#inputNumber').val(); // 입력된 수를 가져옴
-
 
         $.ajax({
             url: `/api/nowOrderProgress/${inputValue}`, // URL을 동적으로 생성
             type: 'GET',
-            // success: function(data) {
-            //     // 테이블 데이터 초기화
-            //     aa.clear().draw();
-            //
-            //     // 데이터를 테이블에 추가
-            //     data.forEach(function(item) {
-            //         aa.row.add(item);
-            //     });
-            // },
             success: function(response) {
                 // 테이블 데이터 초기화
                 aa.clear();
-
-                // 데이터를 테이블에 추가
-                response.Data.forEach(function(item) {
-                    aa.row.add(item).draw();
-                });
+                //전달받은 데이터가 존재하고 길이가 0이상인 경우(값이 잘 도착한 경우)
+                if (response.Data && response.Data.length > 0) {
+                    // 데이터를 테이블에 추가
+                    response.Data.forEach(function(item) {
+                        aa.row.add(item).draw();
+                    });
+                } 
+                
+                //값이 없었다면 컨트롤러에서 error메시지를 보내기 때문에 data는 존재하지 않음
+                //그래서 else는 작동할 여지 x
+                else {
+                    // 서버에서 받은 메시지 표시
+                    alert(response.message || 'No data found.');
+                }
+                
             },
-
-            error: function(error) {
-                console.error('Error fetching data:', error);
-            }
+            //error를 보내어 도착한 내용을 alert창으로 표기
+            // error: function(jqXHR, textStatus, errorThrown) {
+            //     console.error('Error fetching data:', errorThrown);
+            //
+            //     // 서버에서 반환된 에러 메시지
+            //     const errorMessage = jqXHR.responseJSON ? jqXHR.responseJSON.message : 'An unknown error occurred';
+            //
+            //     // 에러 메시지를 alert로 표시
+            //     alert(`Error: ${errorMessage}`);
+            // }
         });
     };
+
 
 });
