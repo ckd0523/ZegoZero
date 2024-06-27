@@ -298,7 +298,12 @@ $(document).ready(function() {
                 columns: [
                     {data: 'order_id'},
                     {data: 'product_name'},
-                    {data: 'production_quantity'},
+                    {
+                        data: 'production_quantity',
+                        render: function(data, type, row) {
+                            return Math.round(data * 1.03); // 1.03을 곱하고 소수점 두 자리로 반올림
+                        }
+                    }
                 ],
 
             })
@@ -329,7 +334,7 @@ $(document).ready(function() {
 
             var orderId = rowData.order_id;
             var product_name = rowData.product_name;
-            var production_quantity = rowData.production_quantity;
+            var production_quantity = rowData.production_quantity*1.03;
 
             console.log(orderId);
             console.log(product_name);
@@ -342,8 +347,8 @@ $(document).ready(function() {
                 console.log("양배추즙")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var cabbageRequired = Math.floor(production_quantity * CABBAGEorGarlic_PER_JUICE);
-                var honeyRequired = Math.floor(production_quantity * HONEY_PER_JUICE);
+                var cabbageRequired = Math.round(production_quantity * CABBAGEorGarlic_PER_JUICE);
+                var honeyRequired = Math.round(production_quantity * HONEY_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
@@ -368,8 +373,8 @@ $(document).ready(function() {
                 console.log("흑마늘즙")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var garlicRequired = Math.floor(production_quantity * CABBAGEorGarlic_PER_JUICE);
-                var honeyRequired2 = Math.floor(production_quantity * HONEY_PER_JUICE);
+                var garlicRequired = Math.round(production_quantity * CABBAGEorGarlic_PER_JUICE);
+                var honeyRequired2 = Math.round(production_quantity * HONEY_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
@@ -394,8 +399,8 @@ $(document).ready(function() {
                 console.log("석류젤리")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var pomegranateJelly = Math.floor(production_quantity * PER_JUICE);
-                var collagenRequired = Math.floor(production_quantity * COLAGEN_PER_JUICE);
+                var pomegranateJelly = Math.round(production_quantity * PER_JUICE);
+                var collagenRequired = Math.round(production_quantity * COLAGEN_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
@@ -418,8 +423,8 @@ $(document).ready(function() {
                 console.log("매실젤리")
 
                 // 주문해야 할 양배추와 벌꿀의 양 계산
-                var plumJelly = Math.floor(production_quantity * PER_JUICE);
-                var collagenRequired2 = Math.floor(production_quantity * COLAGEN_PER_JUICE);
+                var plumJelly = Math.round(production_quantity * PER_JUICE);
+                var collagenRequired2 = Math.round(production_quantity * COLAGEN_PER_JUICE);
 
                 // 객체로 만들어 배열에 추가
                 const data1 = {
