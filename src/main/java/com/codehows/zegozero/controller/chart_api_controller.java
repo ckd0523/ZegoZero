@@ -3,6 +3,9 @@ package com.codehows.zegozero.controller;
 import com.codehows.zegozero.dto.Output_Dto;
 import com.codehows.zegozero.dto.Production_performance_Dto;
 import com.codehows.zegozero.repository.FinishProductRepository;
+import com.codehows.zegozero.repository.OrdersRepository;
+import com.codehows.zegozero.repository.PlanEquipmentRepository;
+import com.codehows.zegozero.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 public class chart_api_controller {
 
     private final FinishProductRepository finishProductRepository;
+    private final OrderService orderService;
+    private final PlanEquipmentRepository planEquipmentRepository;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -27,7 +32,7 @@ public class chart_api_controller {
     @GetMapping("/dailyProduction")
     public List<Output_Dto> getDailyProduction(@RequestParam int month) throws ParseException {
 
-        List<Object[]> results = finishProductRepository.findTotalReceivedQuantityByDate();
+        List<Object[]> results = planEquipmentRepository.findTotalOutputByDate();
 
         // 결과를 Output_Dto 리스트로 변환
         List<Output_Dto> dailyData = new ArrayList<>();
@@ -69,13 +74,10 @@ public class chart_api_controller {
     // 생산실적 데이터
     @GetMapping("/performance")
     public List<Production_performance_Dto> getProductionPerformance() {
-        return Arrays.asList(
-                new Production_performance_Dto(1, 300, 290),
-                new Production_performance_Dto(2, 500, 490),
-                new Production_performance_Dto(3, 400, 380),
-                new Production_performance_Dto(4, 600, 590),
-                new Production_performance_Dto(5, 700, 680),
-                new Production_performance_Dto(6, 800, 780)
-        );
+
+        List<Production_performance_Dto> chart2 = orderService.getChart2();
+
+        // 배송 완료된 수주번호, 제작수량, 산출량
+        return chart2;
     }
 }

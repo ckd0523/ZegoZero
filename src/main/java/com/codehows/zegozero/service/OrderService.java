@@ -1,22 +1,16 @@
 package com.codehows.zegozero.service;
 
 import com.codehows.zegozero.dto.*;
-import com.codehows.zegozero.entity.Material_details;
-import com.codehows.zegozero.entity.Orders;
-import com.codehows.zegozero.entity.Purchase_matarial;
+import com.codehows.zegozero.entity.*;
 import com.codehows.zegozero.repository.*;
 import jakarta.persistence.EntityNotFoundException;
-import com.codehows.zegozero.entity.Plans;
 import com.codehows.zegozero.repository.OrdersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @RequiredArgsConstructor
@@ -38,19 +32,39 @@ public class OrderService {
 
         LocalDateTime expectedShippingDate = plans.getCompletion_date();
 
-        Orders orders = new Orders();
-        orders.setProduct_name(Orderdata.getProduct_name());
-        orders.setQuantity(Orderdata.getQuantity());
-        orders.setUsed_inventory(Orderdata.getUsed_inventory());
-        orders.setProduction_quantity(Orderdata.getProduction_quantity());
-        orders.setOrder_date(date);
-        orders.setExpected_shipping_date(expectedShippingDate);
-        orders.setCustomer_name(Orderdata.getCustomer_name());
-        orders.setDelivery_address(Orderdata.getDelivery_address());
-        orders.setDeletable(true);
-        orders.setDelivery_available(false);
+        if(Orderdata.getProduction_quantity() == 0){
 
-        ordersRepository.save(orders);
+            Orders orders = new Orders();
+            orders.setProduct_name(Orderdata.getProduct_name());
+            orders.setQuantity(Orderdata.getQuantity());
+            orders.setUsed_inventory(Orderdata.getUsed_inventory());
+            orders.setProduction_quantity(Orderdata.getProduction_quantity());
+            orders.setOrder_date(date);
+            orders.setExpected_shipping_date(date);
+            orders.setCustomer_name(Orderdata.getCustomer_name());
+            orders.setDelivery_address(Orderdata.getDelivery_address());
+            orders.setDeletable(false);
+            orders.setDelivery_available(true);
+
+            ordersRepository.save(orders);
+
+        }else{
+
+            Orders orders = new Orders();
+            orders.setProduct_name(Orderdata.getProduct_name());
+            orders.setQuantity(Orderdata.getQuantity());
+            orders.setUsed_inventory(Orderdata.getUsed_inventory());
+            orders.setProduction_quantity(Orderdata.getProduction_quantity());
+            orders.setOrder_date(date);
+            orders.setExpected_shipping_date(expectedShippingDate);
+            orders.setCustomer_name(Orderdata.getCustomer_name());
+            orders.setDelivery_address(Orderdata.getDelivery_address());
+            orders.setDeletable(true);
+            orders.setDelivery_available(false);
+
+            ordersRepository.save(orders);
+
+        }
     }
 
     public void updatePlanOrderId(){
@@ -165,31 +179,6 @@ public class OrderService {
         return materialDetailsRepository.findAll();
     }
 
-
-//    //디티오로 보내
-//    public Material_details PackagingData() {
-//Integer[] list;
-//
-//        //원자재명이 박스, 포장지인 데이터를 가져와 발주번호를 추출한다.
-//        //해당 발주번호 중 출고 가장 최근의 입고량에서
-//
-//        List<Purchase_matarial> pack = purchaseMatarialRepository.findByRawMaterial("포장지");
-//        for(int i=0;i<=pack.toArray().length;i++){
-//            list[i] = pack[i].getPurchase_Material_Id;
-//
-//        }
-//
-//        //pack의 발주번호를 모두 추출
-//        //발주번호로 원자재내역 테이블에서 입고량과 출고량을 모두 더한 값을 도출
-//
-//
-//
-//
-//        materialDetailsRepository.findBy
-//
-//        return;
-//    }
-
     public PackagingData_Dto getPackagingData() {
 
         PackagingData_Dto dto = new PackagingData_Dto();
@@ -256,6 +245,36 @@ public class OrderService {
     // 수주번호, 계획번호에 따른 현황 테이블
     public List<Orders> getRunningPlanEquipments(){
         return ordersRepository.findAllByShippingDateIsNull();
+    }
+
+    // Chart2 데이터 가져오기
+    public List<Production_performance_Dto> getChart2(){
+
+        List<Orders> notNullShippingDateOrders = ordersRepository.findAllByShippingDateIsNotNull();
+
+        List<Production_performance_Dto> dtoList = new ArrayList<>();
+
+        for (Orders order : notNullShippingDateOrders){
+            int orderId = order.getOrderId();
+            int input = (int)Math.ceil(order.getProduction_quantity() * 1.031);
+
+            List<Plans> plansList = order.getPlans();
+
+            int output = plansList.stream()
+                    .flatMap(plan -> plan.getPlanEquipments().stream())
+                    .filter(planEquipment -> planEquipment.getEquipment().getEquipment_id() == 12)
+                    .mapToInt(Plan_equipment::getOutput)
+                    .sum();
+
+            Production_performance_Dto dto = new Production_performance_Dto(orderId, input, output);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+
+    public int getMaxOrderId(){
+        return ordersRepository.findMaxOrderId();
     }
 
 }

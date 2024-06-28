@@ -78,6 +78,7 @@ public class plan_api_controller {
             return Map.<String, Object>of(
                     "order_id", o.getOrderId(),
                     "production", production,
+                    "production_name", o.getProduct_name(),
                     "customer_name", o.getCustomer_name(),
                     "expected_shipping_date", o.getExpected_shipping_date()
             );

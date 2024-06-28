@@ -56,9 +56,20 @@ public class OrderApiController {
             finishedProductService.orderProductsave(Orderdata);
 
         }
+
         orderService.save(Orderdata);
 
+        int maxOrderId = orderService.getMaxOrderId();
+
+        if(Orderdata.getUsed_inventory() > 0) {
+
+            finishedProductService.updateMaxOrderId(maxOrderId);
+
+        }
+
         orderService.updatePlanOrderId();
+
+
 
         // 원하는 작업 후 데이터를 담은 객체를 반환
         return ResponseEntity.ok().body("Order saved successfully");

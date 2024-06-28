@@ -183,7 +183,7 @@ $(document).ready(function () {
                     closePopup("confirmationPopup");
                 }
             });
-        }, 2000);
+        }, 1000);
     });
 
     // 삭제 버튼 클릭 시 처리할 함수

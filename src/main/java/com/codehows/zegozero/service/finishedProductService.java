@@ -7,8 +7,10 @@ import com.codehows.zegozero.entity.Finish_product;
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.repository.FinishProductRepository;
 import com.codehows.zegozero.repository.OrdersRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -108,6 +110,7 @@ public class finishedProductService {
             finishProduct.setShipped_date(date);
             finishProduct.setShipped_quantity(orderDto.getUsed_inventory());
             finishProductRepository.save(finishProduct);
+
     }
 
     public List<Finish_product> findAll() {
@@ -147,6 +150,21 @@ public class finishedProductService {
         int total = receivedQuantity - shippedQuantity;
 
         return total;
+    }
+
+    @Transactional
+    public void updateMaxOrderId(int maxOrderId) {
+        Finish_product maxFinishProduct = finishProductRepository.findMaxFinishProductByQuery();
+        if (maxFinishProduct != null) {
+            Orders order = ordersRepository.findById(maxOrderId)
+                    .orElseThrow(() -> new EntityNotFoundException("Orders not found with id: " + maxOrderId));
+            // 업데이트할 속성 설정
+            maxFinishProduct.setOrder_id(order);
+            // 변경된 엔티티를 저장하여 DB에 반영
+            finishProductRepository.save(maxFinishProduct);
+        } else {
+            throw new EntityNotFoundException("No Finish_product found");
+        }
     }
 
 }

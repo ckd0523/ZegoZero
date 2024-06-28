@@ -19,7 +19,6 @@ public interface OrdersRepository  extends JpaRepository<Orders, Integer> {
     List<Orders> findAllByShippingDateIsNotNull();
 
     List<Orders> findByDeletable(Boolean deletable);
-//    List<Orders> findAllByOrderIdIn(List<Integer> orderIds);
 
     Orders findByOrderId(Integer orderId);
 

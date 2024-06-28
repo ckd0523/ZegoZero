@@ -30,7 +30,7 @@ public class Purchase_matarial {
 
     private String delivery_status;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name="order_id")
     private Orders order_id;
 

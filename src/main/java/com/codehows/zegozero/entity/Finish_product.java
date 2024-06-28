@@ -30,7 +30,7 @@ public class Finish_product {
 
     private LocalDateTime shipped_date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name="order_id")
     private Orders order_id;
 
