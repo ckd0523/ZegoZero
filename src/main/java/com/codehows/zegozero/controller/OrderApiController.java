@@ -276,10 +276,8 @@ public class OrderApiController {
 
             PackagingData_Dto boxData = orderService.getBoxData();
 
-            System.out.println(boxData.getBox());
-
             PackagingData_Dto packData = orderService.getPackData();
-            System.out.println(boxData.getPackaging());
+
 
 //            if (packagingData == null) {
 //                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

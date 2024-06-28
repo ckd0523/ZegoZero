@@ -136,6 +136,35 @@ $(document).ready(function() {
 
 
 
+        // fetch('/api/deliveryOk', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(deliveryOkOrder)
+        // })
+        //     .then(response => response.text())
+        //     // .then(response => {
+        //     //     if (!response.ok) {
+        //     //         throw new Error('Network response was not ok');
+        //     //     }
+        //     //     return response.text();
+        //     // })
+        //     .then(data => {
+        //         console.log('Success:', data);
+        //         alert('Success:'+ data);
+        //     })
+        //     .catch((error) => {
+        //         // console.error('Error:', "error");
+        //         alert('에러'+ error.message)
+        //     });
+        //
+        //
+        // location.reload();
+        
+        //비동기통신이 끝나기 전에 페이지를 로드하여 문제 발생
+        //통신이 끝난 후 페이지를 로드할 수 있도록 then 뒤에 매서드 실행하니 문제 해결
+
         fetch('/api/deliveryOk', {
             method: 'POST',
             headers: {
@@ -144,23 +173,15 @@ $(document).ready(function() {
             body: JSON.stringify(deliveryOkOrder)
         })
             .then(response => response.text())
-            // .then(response => {
-            //     if (!response.ok) {
-            //         throw new Error('Network response was not ok');
-            //     }
-            //     return response.text();
-            // })
             .then(data => {
                 console.log('Success:', data);
-                alert('Success:'+ data);
+                alert('Success:' + data);
+                location.reload();  // 비동기 통신이 끝난 후 페이지 리로드
             })
             .catch((error) => {
-                // console.error('Error:', "error");
-                alert('에러'+ error.message)
+                alert('에러: ' + error.message);
             });
 
-
-        location.reload();
 
     });
 
