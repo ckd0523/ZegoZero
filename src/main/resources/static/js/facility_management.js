@@ -145,9 +145,23 @@ $(document).ready(function() {
                     contentType: 'application/json',
                     data: JSON.stringify(inputDto),
                     success: function(response) {
-                        alert('Cleaning process started successfully.');
-                        console.log(response);
-                        table.ajax.reload(null, false);
+                        $.ajax({
+                            url: '/api/equipment/start',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(equipmentDto),
+                            success: function(response) {
+                                alert('Start time updated successfully.');
+                                console.log(response);
+                                $('#behavior').css('background-color', '#4CAF50');
+                                $('#statusText').text('가동중');
+                                table.ajax.reload(null, false);
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Error: ' + xhr.responseText);
+                                console.log(error);
+                            }
+                        });
                     },
                     error: function(xhr, status, error) {
                         alert('Error: ' + xhr.responseText);
@@ -156,26 +170,508 @@ $(document).ready(function() {
                 });
             }
 
-            $.ajax({
-                url: '/api/equipment/start',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(equipmentDto),
-                success: function(response) {
-                    alert('Start time updated successfully.');
-                    console.log(response);
-                    $('#behavior').css('background-color', '#4CAF50');
-                    $('#statusText').text('가동중');
-                    table.ajax.reload(null, false);
-                },
-                error: function(xhr, status, error) {
-                    alert('Error: ' + xhr.responseText);
-                    console.log(error);
-                }
-            });
+            // 추출기 1
+            if (selectedValue === '3') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response === "세척종료"){
+
+                            // 스타트 누름
+                            $.ajax({
+                                url: '/api/equipment/start',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(equipmentDto),
+                                success: function(response) {
+                                    alert('Start time updated successfully.');
+                                    console.log(response);
+                                    $('#behavior').css('background-color', '#4CAF50');
+                                    $('#statusText').text('가동중');
+                                    table.ajax.reload(null, false);
+                                },
+                                error: function(xhr, status, error) {
+                                    alert('Error: ' + xhr.responseText);
+                                    console.log(error);
+                                }
+                            });
+
+                        } else {
+                            alert("이전 공정이 완료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 추출기 2
+            if (selectedValue === '4') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response === "세척종료"){
+
+                            // 스타트 누름
+                            $.ajax({
+                                url: '/api/equipment/start',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(equipmentDto),
+                                success: function(response) {
+                                    alert('Start time updated successfully.');
+                                    console.log(response);
+                                    $('#behavior').css('background-color', '#4CAF50');
+                                    $('#statusText').text('가동중');
+                                    table.ajax.reload(null, false);
+                                },
+                                error: function(xhr, status, error) {
+                                    alert('Error: ' + xhr.responseText);
+                                    console.log(error);
+                                }
+                            });
+
+                        } else {
+                            alert("이전 공정이 완료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 살균기 1
+            if (selectedValue === '5') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "여과" || "혼합") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 살균기 2
+            if (selectedValue === '6') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "여과" || "혼합") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 혼합기
+            if (selectedValue === '7') {
+
+                $.ajax({
+                    url: '/api/cleaning',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(inputDto),
+                    success: function(response) {
+                        $.ajax({
+                            url: '/api/equipment/start',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(equipmentDto),
+                            success: function(response) {
+                                alert('Start time updated successfully.');
+                                console.log(response);
+                                $('#behavior').css('background-color', '#4CAF50');
+                                $('#statusText').text('가동중');
+                                table.ajax.reload(null, false);
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Error: ' + xhr.responseText);
+                                console.log(error);
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 냉각
+            if (selectedValue === '8') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "충진") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 여과기
+            if (selectedValue === '9') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "추출") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 충진기 1,2
+            if (selectedValue === '10') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "살균") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 충진기 3,4
+            if (selectedValue === '11') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "살균") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 포장기
+            if (selectedValue === '12') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "검사") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+            // 검사기
+            if (selectedValue === '13') {
+
+                // 확인
+                $.ajax({
+                    url: '/api/status',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentDto),
+                    success: function(response) {
+                        if (response.substr(0, 2) === "충진" || "냉각") {
+                            if (response.substring(response.length-2) === "종료") {
+
+                                // 스타트 누름
+                                $.ajax({
+                                    url: '/api/equipment/start',
+                                    type: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(equipmentDto),
+                                    success: function (response) {
+                                        alert('Start time updated successfully.');
+                                        console.log(response);
+                                        $('#behavior').css('background-color', '#4CAF50');
+                                        $('#statusText').text('가동중');
+                                        table.ajax.reload(null, false);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert('Error: ' + xhr.responseText);
+                                        console.log(error);
+                                    }
+                                });
+
+                            } else {
+                                alert("이전 공정이 종료 되지 않았습니다.");
+                            }
+                        } else {
+                            alert("이전 공정이 종료 되지 않았습니다.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + xhr.responseText);
+                        console.log(error);
+                    }
+                });
+
+            }
+
+
         } else {
             alert('하나의 행을 선택해야 합니다.');
         }
+
     });
 
     // STOP 버튼 클릭 시 이벤트 처리
@@ -211,59 +707,95 @@ $(document).ready(function() {
                 console.log(FinishedDto.planId);
                 // 설비 스탑시 로직
                 $.ajax({
-                    url: '/api/equipment/stop',
+                    url: '/api/boolean',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(equipmentDto),
                     success: function(response) {
-                        alert('Stop time updated successfully.');
-                        console.log(response);
-                        // 테이블 리로드
-                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
-                        $('#statusText').text('대기중');
-                        table.ajax.reload(null, false);
+
+                        if (response === true) {
+
+                            // AJAX 요청 보내기
+                            $.ajax({
+                                url: '/api/equipment/stop',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(equipmentDto),
+                                success: function (response) {
+                                    // 재고 등록
+                                    $.ajax({
+                                        url: '/api/receive',
+                                        type: 'POST',
+                                        contentType: 'application/json',
+                                        data: JSON.stringify(FinishedDto),
+                                        success: function(response) {
+                                            alert('Stop time updated successfully.');
+                                            console.log(response);
+                                            // 테이블 리로드
+                                            $('#behavior').css('background-color', '#FF5733'); // 빨간색
+                                            $('#statusText').text('대기중');
+                                            table.ajax.reload(null, false);
+                                        },
+                                        error: function(xhr, status, error) {
+                                            alert('Error: ' + xhr.responseText);
+                                            console.log(error);
+                                        }
+                                    });
+                                },
+                                error: function (xhr, status, error) {
+                                    alert('Error: ' + xhr.responseText);
+                                    console.log(error);
+                                }
+                            });
+
+                        } else {
+                            alert("설비를 먼저 시작해야합니다.");
+                        }
+
                     },
                     error: function(xhr, status, error) {
                         alert('Error: ' + xhr.responseText);
                         console.log(error);
                     }
                 });
-                // 재고 등록
-                $.ajax({
-                    url: '/api/receive',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(FinishedDto),
-                    success: function(response) {
-                        alert('Stop time updated successfully.');
-                        console.log(response);
-                        // 테이블 리로드
-                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
-                        $('#statusText').text('대기중');
-                        table.ajax.reload(null, false);
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Error: ' + xhr.responseText);
-                        console.log(error);
-                    }
-                });
+
 
 
             } else {
 
-                // AJAX 요청 보내기
                 $.ajax({
-                    url: '/api/equipment/stop',
+                    url: '/api/boolean',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(equipmentDto),
                     success: function(response) {
-                        alert('Stop time updated successfully.');
-                        console.log(response);
-                        // 테이블 리로드
-                        $('#behavior').css('background-color', '#FF5733'); // 빨간색
-                        $('#statusText').text('대기중');
-                        table.ajax.reload(null, false);
+
+                        if (response === true) {
+
+                            // AJAX 요청 보내기
+                            $.ajax({
+                                url: '/api/equipment/stop',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(equipmentDto),
+                                success: function (response) {
+                                    alert('Stop time updated successfully.');
+                                    console.log(response);
+                                    // 테이블 리로드
+                                    $('#behavior').css('background-color', '#FF5733'); // 빨간색
+                                    $('#statusText').text('대기중');
+                                    table.ajax.reload(null, false);
+                                },
+                                error: function (xhr, status, error) {
+                                    alert('Error: ' + xhr.responseText);
+                                    console.log(error);
+                                }
+                            });
+
+                        } else {
+                            alert("설비를 먼저 시작해야합니다.");
+                        }
+
                     },
                     error: function(xhr, status, error) {
                         alert('Error: ' + xhr.responseText);

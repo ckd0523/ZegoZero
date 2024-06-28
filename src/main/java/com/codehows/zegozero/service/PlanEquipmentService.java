@@ -1005,17 +1005,17 @@ public class PlanEquipmentService {
     public void start(Equipment_Dto equipmentDto) {
         Optional<Plan_equipment> equipmentPlan = planEquipmentRepository.findById(equipmentDto.getEquipmentPlanId());
 
-
         LocalDateTime date = timeService.getDateTimeFromDB().getTime();
 
         if (equipmentPlan.isPresent()) {
             Plan_equipment planEquipment = equipmentPlan.get();
             Plans plan = planEquipment.getPlan();
+
             plan.setStatus(planEquipment.getEquipment().getEquipment_name()+"시작");
+
             plansRepository.save(plan);
             // 수정할 필드만 설정
             planEquipment.setStart_date(date);
-
             // 저장
             planEquipmentRepository.save(planEquipment);
         } else {
@@ -1058,6 +1058,11 @@ public class PlanEquipmentService {
     // 시작시간이 있고 종료시간이 없는 데이터 가져오기
     public List<Plan_equipment> getRunningEquipments() {
         return planEquipmentRepository.findRunningEquipments();
+    }
+
+    // 설비 계획 번호에 시작 시간이 있는지 여부
+    public boolean checkStartDateExists(Integer equipmentPlanId) {
+        return planEquipmentRepository.existsStartDateByEquipmentPlanId(equipmentPlanId);
     }
 
 }

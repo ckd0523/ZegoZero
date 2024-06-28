@@ -160,6 +160,10 @@ public class PlanService {
         return Math.floor(percentage); // 소수점 버림 처리
     }
 
+    public String getPlanStatusByEquipmentPlanId(Integer equipmentPlanId) {
+        return planEquipmentRepository.findPlanStatusByEquipmentPlanId(equipmentPlanId);
+    }
+
 
 }
 
