@@ -2,7 +2,10 @@ package com.codehows.zegozero.controller;
 
 import com.codehows.zegozero.dto.Finished_product_management_Dto;
 import com.codehows.zegozero.dto.Order_Dto;
+import com.codehows.zegozero.dto.PackagingData_Dto;
 import com.codehows.zegozero.dto.Shipment_management_dto;
+import com.codehows.zegozero.entity.Material_details;
+import com.codehows.zegozero.entity.Purchase_matarial;
 import com.codehows.zegozero.service.OrderService;
 import com.codehows.zegozero.service.finishedProductService;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -25,11 +25,20 @@ public class finishedProductApiController {
     private final finishedProductService productService;
     private final OrderService orderService;
 
-    // 완제품 입고
+    // 완제품 입고(완제품 재고 추가)
     @PostMapping("/receive")
     public ResponseEntity<?> receive(@RequestBody Finished_product_management_Dto finishedProduct) throws IOException {
 
+        
+
+
+        
+
         productService.receivesave(finishedProduct);
+        orderService.usePackaging(finishedProduct);
+
+
+
         return ResponseEntity.ok().body("saved successfully");
     };
 

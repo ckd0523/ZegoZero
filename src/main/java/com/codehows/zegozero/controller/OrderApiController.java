@@ -187,6 +187,17 @@ public class OrderApiController {
                 .map(a -> new responsePurchaseMaterial_Dto(a))
                 .collect(Collectors.toList());
 
+        if(delivered1.isEmpty()){
+            responsePurchaseMaterial_Dto dto = new responsePurchaseMaterial_Dto();
+            dto.setOrder_id(null);
+            dto.setPurchase_matarial_id(null);
+            dto.setRaw_material(null);
+            dto.setOrder_quantity(null);
+            dto.setDelivery_completion_date(null);
+            dto.setDelivery_status(null);
+            dto.setPurchase_date(null);
+        }
+
         delivered.put("data", delivered1);
 
         return delivered;
@@ -218,14 +229,16 @@ public class OrderApiController {
         // 배열 길이를 체크하고 각 값을 출력
         if (deliveryOk != null && deliveryOk.length > 0) {
 
-            for (int i = 0; i < deliveryOk.length; i++) {
+//            for (int i = 0; i < deliveryOk.length; i++) {
+            System.out.println(deliveryOk.length);
+                orderService.findByPurchase_material_id(deliveryOk);
 
-                orderService.findByPurchase_material_id(deliveryOk[i]); //
-            }
+//            }
         } else {
-            return ResponseEntity.badRequest().body("No materials provided");
+            return ResponseEntity.badRequest().body("값을 선택해주세요");
         }
-        return ResponseEntity.ok().body("All materials saved successfully");
+
+        return ResponseEntity.ok().body("성공적으로...");
     }
 
     @GetMapping("/showInventory")
@@ -271,19 +284,28 @@ public class OrderApiController {
     public ResponseEntity<PackagingData_Dto> getPackagingData() {
 
         try {
-            PackagingData_Dto packagingData = orderService.getPackagingData();
 
-            if (packagingData == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-            }
+            PackagingData_Dto boxData = orderService.getBoxData();
 
-            System.out.println(packagingData.getPackaging());
-            System.out.println(packagingData.getBox());
+            PackagingData_Dto packData = orderService.getPackData();
 
-            return ResponseEntity.ok().body(packagingData);
+
+//            if (packagingData == null) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//            }
+
+            packData.setBox(boxData.getBox());
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"+packData.getPackaging());
+            System.out.println(packData.getBox());
+            System.out.println(boxData);
+            return ResponseEntity.ok().body(packData);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            PackagingData_Dto dto = new PackagingData_Dto();
+            dto.setPackaging("0");
+            dto.setBox("0");
+            System.out.println("널포인트 예외");
+
+            return ResponseEntity.ok().body(dto);
         }
     }
 
@@ -355,6 +377,18 @@ public class OrderApiController {
                     return "Success";
                 }
     }
+
+    @PostMapping("PackOrder")
+    public ResponseEntity<?> PackOrder() {
+        orderService.packagingOrder();
+
+        return ResponseEntity.ok().body("주문 완료");
+    }
+
+
+
+
+
 }
 
 

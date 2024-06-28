@@ -46,11 +46,17 @@ $(document).ready(function() {
         responsive: true,
         orderMulti: true,
         columns: [
-            {data: 'order_id.orderId'}, // order_id 내부의 orderId
+            {
+                data: 'order_id.orderId',
+                render: function(data, type, row) {
+                    return data !== null && data !== undefined ? data : 'null';
+                },
+                title: '수주번호'
+            }, // order_id 내부의 orderId
             {data: 'purchase_matarial_id'},
             {data: 'raw_material'}, // purchase_matarial의 raw_material
-            {data: 'purchase_date'},
-            {data: 'order_id.order_date'}, // order_id 내부의 production_quantity
+            {data: 'order_quantity'},
+            {data: 'purchase_date'}, // order_id 내부의 production_quantity
             {data: 'delivery_status'},
         ]
     });
@@ -128,6 +134,37 @@ $(document).ready(function() {
         //3. 원자재 입고량을 구하는 방법- '주문량'(원자재발주tbl)을 가져와 '입고량'(원자재내역tbl)으로 등록한다.
         //4.dto에 현재 날짜를 등록하여 함께 저장한다.
 
+
+
+        // fetch('/api/deliveryOk', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(deliveryOkOrder)
+        // })
+        //     .then(response => response.text())
+        //     // .then(response => {
+        //     //     if (!response.ok) {
+        //     //         throw new Error('Network response was not ok');
+        //     //     }
+        //     //     return response.text();
+        //     // })
+        //     .then(data => {
+        //         console.log('Success:', data);
+        //         alert('Success:'+ data);
+        //     })
+        //     .catch((error) => {
+        //         // console.error('Error:', "error");
+        //         alert('에러'+ error.message)
+        //     });
+        //
+        //
+        // location.reload();
+        
+        //비동기통신이 끝나기 전에 페이지를 로드하여 문제 발생
+        //통신이 끝난 후 페이지를 로드할 수 있도록 then 뒤에 매서드 실행하니 문제 해결
+
         fetch('/api/deliveryOk', {
             method: 'POST',
             headers: {
@@ -138,17 +175,40 @@ $(document).ready(function() {
             .then(response => response.text())
             .then(data => {
                 console.log('Success:', data);
+                alert('Success:' + data);
+                location.reload();  // 비동기 통신이 끝난 후 페이지 리로드
             })
             .catch((error) => {
-                console.error('Error:', "error");
+                alert('에러: ' + error.message);
             });
 
 
-        location.reload();
-        //
-
     });
 
+    $("#PackOrder").click(function () {
+        fetch('/api/PackOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log('Success:', data); // 서버에서 반환한 응답 데이터 출력
+                // 성공 시 추가적인 클라이언트 측 로직을 추가할 수 있음
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // 오류 발생 시 처리할 로직을 추가할 수 있음
+            });
+
+        location.reload(); // 페이지 새로고침
+    });
 
 
 //     //체크박스 클릭 시 이벤트
@@ -301,8 +361,8 @@ $(document).ready(function() {
                     {
                         data: 'production_quantity',
                         render: function(data, type, row) {
-                            return Math.round(0.97/data ); // 1.03을 곱하고 소수점 두 자리로 반올림
-                        }
+                            return Math.ceil(data * 1.031); // 1.03을 곱하고 소수점 두 자리로 반올림
+        }
                     }
                 ],
 
@@ -334,7 +394,7 @@ $(document).ready(function() {
 
             var orderId = rowData.order_id;
             var product_name = rowData.product_name;
-            var production_quantity = 0.97/(rowData.production_quantity);
+            var production_quantity = rowData.production_quantity;
 
             console.log(orderId);
             console.log(product_name);
