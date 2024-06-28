@@ -225,6 +225,13 @@ public class Plan_equipment_api_controller {
         return ResponseEntity.ok(equipmentIds);
     }
 
+    @PostMapping("/boolean")
+    public Boolean aBoolean (@RequestBody Equipment_Dto equipmentDto) {
+
+        return planEquipmentService.checkStartDateExists(equipmentDto.getEquipmentPlanId());
+
+    }
+
 
 
 }

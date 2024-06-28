@@ -1,7 +1,9 @@
 package com.codehows.zegozero.controller;
 
+import com.codehows.zegozero.dto.Equipment_Dto;
 import com.codehows.zegozero.dto.Equipment_plan_date_Dto;
 
+import com.codehows.zegozero.dto.Order_Dto;
 import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plan_equipment;
 import com.codehows.zegozero.entity.Plans;
@@ -177,6 +179,15 @@ public class plan_api_controller {
 //        response.put("message", "입력 값이 필요합니다");
 //        return response;
 //    }
+
+    @PostMapping("/status")
+    public String findstatus(@RequestBody Equipment_Dto equipmentDto){
+
+        String status = planService.getPlanStatusByEquipmentPlanId(equipmentDto.getEquipmentPlanId());
+
+        return status;
+
+    }
 
 
 

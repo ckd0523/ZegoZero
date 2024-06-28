@@ -67,4 +67,11 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     @Query("SELECT pe FROM Plan_equipment pe WHERE pe.plan = :plan")
     List<Plan_equipment> findByPlans(Plans plan);
 
+    //설비별 계획 번호로 생산 계획 상태 가져오기
+    @Query("SELECT p.status FROM Plan_equipment pe JOIN pe.plan p WHERE pe.equipment_plan_id = :equipmentPlanId")
+    String findPlanStatusByEquipmentPlanId(@Param("equipmentPlanId") Integer equipmentPlanId);
+
+    @Query("SELECT CASE WHEN pe.start_date IS NOT NULL THEN true ELSE false END FROM Plan_equipment pe WHERE pe.equipment_plan_id = :equipmentPlanId")
+    boolean existsStartDateByEquipmentPlanId(@Param("equipmentPlanId") Integer equipmentPlanId);
+
 }
