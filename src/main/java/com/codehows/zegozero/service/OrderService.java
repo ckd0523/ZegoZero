@@ -3,12 +3,6 @@ package com.codehows.zegozero.service;
 
 import com.codehows.zegozero.dto.*;
 import com.codehows.zegozero.entity.*;
-import com.codehows.zegozero.repository.*;
-import jakarta.persistence.EntityNotFoundException;
-import com.codehows.zegozero.entity.Material_details;
-import com.codehows.zegozero.entity.Orders;
-import com.codehows.zegozero.entity.Plans;
-import com.codehows.zegozero.entity.Purchase_matarial;
 import com.codehows.zegozero.repository.MaterialDetailsRepository;
 import com.codehows.zegozero.repository.OrdersRepository;
 import com.codehows.zegozero.repository.PlansRepository;
@@ -18,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 import java.time.LocalDateTime;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,6 +70,9 @@ public class OrderService {
 
         }
     }
+
+    public int getMaxOrderId(){
+        return ordersRepository.findMaxOrderId();}
 
     public void updatePlanOrderId(){
         int maxOrderId = ordersRepository.findMaxOrderId();
@@ -222,7 +216,6 @@ public class OrderService {
         return materialDetailsRepository.findAll();
     }
 
-    public PackagingData_Dto getPackagingData() {
 //    public void updatePackaging(int )
 
 
@@ -364,8 +357,6 @@ public class OrderService {
         return dtoList;
     }
 
-    public int getMaxOrderId(){
-        return ordersRepository.findMaxOrderId();
 
     public void packagingOrder(){
         int box=10000;
@@ -373,11 +364,11 @@ public class OrderService {
         boolean t = true;
         boolean f = false;
 
-//        Orders orders = new Orders();
-//        orders.setQuantity(box);
-//        orders.setDeletable(t);
-//        orders.setProduct_name("박스");
-//        ordersRepository.save(orders);
+        //        Orders orders = new Orders();
+        //        orders.setQuantity(box);
+        //        orders.setDeletable(t);
+        //        orders.setProduct_name("박스");
+        //        ordersRepository.save(orders);
 
         Purchase_matarial purchaseMatarial = new Purchase_matarial();
         purchaseMatarial.setOrder_quantity(box);
@@ -443,5 +434,3 @@ public class OrderService {
     }
 
 }
-
-
