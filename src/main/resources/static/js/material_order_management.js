@@ -134,6 +134,8 @@ $(document).ready(function() {
         //3. 원자재 입고량을 구하는 방법- '주문량'(원자재발주tbl)을 가져와 '입고량'(원자재내역tbl)으로 등록한다.
         //4.dto에 현재 날짜를 등록하여 함께 저장한다.
 
+
+
         fetch('/api/deliveryOk', {
             method: 'POST',
             headers: {
@@ -142,16 +144,23 @@ $(document).ready(function() {
             body: JSON.stringify(deliveryOkOrder)
         })
             .then(response => response.text())
+            // .then(response => {
+            //     if (!response.ok) {
+            //         throw new Error('Network response was not ok');
+            //     }
+            //     return response.text();
+            // })
             .then(data => {
                 console.log('Success:', data);
+                alert('Success:'+ data);
             })
             .catch((error) => {
-                console.error('Error:', "error");
+                // console.error('Error:', "error");
+                alert('에러'+ error.message)
             });
 
 
         location.reload();
-        //
 
     });
 

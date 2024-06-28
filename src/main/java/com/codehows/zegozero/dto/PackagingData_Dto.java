@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PackagingData_Dto {
-    private String packaging ="0";
-    private String box="0";
+    private String packaging;
+    private String box;
 }

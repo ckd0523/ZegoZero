@@ -1,23 +1,26 @@
 package com.codehows.zegozero.service;
 
+
 import com.codehows.zegozero.dto.*;
 import com.codehows.zegozero.entity.Material_details;
 import com.codehows.zegozero.entity.Orders;
-import com.codehows.zegozero.entity.Purchase_matarial;
-import com.codehows.zegozero.repository.*;
-import jakarta.persistence.EntityNotFoundException;
 import com.codehows.zegozero.entity.Plans;
+import com.codehows.zegozero.entity.Purchase_matarial;
+import com.codehows.zegozero.repository.MaterialDetailsRepository;
 import com.codehows.zegozero.repository.OrdersRepository;
+import com.codehows.zegozero.repository.PlansRepository;
+import com.codehows.zegozero.repository.PurchaseMatarialRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 
 @RequiredArgsConstructor
 @Service
@@ -132,6 +135,7 @@ public class OrderService {
 
 
     public void savePurchaseMaterial(savePurchaseMaterial_Dto saveRequest) {
+
         Orders orders = ordersRepository.findById(saveRequest.getOrder_id())
                 .orElseThrow(EntityNotFoundException::new);
         orders.setDeletable(false);
@@ -139,28 +143,57 @@ public class OrderService {
     }
 
 
-    public void findByPurchase_material_id(Integer Purchase_material_id) {
+//    public void findByPurchase_material_id(Integer Purchase_material_id) {
+//
+//        //발주번호로 데이터를 조회하고, '배송중'->'배송 완료'로 변경하여 저장
+//        String deliveryOk = "배송완료";
+//        Purchase_matarial purchaseMatarial = purchaseMatarialRepository.findByPurchaseMaterialId(Purchase_material_id);
+//        purchaseMatarial.setDelivery_status(deliveryOk);
+//        purchaseMatarialRepository.save(purchaseMatarial);
+//
+//        //발주번호로 데이터를 조회한 값의 '주문량'을 가져와 '입고량'으로 등록한다.
+//        //발주번호로 조회한 원자재발주tbl을 연관관계 매핑된 필드에 등록한다.
+//        //시각을 할당한다.
+//        //db에 저장한다.
+//        LocalDateTime date = timeService.getDateTimeFromDB().getTime();
+//
+//        Material_details materialDetails = new Material_details();
+//        materialDetails.setReceived_quantity(purchaseMatarial.getOrder_quantity());
+//        materialDetails.setPurchase_matarial(purchaseMatarial);
+//        materialDetails.setReceived_date(date);
+//        materialDetailsRepository.save(materialDetails);
+//
+//    }
 
-        //발주번호로 데이터를 조회하고, '배송중'->'배송 완료'로 변경하여 저장
-        String deliveryOk = "배송완료";
-        Purchase_matarial purchaseMatarial = purchaseMatarialRepository.findByPurchaseMaterialId(Purchase_material_id);
-        purchaseMatarial.setDelivery_status(deliveryOk);
-        purchaseMatarialRepository.save(purchaseMatarial);
 
-        //발주번호로 데이터를 조회한 값의 '주문량'을 가져와 '입고량'으로 등록한다.
-        //발주번호로 조회한 원자재발주tbl을 연관관계 매핑된 필드에 등록한다.
-        //시각을 할당한다.
-        //db에 저장한다.
+    public void findByPurchase_material_id(Integer[] deliveryOk) {
+
         LocalDateTime date = timeService.getDateTimeFromDB().getTime();
 
-        Material_details materialDetails = new Material_details();
-        materialDetails.setReceived_quantity(purchaseMatarial.getOrder_quantity());
-        materialDetails.setPurchase_matarial(purchaseMatarial);
-        materialDetails.setReceived_date(date);
-        materialDetailsRepository.save(materialDetails);
+        //발주번호로 데이터를 조회하고, '배송중'->'배송 완료'로 변경하여 저장
+        String delivery_Ok = "배송완료";
+        for (Integer i : deliveryOk) {
+            Purchase_matarial purchaseMatarial = purchaseMatarialRepository.findByPurchaseMaterialId(i);
+            purchaseMatarial.setDelivery_status(delivery_Ok);
+            purchaseMatarial.setDelivery_completion_date(date);
+            System.out.println(purchaseMatarial);
+            purchaseMatarialRepository.save(purchaseMatarial);
+
+
+            //발주번호로 데이터를 조회한 값의 '주문량'을 가져와 '입고량'으로 등록한다.
+            //발주번호로 조회한 원자재발주tbl을 연관관계 매핑된 필드에 등록한다.
+            //시각을 할당한다.
+            //db에 저장한다.
+
+
+            Material_details materialDetails = new Material_details();
+            materialDetails.setReceived_quantity(purchaseMatarial.getOrder_quantity());
+            materialDetails.setPurchase_matarial(purchaseMatarial);
+            materialDetails.setReceived_date(date);
+            materialDetailsRepository.save(materialDetails);
+        }
 
     }
-
     public List<Material_details> findAllMaterialDetail() {
         return materialDetailsRepository.findAll();
     }
@@ -192,69 +225,89 @@ public class OrderService {
 //        return;
 //    }
 
-    public PackagingData_Dto getPackagingData() {
+    public PackagingData_Dto getBoxData() {
 
         PackagingData_Dto dto = new PackagingData_Dto();
 
 
+        String boxName = "박스";
 
-        String boxName="박스";
+        int usableBox = 0;// 사용가능한 박스
+        int usedBox = 0;//사용된 박스
+        int stockOfBox = 0;//현재 박스 재고
 
-        int usableBox=0;// 사용가능한 박스
-        int usedBox=0;//사용된 박스
-        int stockOfBox=0;//현재 박스 재고
+        //원자재명 필요.
+        List<Purchase_matarial> Boxes = purchaseMatarialRepository.findByRawMaterial(boxName);
 
-        List<Purchase_matarial> Box = purchaseMatarialRepository.findByRawMaterial(boxName);
+        // purchaseId를 저장할 리스트
+       // List<Integer> purchaseIds = new ArrayList<>();
 
-        // Order ID를 저장할 리스트
-        List<Integer> purchaseIds  = new ArrayList<>();
+        if(Boxes.size()>0){
+//        for (Purchase_matarial pm : Box) {
+//            purchaseIds.add(pm.getPurchase_matarial_id());
+//        }
 
-        for (Purchase_matarial pm : Box) {
-            purchaseIds.add(pm.getPurchase_matarial_id());
-        }
+            // 각 purchaseId의 값을 모두 더하기
+            for (Purchase_matarial box : Boxes) {
 
-        // 각 purchaseId의 값을 모두 더하기
-        for (Integer purchaseId : purchaseIds) {
-           Material_details materialDetails= materialDetailsRepository.findByPurchaseId(purchaseId);
+                int a = box.getPurchase_matarial_id();
+
+                Material_details materialDetails = materialDetailsRepository.findByPurchaseId(box.getPurchase_matarial_id());
 
                 usableBox += materialDetails.getReceived_quantity();
                 usedBox += materialDetails.getShipped_quantity();
 
 
+            }
+
+            stockOfBox = usableBox - usedBox;
+            dto.setBox(String.valueOf(stockOfBox));
+        } else {
+            throw new IllegalArgumentException("박스 원자재를 찾을 수 없습니다.");
         }
+        return dto;
+    }
 
-        stockOfBox= usableBox-usedBox;
-        dto.setBox(String.valueOf(stockOfBox));
+    public PackagingData_Dto getPackData() {
 
+        PackagingData_Dto dto = new PackagingData_Dto();
+        // Order ID를 저장할 리스트
+        List<Integer> purchaseIdsOfPack = new ArrayList<>();
+        String packName = "포장지";
 
-        String packName="포장지";
-
-        int usablePack=0;// 사용가능한 포장지
-        int usedPack=0;//사용된 포장지
-        int stockOfPack=0;//현재 포장지 재고
+        int usablePack = 0;// 사용가능한 포장지
+        int usedPack = 0;//사용된 포장지
+        int stockOfPack = 0;//현재 포장지 재고
 
 
         List<Purchase_matarial> Pack = purchaseMatarialRepository.findByRawMaterial(packName);
 
-        // Order ID를 저장할 리스트
-        List<Integer> purchaseIdsOfBox  = new ArrayList<>();
+        if(Pack.size()>0){
 
         for (Purchase_matarial pm : Pack) {
-            purchaseIdsOfBox.add(pm.getPurchase_matarial_id());
+            purchaseIdsOfPack.add(pm.getPurchase_matarial_id());
         }
 
-        // 각 purchaseId의 값을 모두 더하기
-        for (Integer purchaseId : purchaseIdsOfBox) {
-            Material_details materialDetails = materialDetailsRepository.findByPurchaseId(purchaseId);
-            usablePack += materialDetails.getReceived_quantity();
-            usedPack += materialDetails.getShipped_quantity();
+            // 각 purchaseId의 값을 모두 더하기
+            for (Integer purchaseId : purchaseIdsOfPack) {
+                Material_details materialDetails = materialDetailsRepository.findByPurchaseId(purchaseId);
+
+                usablePack += materialDetails.getReceived_quantity();
+                usedPack += materialDetails.getShipped_quantity();
+            }
+
+            stockOfPack = usablePack-usedPack;
+            dto.setPackaging(String.valueOf(stockOfPack));
+
+        } else {
+            throw new NullPointerException("");
         }
-
-        stockOfPack= usablePack-usedPack;
-        dto.setPackaging(String.valueOf(stockOfPack));
-
         return dto;
     }
+
+
+
+
     // 수주번호, 계획번호에 따른 현황 테이블
     public List<Orders> getRunningPlanEquipments(){
         return ordersRepository.findAllByShippingDateIsNull();
@@ -299,12 +352,12 @@ public class OrderService {
 //        orders2.setProduct_name("포장지");
 //        ordersRepository.save(orders2);
 //
-//        Purchase_matarial purchaseMatarial2 = new Purchase_matarial();
-//        purchaseMatarial2.setDelivery_status("배송중");
-//        purchaseMatarial2.setPurchase_date(LocalDateTime.now());
-//        purchaseMatarial2.setOrder_id(orders2);
-//        purchaseMatarial.setRaw_material("포장지");
-//        purchaseMatarialRepository.save(purchaseMatarial2);
+        Purchase_matarial purchaseMatarial2 = new Purchase_matarial();
+        purchaseMatarial2.setOrder_quantity(pack);
+        purchaseMatarial2.setDelivery_status("배송중");
+        purchaseMatarial2.setPurchase_date(timeService.getDateTimeFromDB().getTime());
+        purchaseMatarial2.setRaw_material("포장지");
+        purchaseMatarialRepository.save(purchaseMatarial2);
 
 
 
