@@ -21,5 +21,8 @@ public interface PurchaseMatarialRepository  extends JpaRepository<Purchase_mata
     @Query("SELECT p FROM Purchase_matarial p WHERE p.raw_material = :rowMaterial")
     List<Purchase_matarial> findByRawMaterial(String rowMaterial);
 
+    @Query("SELECT p FROM Purchase_matarial p WHERE p.purchase_matarial_id = (SELECT MAX(p2.purchase_matarial_id) FROM Purchase_matarial p2)")
+    Purchase_matarial findMaxPurchaseMaterial();
+
 
 }

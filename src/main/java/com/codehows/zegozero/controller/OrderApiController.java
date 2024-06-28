@@ -176,6 +176,17 @@ public class OrderApiController {
                 .map(a -> new responsePurchaseMaterial_Dto(a))
                 .collect(Collectors.toList());
 
+        if(delivered1.isEmpty()){
+            responsePurchaseMaterial_Dto dto = new responsePurchaseMaterial_Dto();
+            dto.setOrder_id(null);
+            dto.setPurchase_matarial_id(null);
+            dto.setRaw_material(null);
+            dto.setOrder_quantity(null);
+            dto.setDelivery_completion_date(null);
+            dto.setDelivery_status(null);
+            dto.setPurchase_date(null);
+        }
+
         delivered.put("data", delivered1);
 
         return delivered;
@@ -344,6 +355,18 @@ public class OrderApiController {
                     return "Success";
                 }
     }
+
+    @PostMapping("PackOrder")
+    public ResponseEntity<?> PackOrder() {
+        orderService.packagingOrder();
+
+        return ResponseEntity.ok().body("주문 완료");
+    }
+
+
+
+
+
 }
 
 

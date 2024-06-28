@@ -10,6 +10,7 @@
 <body>
 <header th:replace="header :: header"></header>
 
+<div class="container mt-4">
 <div class="aaaa">
     <table id="example" class="display" style="width:100%">
         <thead>
@@ -32,12 +33,17 @@
 <!--            <button id="deleteSelected" class="btn btn-danger mt-0">선택된 항목 삭제</button>-->
 <!--        </div>-->
         <div class="col-auto">
+            <button class="btn btn-primary ms-2" type="button" id="PackOrder">포장지 및 박스 주문</button>
+        </div>
+        <div class="col-auto">
             <button class="btn btn-primary ms-2" type="button" id="deliveryOk">배송 완료</button>
         </div>
         <div class="col-auto">
             <button class="btn btn-primary ms-2" type="button" id="openRegistrationPopup">발주 계획 조회</button>
         </div>
     </div>
+</div>
+
 </div>
 
 <!-- 팝업 시작 -->

@@ -2,6 +2,7 @@ package com.codehows.zegozero.controller;
 
 import com.codehows.zegozero.dto.Finished_product_management_Dto;
 import com.codehows.zegozero.dto.Order_Dto;
+import com.codehows.zegozero.dto.PackagingData_Dto;
 import com.codehows.zegozero.dto.Shipment_management_dto;
 import com.codehows.zegozero.service.OrderService;
 import com.codehows.zegozero.service.finishedProductService;
@@ -10,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -30,6 +28,27 @@ public class finishedProductApiController {
     public ResponseEntity<?> receive(@RequestBody Finished_product_management_Dto finishedProduct) throws IOException {
 
         productService.receivesave(finishedProduct);
+
+//        int packQuantity = finishedProduct.getReceived_quantity();
+//        PackagingData_Dto packagingDataDto = orderService.getPackagingData();
+//
+//        if(finishedProduct.getProduct_name().equals("박스")){
+//            Integer box = Integer.valueOf(packagingDataDto.getBox());
+//
+//            int newQuantity= box -packQuantity;
+//
+//            orderService.updatePackaging(newQuantity);
+//
+//        }else{
+//            Integer pack = Integer.valueOf(packagingDataDto.getPackaging());
+//
+//            int newQuantity= pack -packQuantity;
+//
+//            orderService.updatePackaging(newQuantity);
+//        }
+
+
+
         return ResponseEntity.ok().body("saved successfully");
     };
 

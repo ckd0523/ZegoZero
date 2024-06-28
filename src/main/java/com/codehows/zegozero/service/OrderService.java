@@ -165,6 +165,8 @@ public class OrderService {
         return materialDetailsRepository.findAll();
     }
 
+//    public void updatePackaging(int )
+
 
 //    //디티오로 보내
 //    public Material_details PackagingData() {
@@ -256,6 +258,56 @@ public class OrderService {
     // 수주번호, 계획번호에 따른 현황 테이블
     public List<Orders> getRunningPlanEquipments(){
         return ordersRepository.findAllByShippingDateIsNull();
+    }
+
+
+    public void packagingOrder(){
+        int box=10000;
+        int pack=100000;
+        boolean t = true;
+        boolean f = false;
+
+//        Orders orders = new Orders();
+//        orders.setQuantity(box);
+//        orders.setDeletable(t);
+//        orders.setProduct_name("박스");
+//        ordersRepository.save(orders);
+
+        Purchase_matarial purchaseMatarial = new Purchase_matarial();
+        purchaseMatarial.setOrder_quantity(box);
+        purchaseMatarial.setDelivery_status("배송중");
+        purchaseMatarial.setPurchase_date(timeService.getDateTimeFromDB().getTime());
+        purchaseMatarial.setRaw_material("박스");
+        purchaseMatarialRepository.save(purchaseMatarial);
+
+
+
+//        Material_details materialDetails = new Material_details();
+//        Purchase_matarial MaxId = purchaseMatarialRepository.findMaxPurchaseMaterial();
+//        materialDetails.setReceived_date(timeService.getDateTimeFromDB().getTime());
+//        materialDetails.setReceived_quantity(box);
+//        materialDetails.setPurchase_matarial(MaxId);
+//        materialDetailsRepository.save(materialDetails);
+
+//
+//
+//
+//
+//        Orders orders2 = new Orders();
+//        orders2.setQuantity(pack);
+//        orders2.setDeletable(t);
+//        orders2.setProduct_name("포장지");
+//        ordersRepository.save(orders2);
+//
+//        Purchase_matarial purchaseMatarial2 = new Purchase_matarial();
+//        purchaseMatarial2.setDelivery_status("배송중");
+//        purchaseMatarial2.setPurchase_date(LocalDateTime.now());
+//        purchaseMatarial2.setOrder_id(orders2);
+//        purchaseMatarial.setRaw_material("포장지");
+//        purchaseMatarialRepository.save(purchaseMatarial2);
+
+
+
     }
 
 }

@@ -46,11 +46,17 @@ $(document).ready(function() {
         responsive: true,
         orderMulti: true,
         columns: [
-            {data: 'order_id.orderId'}, // order_id 내부의 orderId
+            {
+                data: 'order_id.orderId',
+                render: function(data, type, row) {
+                    return data !== null && data !== undefined ? data : 'null';
+                },
+                title: '수주번호'
+            }, // order_id 내부의 orderId
             {data: 'purchase_matarial_id'},
             {data: 'raw_material'}, // purchase_matarial의 raw_material
-            {data: 'purchase_date'},
-            {data: 'order_id.order_date'}, // order_id 내부의 production_quantity
+            {data: 'order_quantity'},
+            {data: 'purchase_date'}, // order_id 내부의 production_quantity
             {data: 'delivery_status'},
         ]
     });
@@ -149,6 +155,30 @@ $(document).ready(function() {
 
     });
 
+    $("#PackOrder").click(function () {
+        fetch('/api/PackOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log('Success:', data); // 서버에서 반환한 응답 데이터 출력
+                // 성공 시 추가적인 클라이언트 측 로직을 추가할 수 있음
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // 오류 발생 시 처리할 로직을 추가할 수 있음
+            });
+
+        location.reload(); // 페이지 새로고침
+    });
 
 
 //     //체크박스 클릭 시 이벤트
@@ -301,8 +331,8 @@ $(document).ready(function() {
                     {
                         data: 'production_quantity',
                         render: function(data, type, row) {
-                            return Math.round(0.97/data ); // 1.03을 곱하고 소수점 두 자리로 반올림
-                        }
+                            return Math.ceil(data * 1.031); // 1.03을 곱하고 소수점 두 자리로 반올림
+        }
                     }
                 ],
 
@@ -334,7 +364,7 @@ $(document).ready(function() {
 
             var orderId = rowData.order_id;
             var product_name = rowData.product_name;
-            var production_quantity = 0.97/(rowData.production_quantity);
+            var production_quantity = rowData.production_quantity;
 
             console.log(orderId);
             console.log(product_name);
