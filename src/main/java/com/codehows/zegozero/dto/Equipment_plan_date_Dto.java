@@ -24,6 +24,8 @@ public class Equipment_plan_date_Dto {
     private int equipment_id;
     private int order_id;
     private double nowProcessing;
+    private String equipment;
+
 
 
 
@@ -54,6 +56,9 @@ public class Equipment_plan_date_Dto {
         this.equipment_id=plan_equipment.getEquipment_plan_id();
         this.order_id=orderId;
         this.nowProcessing=Processing;
+        this.equipment= plan_equipment.getEquipment().getEquipment_name();
+
+        System.out.println(equipment);
     }
 
 }

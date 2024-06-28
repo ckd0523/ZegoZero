@@ -85,9 +85,11 @@ public class PlanService {
 
 
         List<Equipment_plan_date_Dto> nowProcessing = new ArrayList<>();
+        //orders객체로  매핑된 plans 객체를 리스트로 찾음,(수주테이블과 생산계획은 일대다 관계)
         List<Plans> byOrderId = plansRepository.findByOrderId(orders);
 
 
+        //각 plans객체를 통해 Plan_equipment를 리스트로 찾음('생산계획테이블'과 '설비별생산계획테이블'은 일대다 관계)
         for(Plans plan : byOrderId){
             List<Plan_equipment> plans = planEquipmentRepository.findByPlans(plan);
             Processing = calculateProductionPercentage(plan,currentTime);
