@@ -23,8 +23,18 @@ $(document).ready(function() {
                 title: '수주번호'
             },
 
-            {data: 'purchase_matarial.purchase_matarial_id', title: '발주 번호'},
-            {data: 'purchase_matarial.raw_material', title: '원자재'},
+            {
+                data: 'purchase_matarial.purchase_matarial_id', title: '발주 번호',
+                render: function (data, type, row) {
+                    return data !== null && data !== undefined ? data : 'null';
+                },
+            },
+            {
+                data: 'purchase_matarial.raw_material', title: '원자재',
+                render: function (data, type, row) {
+                    return data !== null && data !== undefined ? data : 'null';
+                },
+            },
             {
                 data: 'received_quantity',
                 title: '입고량',

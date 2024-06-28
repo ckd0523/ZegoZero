@@ -333,31 +333,57 @@ public class OrderService {
         purchaseMatarial.setRaw_material("박스");
         purchaseMatarialRepository.save(purchaseMatarial);
 
-
-
-//        Material_details materialDetails = new Material_details();
-//        Purchase_matarial MaxId = purchaseMatarialRepository.findMaxPurchaseMaterial();
-//        materialDetails.setReceived_date(timeService.getDateTimeFromDB().getTime());
-//        materialDetails.setReceived_quantity(box);
-//        materialDetails.setPurchase_matarial(MaxId);
-//        materialDetailsRepository.save(materialDetails);
-
-//
-//
-//
-//
-//        Orders orders2 = new Orders();
-//        orders2.setQuantity(pack);
-//        orders2.setDeletable(t);
-//        orders2.setProduct_name("포장지");
-//        ordersRepository.save(orders2);
-//
         Purchase_matarial purchaseMatarial2 = new Purchase_matarial();
         purchaseMatarial2.setOrder_quantity(pack);
         purchaseMatarial2.setDelivery_status("배송중");
         purchaseMatarial2.setPurchase_date(timeService.getDateTimeFromDB().getTime());
         purchaseMatarial2.setRaw_material("포장지");
         purchaseMatarialRepository.save(purchaseMatarial2);
+
+
+
+    }
+
+    public void usePackaging(Finished_product_management_Dto finishedProduct){
+        //완제품 재고의 입고량
+        System.out.println(finishedProduct.getReceived_quantity());
+        //완제품 재고의 입고 날짜
+        System.out.println(finishedProduct.getReceived_date());
+
+        //완제품 재고의 입고가 이루어질 때, 상자,포장자의 출고도 함께 이루어질 수 있도록 한다.
+        //상자, 포장지의 수가 없을 경우, 그냥 진행할 수 있도록 한다.
+        //1.완제품 재고를 입고한다(기존 로직)
+        //2. 완제품 재고의 입고날짜를 가진 박스,포장지의 출하 날짜 데이터를 만든다
+
+        //2-1 새로운 Purchase_matarial 생성
+        Purchase_matarial rawMBox = new Purchase_matarial();
+        rawMBox.setRaw_material("박스");
+        purchaseMatarialRepository.save(rawMBox);
+
+        System.out.println(rawMBox);
+
+
+        //2-2 새로운 Material_details 생성
+        Material_details shippedBox = new Material_details();
+        shippedBox.setShipped_date(finishedProduct.getReceived_date());
+        shippedBox.setShipped_quantity(finishedProduct.getReceived_quantity());
+        shippedBox.setPurchase_matarial(purchaseMatarialRepository.findMaxPurchaseMaterial());
+        materialDetailsRepository.save(shippedBox);
+
+        //2-1 새로운 Purchase_matarial 생성
+        Purchase_matarial rawPack = new Purchase_matarial();
+        rawPack.setRaw_material("포장지");
+        purchaseMatarialRepository.save(rawPack);
+
+        System.out.println(rawPack);
+
+
+        //2-2 새로운 Material_details 생성
+        Material_details shippedPack = new Material_details();
+        shippedPack.setShipped_date(finishedProduct.getReceived_date());
+        shippedPack.setShipped_quantity(finishedProduct.getReceived_quantity()*30);
+        shippedPack.setPurchase_matarial(purchaseMatarialRepository.findMaxPurchaseMaterial());
+        materialDetailsRepository.save(shippedPack);
 
 
 

@@ -4,6 +4,8 @@ import com.codehows.zegozero.dto.Finished_product_management_Dto;
 import com.codehows.zegozero.dto.Order_Dto;
 import com.codehows.zegozero.dto.PackagingData_Dto;
 import com.codehows.zegozero.dto.Shipment_management_dto;
+import com.codehows.zegozero.entity.Material_details;
+import com.codehows.zegozero.entity.Purchase_matarial;
 import com.codehows.zegozero.service.OrderService;
 import com.codehows.zegozero.service.finishedProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,29 +25,17 @@ public class finishedProductApiController {
     private final finishedProductService productService;
     private final OrderService orderService;
 
-    // 완제품 입고
+    // 완제품 입고(완제품 재고 추가)
     @PostMapping("/receive")
     public ResponseEntity<?> receive(@RequestBody Finished_product_management_Dto finishedProduct) throws IOException {
 
-        productService.receivesave(finishedProduct);
+        
 
-//        int packQuantity = finishedProduct.getReceived_quantity();
-//        PackagingData_Dto packagingDataDto = orderService.getPackagingData();
-//
-//        if(finishedProduct.getProduct_name().equals("박스")){
-//            Integer box = Integer.valueOf(packagingDataDto.getBox());
-//
-//            int newQuantity= box -packQuantity;
-//
-//            orderService.updatePackaging(newQuantity);
-//
-//        }else{
-//            Integer pack = Integer.valueOf(packagingDataDto.getPackaging());
-//
-//            int newQuantity= pack -packQuantity;
-//
-//            orderService.updatePackaging(newQuantity);
-//        }
+
+        
+
+        productService.receivesave(finishedProduct);
+        orderService.usePackaging(finishedProduct);
 
 
 
