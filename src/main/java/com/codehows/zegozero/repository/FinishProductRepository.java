@@ -39,4 +39,8 @@ public interface FinishProductRepository extends JpaRepository<Finish_product, I
             "GROUP BY CAST(fp.received_date AS date)")
     List<Object[]> findTotalReceivedQuantityByDate();
 
+    // 완제품 재고 사용할때 수주번호 업데이트
+    @Query("SELECT fp FROM Finish_product fp WHERE fp.finish_product_id = (SELECT MAX(fp2.finish_product_id) FROM Finish_product fp2)")
+    Finish_product findMaxFinishProductByQuery();
+
 }

@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -58,4 +59,10 @@ public class Orders {
         this.delivery_address = delivery_address;
         this.deletable = deletable;
     }
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Plans> plans;
+
+    @OneToMany(mappedBy = "order_id", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Finish_product> finishProducts;
 }

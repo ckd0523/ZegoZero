@@ -24,21 +24,23 @@ $(document).ready(function () {
                     id34Plan(productName, 3, 4, 333);
                     setTimeout(function() {
                         id34Plan(productName, 3, 4, 333);
-                    }, 500);
+                    }, 300);
                     setTimeout(function() {
                         id34Plan(productName, 3, 4, totalProductionQuantity);
-                    }, 1000);
+                    }, 750);
                 }else if(newPlan == 4){
                     id34Plan(productName, 3, 4, 333);
                     setTimeout(function() {
                         id34Plan(productName, 3, 4, 333);
-                    }, 500);
+                    }, 250);
                     setTimeout(function() {
                         id34Plan(productName, 3, 4, 333);
-                    }, 1000);
+                    }, 500);
                     setTimeout(function() {
                         id34Plan(productName, 3, 4, totalProductionQuantity);
-                    }, 1500);
+                    }, 750);
+                }else{
+                    console.log("생산계획 생성 x")
                 }
             }else {
                 if (newPlan == 1) {
@@ -55,33 +57,8 @@ $(document).ready(function () {
                     }, 500);
                     zeliPlan(function () {
                         zeliPlan(productName, totalProductionQuantity);
-                    }, 1000);
+                    }, 900);
                 } else if (newPlan == 4) {
-                    zeliPlan(productName, 160);
-                    setTimeout(function () {
-                        zeliPlan(productName, 160);
-                    }, 500);
-                    setTimeout(function () {
-                        zeliPlan(productName, 160);
-                    }, 1000);
-                    setTimeout(function () {
-                        zeliPlan(productName, totalProductionQuantity);
-                    }, 1500);
-                } else if (newPlan == 5) {
-                    zeliPlan(productName, 160);
-                    setTimeout(function () {
-                        zeliPlan(productName, 160);
-                    }, 400);
-                    setTimeout(function () {
-                        zeliPlan(productName, 160);
-                    }, 800);
-                    setTimeout(function () {
-                        zeliPlan(productName, 160);
-                    }, 1200);
-                    setTimeout(function () {
-                        zeliPlan(productName, totalProductionQuantity);
-                    }, 1600);
-                } else if (newPlan == 6) {
                     zeliPlan(productName, 160);
                     setTimeout(function () {
                         zeliPlan(productName, 160);
@@ -90,34 +67,61 @@ $(document).ready(function () {
                         zeliPlan(productName, 160);
                     }, 600);
                     setTimeout(function () {
-                        zeliPlan(productName, 160);
+                        zeliPlan(productName, totalProductionQuantity);
                     }, 900);
+                } else if (newPlan == 5) {
+                    zeliPlan(productName, 160);
                     setTimeout(function () {
                         zeliPlan(productName, 160);
-                    }, 1200);
+                    }, 150);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 300);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 500);
                     setTimeout(function () {
                         zeliPlan(productName, totalProductionQuantity);
-                    }, 1500);
+                    }, 750);
+                } else if (newPlan == 6) {
+                    zeliPlan(productName, 160);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 200);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 400);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 600);
+                    setTimeout(function () {
+                        zeliPlan(productName, 160);
+                    }, 700);
+                    setTimeout(function () {
+                        zeliPlan(productName, totalProductionQuantity);
+                    }, 900);
                 } else if (newPlan == 7) {
                     zeliPlan(productName, 160);
                     setTimeout(function () {
                         zeliPlan(productName, 160);
-                    }, 250);
+                    }, 400);
                     setTimeout(function () {
                         zeliPlan(productName, 160);
                     }, 500);
                     setTimeout(function () {
                         zeliPlan(productName, 160);
-                    }, 750);
+                    }, 600);
                     setTimeout(function () {
                         zeliPlan(productName, 160);
-                    }, 1000);
+                    }, 700);
                     setTimeout(function () {
                         zeliPlan(productName, 160);
-                    }, 1250);
+                    }, 800);
                     setTimeout(function () {
                         zeliPlan(productName, totalProductionQuantity);
-                    }, 1500);
+                    }, 900);
+                }else{
+                    console.log("생산계획 생성 x")
                 }
             }
         }

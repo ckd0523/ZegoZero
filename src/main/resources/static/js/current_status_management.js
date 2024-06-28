@@ -17,13 +17,6 @@ let currentMonth = new Date().getMonth(); // 현재 월로 초기화 (0부터 �
 
 <!-- dataTable 초기화/설정 -->
 $(document).ready( function () {
-    $('#myTable1').DataTable({
-
-        "searching": false,     // 검색 상자 비활성화
-        "paging": false,        // 페이지네이션 비활성화
-        "ordering": false,      // 정렬 기능 비활성화
-
-    });
 
     $('#myTable2').DataTable({
         ajax: {
@@ -41,21 +34,16 @@ $(document).ready( function () {
                     return data.toFixed(0) + '%'; // production 데이터에 %를 붙임
                 }
             },
+            { data: 'production_name'},
             { data: 'customer_name'},
             { data: 'expected_shipping_date'}
         ]
     });
 
     // "Showing X entries" 메시지 숨기기
-    $('#myTable1_info').hide();  // myTable1의 "Showing X entries" 메시지 숨기기
     $('#myTable2_info').hide();  // myTable2의 "Showing X entries" 메시지 숨기기
 
     // DataTables 초기화 후 width 속성을 100%로 변경
-    $('#myTable1_wrapper').find('table').css({
-        'width': '100%',
-        'margin': '0',
-        'padding': '3px'
-    });
     $('#myTable2_wrapper').find('table').css({
         'width': '100%',
         'margin': '0',
@@ -65,11 +53,6 @@ $(document).ready( function () {
     // 페이지 로드 시 차트 초기화
     initializeCharts();
 });
-
-// 새로고침 버튼 클릭 시 DataTable1 다시 로드
-function refreshTable1() {
-    $('#myTable1').DataTable().ajax.reload();
-}
 
 
 <!-- Chart.js 초기화/설정 -->
@@ -83,7 +66,7 @@ const myChart1 = new Chart(ctx1, {
     data: {
         labels: ['일일 생산량'],
         datasets: [{
-            label: '생산량',
+            label: '생산량(Box)',
             data: [0],
             backgroundColor: ['rgba(54, 162, 235, 0.2)'],
             borderColor: ['rgba(54, 162, 235, 1)'],
@@ -175,7 +158,7 @@ const myChart2 = new Chart(ctx2, {
 fetch('/api/performance')
     .then(response => response.json())
     .then(data => {
-        const labels = data.map(item => `주문 ${item.order_id}`); // 수주번호를 레이블로 사용
+        const labels = data.map(item => `수주번호 ${item.order_id}`); // 수주번호를 레이블로 사용
         const percentages = calculatePercentages(data); // 백분율 계산
 
         // Chart.js 데이터 업데이트

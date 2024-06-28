@@ -62,9 +62,14 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     @Query("SELECT pe FROM Plan_equipment pe WHERE pe.start_date IS NOT NULL AND pe.end_date IS NULL")
     List<Plan_equipment> findRunningEquipments();
 
-
-
     @Query("SELECT pe FROM Plan_equipment pe WHERE pe.plan = :plan")
     List<Plan_equipment> findByPlans(Plans plan);
+
+    // 날짜별로 output을 합산하는 쿼리문
+    @Query("SELECT SUM(pe.output), CAST(pe.end_date AS date) " +
+            "FROM Plan_equipment pe " +
+            "WHERE pe.end_date IS NOT NULL AND pe.equipment.equipment_id = 12 " +
+            "GROUP BY CAST(pe.end_date AS LocalDate)")
+    List<Object[]> findTotalOutputByDate();
 
 }

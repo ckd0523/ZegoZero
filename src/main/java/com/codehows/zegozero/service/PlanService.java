@@ -37,30 +37,54 @@ public class PlanService {
         if(productName.equals("양배추즙")||productName.equals("흑마늘즙")){
             totalProductionQuantity = productionQuantity;
             numberOfPlans = 1;
-            // 새로 만들어야할 계획 수
-            while (totalProductionQuantity > 333) {
-                totalProductionQuantity -= 333;
-                numberOfPlans++;
+
+            if(totalProductionQuantity == 0){
+                numberOfPlans = 0;
+
+                result[0] = numberOfPlans;
+                result[1] = totalProductionQuantity;
+
+                return result;
+
+            }else {
+                // 새로 만들어야할 계획 수
+                while (totalProductionQuantity > 333) {
+                    totalProductionQuantity -= 333;
+                    numberOfPlans++;
+                }
+
+                result[0] = numberOfPlans;
+                result[1] = totalProductionQuantity;
+
+                return result;
             }
 
-            result[0] = numberOfPlans;
-            result[1] = totalProductionQuantity;
 
-            return result;
         }else {
 
             totalProductionQuantity = productionQuantity;
             numberOfPlans = 1;
-            // 새로 만들어야할 계획 수
-            while (totalProductionQuantity > 160) {
-                totalProductionQuantity -= 160;
-                numberOfPlans++;
+
+            if(totalProductionQuantity == 0){
+                numberOfPlans = 0;
+
+                result[0] = numberOfPlans;
+                result[1] = totalProductionQuantity;
+
+                return result;
+
+            }else{
+                // 새로 만들어야할 계획 수
+                while (totalProductionQuantity > 160) {
+                    totalProductionQuantity -= 160;
+                    numberOfPlans++;
+                }
+
+                result[0] = numberOfPlans;
+                result[1] = totalProductionQuantity;
+
+                return result;
             }
-
-            result[0] = numberOfPlans;
-            result[1] = totalProductionQuantity;
-
-            return result;
         }
     }
 
