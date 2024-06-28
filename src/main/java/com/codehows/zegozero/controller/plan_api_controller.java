@@ -163,12 +163,12 @@ public class plan_api_controller {
                 throw new NullPointerException();
             }
 
-        } catch (NumberFormatException e) {
-            response.put("message", "입력 값이 올바르지 않습니다: " + inputValue);
-            return ResponseEntity.badRequest().body(response);
         } catch (NullPointerException e) {
             response.put("message", "해당 주문을 찾을 수 없습니다: " + "입력한 값 :"+ inputValue);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } catch (RuntimeException e) {
+            response.put("message", "수주 등록 오류로 인한 에러");
+            return ResponseEntity.badRequest().body(response);
         } catch (Exception e) {
             response.put("message", "서버 오류가 발생했습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

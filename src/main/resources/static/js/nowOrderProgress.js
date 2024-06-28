@@ -58,7 +58,7 @@ $(document).ready(function() {
             {data: 'estimated_start_date', title:'시작 예정 시간'},
             {data: 'estimated_end_date', title:'종료 예정 시간'},
             {
-                data: 'end_date', title: '현재 진행 상태',
+                data: 'nowProcessing', title: '현재 진행 상태',
                 render: function(data, type, row) {
                     var unit = '';
                     if (row.start_date == null) {

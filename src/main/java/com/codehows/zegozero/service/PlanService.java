@@ -85,10 +85,20 @@ public class PlanService {
 
 
         List<Equipment_plan_date_Dto> nowProcessing = new ArrayList<>();
+
         //orders객체로  매핑된 plans 객체를 리스트로 찾음,(수주테이블과 생산계획은 일대다 관계)
         List<Plans> byOrderId = plansRepository.findByOrderId(orders);
 
 
+
+        //수주등록 시 딜레이가 있음. 이때 두번 클릭하면 수주가 두번 등록되는 문제 발생. 이
+        //때 orders테이블에는 잘 저장되지만, plans에는 동일한 수주 번호로 등록되는 문제가 있음.
+        //=>수주번호로 플랜을 조회할 수 없는 상황 발생(orders는 있으나 연관된 plan이 부재한 경우)
+        //=>그래서 수주등록 시 주의해야함
+
+        if(byOrderId.isEmpty()){
+            throw new RuntimeException("수주 등록 오류로 인한 에러");
+        }
         //각 plans객체를 통해 Plan_equipment를 리스트로 찾음('생산계획테이블'과 '설비별생산계획테이블'은 일대다 관계)
         for(Plans plan : byOrderId){
             List<Plan_equipment> plans = planEquipmentRepository.findByPlans(plan);
