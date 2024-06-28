@@ -10,6 +10,7 @@ import com.codehows.zegozero.service.OrderService;
 import com.codehows.zegozero.service.PlanService;
 import com.codehows.zegozero.service.TimeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -140,16 +141,13 @@ public class plan_api_controller {
 //        }
 //        return A;
 //    }
+
+
     @GetMapping("/nowOrderProgress/{inputValue}")
-    public Map<String, Object> findnowOrderProgress(@PathVariable(required = false) String inputValue) {
+    public ResponseEntity<Map<String, Object>> findnowOrderProgress(@PathVariable(required = false) String inputValue) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-
-            // 입력 값이 없는 경우 예외 처리
-            if (inputValue == null || inputValue.isEmpty()) {
-                throw new IllegalArgumentException("입력 값이 없습니다");
-            }
 
             Integer orderId = Integer.parseInt(inputValue); // 입력 값 파싱
 
@@ -159,25 +157,26 @@ public class plan_api_controller {
             if (orders != null) {
                 List<Equipment_plan_date_Dto> dto = planService.findByOrderId(orders);
                 response.put("Data", dto);
+
+                return ResponseEntity.ok().body(response);
+            }else{
+                throw new NullPointerException();
             }
 
+        } catch (NumberFormatException e) {
+            response.put("message", "입력 값이 올바르지 않습니다: " + inputValue);
+            return ResponseEntity.badRequest().body(response);
+        } catch (NullPointerException e) {
+            response.put("message", "해당 주문을 찾을 수 없습니다: " + "입력한 값 :"+ inputValue);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (Exception e) {
-            response.put("Data", new ArrayList<>()); // 빈 리스트 반환
-            response.put("message", "등록되지 않은 수주 번호입니다");
-            response.put("error", e.getMessage());
+            response.put("message", "서버 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
-        return response;
     }
-
-//    @GetMapping("/api/nowOrderProgress")
-//    public Map<String, Object> handleMissingInputValue() {
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("Data", new ArrayList<>()); // 빈 리스트 반환
-//        response.put("message", "입력 값이 필요합니다");
-//        return response;
-//    }
-
 
 
 }
+
+
+

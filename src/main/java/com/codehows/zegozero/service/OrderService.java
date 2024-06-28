@@ -65,7 +65,7 @@ public class OrderService {
 
     public Orders findById(Integer id) {
         return ordersRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Board not found"));
+                .orElseThrow(() -> new NullPointerException("값이 없습니다"));
     }
 
     public List<Orders> findAll() {
