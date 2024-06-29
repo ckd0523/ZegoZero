@@ -7,6 +7,7 @@
     <!-- 공통 cdn.css 포함 -->
     <th:block th:replace="header :: head"></th:block>
     <link rel="stylesheet" href="/css/progress_order.css">
+
 </head>
 <body>
 <!-- 공통 헤더 포함 -->
@@ -15,14 +16,14 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-end mb-3">
-        <form th:action="@{/excelorder}" method="POST" enctype="multipart/form-data" style="margin-right: 10px">
-            <input type="file" th:name="file1">
-            <input th:type="submit" value="import Excel" />
+        <form class="d-flex align-items-center" th:action="@{/excelorder}" method="POST" enctype="multipart/form-data" style="margin-right: 10px">
+            <input class="form-control" type="file" th:name="file1" id="formFile" style="margin-right: 10px;">
+            <input class="btn btn-success" type="submit" value="엑셀로 등록">
         </form>
         <button class="btn btn-secondary" id="openRegistrationPopup">수주 등록</button>
     </div>
     <div>
-        <table id="myTable" class="display">
+        <table id="myTable" class="display" style="width: 100%;">
             <thead>
             <tr>
                 <th>수주번호</th>

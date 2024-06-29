@@ -59,6 +59,22 @@ $(document).ready(function() {
                 }
             },
             { data: 'shipped_date', title: '출고 날짜' }
+        ],
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: '엑셀로 저장',
+                className: 'exportCSV',
+                filename: 'exported_data',
+                exportOptions: {
+                    columns: ':visible'
+                },
+                customize: function (xlsx) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row c', sheet).attr('s', '25');
+                }
+            }
         ]
     });
 

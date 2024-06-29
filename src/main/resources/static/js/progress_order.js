@@ -45,24 +45,18 @@ $(document).ready(function () {
         dom: 'Bfrtip',
         buttons: [
             {
-                extend: 'excelHtml5',
-                text: 'Export Excel',
-                className: 'exportCSV',
-                filename: 'exported_data',
-                exportOptions: {
-                    columns: ':visible'
-                },
-                customize: function (xlsx) {
-                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                    $('row c', sheet).attr('s', '25');
-                }
+            extend: 'excelHtml5',
+            text: '엑셀로 저장',
+            className: 'exportCSV',
+            filename: 'exported_data',
+            exportOptions: {
+                columns: ':visible'
             },
-            {
-                extend: 'colvis',
-                text: '열 선택',
-                className: 'colVisButton',
-                columns: ':not(.no-export)'
+            customize: function (xlsx) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                $('row c', sheet).attr('s', '25');
             }
+        }
         ]
     });
 

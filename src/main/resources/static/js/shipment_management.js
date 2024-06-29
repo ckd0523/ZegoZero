@@ -46,7 +46,7 @@ $(document).ready(function() {
         buttons: [
             {
                 extend: 'excelHtml5',
-                text: 'Export Excel',
+                text: '엑셀로 저장',
                 className: 'exportCSV',
                 filename: 'exported_data',
                 exportOptions: {
@@ -56,12 +56,6 @@ $(document).ready(function() {
                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
                     $('row c', sheet).attr('s', '25');
                 }
-            },
-            {
-                extend: 'colvis',
-                text: '열 선택',
-                className: 'colVisButton',
-                columns: ':not(.no-export)'
             }
         ]
     });
@@ -102,7 +96,7 @@ $(document).ready(function() {
         buttons: [
             {
                 extend: 'excelHtml5',
-                text: 'Export Excel',
+                text: '엑셀로 저장',
                 className: 'exportCSV',
                 filename: 'exported_data',
                 exportOptions: {
@@ -112,12 +106,6 @@ $(document).ready(function() {
                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
                     $('row c', sheet).attr('s', '25');
                 }
-            },
-            {
-                extend: 'colvis',
-                text: '열 선택',
-                className: 'colVisButton',
-                columns: ':not(.no-export)'
             }
         ]
     });

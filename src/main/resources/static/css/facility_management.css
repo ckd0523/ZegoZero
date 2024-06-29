@@ -55,22 +55,22 @@ table.dataTable.display tbody tr:hover {
 }
 
 /* EXCEL 버튼 */
-.exportCSV {
+.dataTables_wrapper .dt-buttons .buttons-excel.exportCSV {
     margin-right: 5px;
     text-align: center;
     border: 1px solid white;
     transition: all 0.15s;
-    background-color: #00695C;
+    background-color: #198654;
     padding: 5px 10px;
     color: white;
     border-radius: 5px;
     cursor: pointer;
 }
 
-.exportCSV:hover {
+.dataTables_wrapper .dt-buttons .buttons-excel.exportCSV:hover {
     background-color: transparent;
-    border: 1px solid gray;
-    color: black;
+    border: 1px solid #ffffff;
+    color: #198654;
 }
 
 /* 컬럼 선택 버튼 */
@@ -84,6 +84,10 @@ table.dataTable.display tbody tr:hover {
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px; /* 오른쪽 마진 추가 */
+}
+
+#equipmentSelect {
+    font-size: 45px; /* 원하는 크기로 설정하세요 */
 }
 
 .colVisButton:hover {
