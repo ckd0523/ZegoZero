@@ -44,7 +44,7 @@ $(document).ready(function () {
                     "previous": "이전"
                 }
             },
-            dom: 'Bfrtip',
+            dom: '<"top"fB>rt<"bottom"ip><"clear">',
             buttons: [
                 {
                     extend: 'excelHtml5',
@@ -59,7 +59,54 @@ $(document).ready(function () {
                         $('row c', sheet).attr('s', '25');
                     }
                 }
-            ]
+            ],
+            initComplete: function() {
+                // 엑셀 버튼 옆에 셀렉트 박스 추가
+                $('#myTable_wrapper .dt-buttons').append(
+                    '<select id="Select" class="colVisButton">' +
+                    '<option value="1">전체</option>' +
+                    '<option value="2">입고</option>' +
+                    '<option value="3">출고</option>' +
+                    '</select>'
+                );
+
+                // 셀렉트 박스 변경 이벤트 리스너
+                $('#Select').on('change', function() {
+                    var selectedValue = $(this).val();
+                    console.log(selectedValue);
+                    var newUrl;
+                    var newColumns;
+                    if (selectedValue === '1') {
+                        newColumns = [
+                            {title: "수주번호", data: 'order_id'},
+                            {title: "완제품명", data: 'product_name'},
+                            {title: "입고량", data: 'received_quantity'},
+                            {title: "입고날짜", data: 'received_date'},
+                            {title: "출고량", data: 'shipped_quantity'},
+                            {title: "출고날짜", data: 'shipped_date'}
+                        ];
+                        newUrl = '/api/finish1';
+                    } else if (selectedValue === '2') {
+                        newColumns = [
+                            {title: "수주번호", data: 'order_id'},
+                            {title: "완제품명", data: 'product_name'},
+                            {title: "입고량", data: 'received_quantity'},
+                            {title: "입고날짜", data: 'received_date'}
+                        ];
+                        newUrl = '/api/finish2';
+                    } else if (selectedValue === '3') {
+                        newColumns = [
+                            {title: "수주번호", data: 'order_id'},
+                            {title: "완제품명", data: 'product_name'},
+                            {title: "출고량", data: 'shipped_quantity'},
+                            {title: "출고날짜", data: 'shipped_date'}
+                        ];
+                        newUrl = '/api/finish3';
+                    }
+
+                    initializeDataTable(newColumns, newUrl);
+                });
+            }
         });
 
         // 열 선택 버튼 클릭 시 이벤트 처리
@@ -67,41 +114,4 @@ $(document).ready(function () {
             table.buttons(['.buttons-colvis']).trigger();
         });
     }
-
-    // 셀렉트 박스 변경 이벤트 리스너
-    $('#Select').on('change', function() {
-        var selectedValue = $(this).val();
-        console.log(selectedValue);
-        var newUrl
-        var newColumns;
-        if (selectedValue === '1') {
-            newColumns = [
-                {title: "수주번호", data: 'order_id'},
-                {title: "완제품명", data: 'product_name'},
-                {title: "입고량", data: 'received_quantity'},
-                {title: "입고날짜", data: 'received_date'},
-                {title: "출고량", data: 'shipped_quantity'},
-                {title: "출고날짜", data: 'shipped_date'}
-            ];
-            newUrl = '/api/finish1';
-        } else if (selectedValue === '2') {
-            newColumns = [
-                {title: "수주번호", data: 'order_id'},
-                {title: "완제품명", data: 'product_name'},
-                {title: "입고량", data: 'received_quantity'},
-                {title: "입고날짜", data: 'received_date'}
-            ];
-            newUrl = '/api/finish2';
-        } else if (selectedValue === '3') {
-            newColumns = [
-                {title: "수주번호", data: 'order_id'},
-                {title: "완제품명", data: 'product_name'},
-                {title: "출고량", data: 'shipped_quantity'},
-                {title: "출고날짜", data: 'shipped_date'}
-            ];
-            newUrl = '/api/finish3';
-        }
-
-        initializeDataTable(newColumns, newUrl);
-    });
 });

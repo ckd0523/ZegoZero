@@ -11,33 +11,22 @@ body, select, input {
     font-family: 'Jeju Gothic', sans-serif;
 }
 
-body, select, input {
-    font-family: 'Jeju Gothic', sans-serif;
-}
-
 /* FullCalendar 컨테이너 스타일 */
 #calendar {
     max-width: 900px;
     margin: 40px auto;
 }
 
-/* 날짜 셀의 기본 스타일 제거 */
-/*.fc .fc-daygrid-day-frame {*/
-/*    cursor: default;*/
-/*    background-color: transparent;*/
-/*    text-decoration: none;*/
-/*}*/
+/* 링크 스타일 수정 */
+.fc a {
+    color: inherit; /* 기본 링크 색상을 상속받도록 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
 
-/*!* 날짜 셀의 a 태그 기본 스타일 제거 *!*/
-/*.fc .fc-daygrid-day-number {*/
-/*    color: black;*/
-/*    text-decoration: none;*/
-/*    cursor: default;*/
-/*}*/
+/* 헤더 텍스트 스타일 */
+.fc .fc-col-header-cell-cushion {
+    color: #000; /* 헤더 텍스트 색상 설정 */
+    cursor: pointer; /* 커서 모양 변경 */
+}
 
-/*.fc-col-header-cell-cushion{*/
-/*    color: black;*/
-/*    text-decoration: none;*/
-/*    cursor: default;*/
-/*}*/
 

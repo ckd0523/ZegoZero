@@ -76,62 +76,14 @@ table.dataTable.display tbody tr:hover {
 /* 컬럼 선택 버튼 */
 .colVisButton {
     text-align: center;
-    border: 1px solid white;
+    border: 1px solid #1e1f22;
     transition: all 0.15s;
-    background-color: #17a2b8;
+    background-color: #ffffff;
     padding: 5px 10px;
-    color: white;
+    color: #1e1f22;
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px; /* 오른쪽 마진 추가 */
-}
-
-.colVisButton:hover {
-    background-color: transparent;
-    border: 1px solid gray;
-    color: black;
-}
-
-.dt-button-collection {
-    position: absolute; /* 절대 위치로 설정 */
-    right: 0; /* 오른쪽 정렬 */
-    top: 100%; /* 버튼 아래에 위치하도록 설정 */
-    width: 120px; /* 너비 조정 */
-    background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 0.25em;
-    padding: 0.5em;
-}
-
-.dt-button-collection .dt-button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: none;
-    color: black;
-    border: none;
-    padding: 0.5em;
-    margin-bottom: 0.1em;
-}
-
-.dt-button-collection .dt-button.active {
-    background-color: #17a2b8;
-    color: white;
-}
-
-/* 드롭다운 메뉴에 호버 효과 추가 */
-.dt-button-collection .dt-button:hover {
-    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
-}
-
-/* 드롭다운 메뉴 내 항목들 너비 조정 */
-.dt-button-collection .dt-button span {
-    display: inline-block;
-    width: 100%;
-    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-    overflow: hidden;
-    text-overflow: ellipsis; /* 넘치는 경우 ...으로 표시 */
 }
 
 @media screen and (max-width: 640px) {

@@ -4,15 +4,14 @@ $(document).ready(function () {
         headerToolbar: {
             left: 'prev,next today', // 왼쪽에 표시될 버튼
             center: 'title', // 중앙에 표시될 제목
-            right: 'dayGridMonth,timeGridWeek,timeGridDay' // 오른쪽에 표시될 버튼
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth' // 오른쪽에 표시될 버튼
         },
         locale: 'ko',
-        selectable: false,
-        editable: false,
+        navLinks: true, // can click day/week names to navigate views
+        businessHours: true, // display business hours
+        editable: true,
+        selectable: true,
         events: '/api/fullCalendar'
-        // eventSources: [
-        //     'MOCK_DATA4.json'
-        // ]
     });
     calendar.render();
 });
