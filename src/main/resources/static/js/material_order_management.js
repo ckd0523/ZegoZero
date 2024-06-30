@@ -18,7 +18,7 @@ var allData;    //발주 등록의 모든 수주 데이터
 const CABBAGEorGarlic_PER_JUICE = 4; // 1 양배추즙 당 1kg 양배추
 const HONEY_PER_JUICE = 0.15; // 1 양배추즙 당 0.1kg 벌꿀
 const PER_JUICE = 150; // ML
-const COLAGEN_PER_JUICE = 5; // ML
+const COLAGEN_PER_JUICE = 0.05; // ML
 
 var selectedRows=[];
 
@@ -406,6 +406,11 @@ $(document).ready(function() {
             console.log(orderId);
             console.log(product_name);
             console.log(production_quantity);
+
+            // const CABBAGEorGarlic_PER_JUICE = 4; // 1 양배추즙 당 1kg 양배추
+            // const HONEY_PER_JUICE = 0.15; // 1 양배추즙 당 0.1kg 벌꿀
+            // const PER_JUICE = 150; // ML
+            // const COLAGEN_PER_JUICE = 0.05; // ML
 
 
 
