@@ -216,10 +216,14 @@ public class OrderService {
         for (Purchase_matarial byOrder : byOrders) {
 
             //3. purchase 객체로 details객체 찾기(List)
-            Material_details aa = materialDetailsRepository.findByPurchaseM(byOrder);
-            details.add(aa);
+            List<Material_details> aa = materialDetailsRepository.findByPurchaseM(byOrder);
+
+            for (Material_details materialDetails : aa) {
+                details.add(materialDetails);
+            }
+
         }
-        detailsMap.put("data",details);
+        detailsMap.put("Data",details);
 
         return detailsMap;
 
