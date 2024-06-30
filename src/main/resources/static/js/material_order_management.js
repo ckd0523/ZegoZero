@@ -49,13 +49,18 @@ $(document).ready(function() {
             {
                 data: 'order_id.orderId',
                 render: function(data, type, row) {
-                    return data !== null && data !== undefined ? data : 'null';
+                    return data !== null && data !== undefined ? data : '박스 및 포장지';
                 },
                 title: '수주번호'
             }, // order_id 내부의 orderId
             {data: 'purchase_matarial_id'},
             {data: 'raw_material'}, // purchase_matarial의 raw_material
-            {data: 'order_quantity'},
+            {
+                data: 'order_quantity',
+                render: function (data, type, row) {
+                    return data + ' ' + '개'; // 단위를 포함하여 반환
+                },
+            },
             {data: 'purchase_date'}, // order_id 내부의 production_quantity
             {data: 'delivery_status'},
         ]
@@ -161,7 +166,7 @@ $(document).ready(function() {
         //
         //
         // location.reload();
-        
+
         //비동기통신이 끝나기 전에 페이지를 로드하여 문제 발생
         //통신이 끝난 후 페이지를 로드할 수 있도록 then 뒤에 매서드 실행하니 문제 해결
 
@@ -298,7 +303,9 @@ $(document).ready(function() {
             }
 
             const data = await response.json();
-            console.log('Success:', data);
+            console.log('Success:', data.message);
+
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -362,7 +369,7 @@ $(document).ready(function() {
                         data: 'production_quantity',
                         render: function(data, type, row) {
                             return Math.ceil(data * 1.031); // 1.03을 곱하고 소수점 두 자리로 반올림
-        }
+                        }
                     }
                 ],
 
@@ -428,7 +435,7 @@ $(document).ready(function() {
 
 
 
-            //흑마늘즙일 경우
+                //흑마늘즙일 경우
             }else if('흑마늘즙'===product_name) {
                 console.log("흑마늘즙")
 
@@ -454,7 +461,7 @@ $(document).ready(function() {
 
 
 
-            //석류 젤리일 경우
+                //석류 젤리일 경우
             }else if('석류젤리'===product_name) {
                 console.log("석류젤리")
 
@@ -478,7 +485,7 @@ $(document).ready(function() {
                 result.push(data1);
                 result.push(data2);
 
-            //매실 젤리인 경우
+                //매실 젤리인 경우
             }else if('매실젤리'===product_name) {
                 console.log("매실젤리")
 
@@ -527,6 +534,8 @@ $(document).ready(function() {
                                 unit = 'kg';
                             } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀') {
                                 unit = 'ml';
+                            }else if(row.raw_material === '박스' || row.raw_material === '포장지'){
+                                unit = '개';
                             }
                             return data + ' ' + unit; // 단위를 포함하여 반환
                         }
@@ -542,6 +551,6 @@ $(document).ready(function() {
 
 
 
-    //값을 바탕으로 양배추 벌꿀 흑마늘...의 양을 매개변수로 받는 테이블 생성 함수 만들기.
+//값을 바탕으로 양배추 벌꿀 흑마늘...의 양을 매개변수로 받는 테이블 생성 함수 만들기.
 
-    //등록하기 버튼 클릭 시 DB 저장하기.
+//등록하기 버튼 클릭 시 DB 저장하기.

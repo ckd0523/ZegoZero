@@ -12,15 +12,14 @@ import com.codehows.zegozero.repository.PlansRepository;
 import com.codehows.zegozero.repository.PurchaseMatarialRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -196,6 +195,37 @@ public class OrderService {
     }
     public List<Material_details> findAllMaterialDetail() {
         return materialDetailsRepository.findAll();
+    }
+
+    public List<Material_details> findByOrderNum(Integer inputValue) {
+        return materialDetailsRepository.findByOrderId2(inputValue);
+    }
+
+    public Map<String, Object> selectedOrderNum(Integer orderId){
+
+        Map<String, Object> detailsMap = new HashMap<String, Object>();
+        List<Material_details> details = new ArrayList<>();
+
+
+        //1.orderid로 order객체를 찾기(단일)
+        Orders byOrderId = ordersRepository.findByOrderId(orderId);
+
+        //2. order객체로 purchase 객체 찾기(List)
+        List<Purchase_matarial> byOrders = purchaseMatarialRepository.findByOrdersId(byOrderId);
+
+        for (Purchase_matarial byOrder : byOrders) {
+
+            //3. purchase 객체로 details객체 찾기(List)
+            Material_details aa = materialDetailsRepository.findByPurchaseM(byOrder);
+            details.add(aa);
+        }
+        detailsMap.put("data",details);
+
+        return detailsMap;
+
+
+        //4. 찾은 값을 detail MAP에 넣어서 리턴
+
     }
 
 //    public void updatePackaging(int )

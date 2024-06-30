@@ -15,7 +15,16 @@ public interface MaterialDetailsRepository  extends JpaRepository<Material_detai
     @Query("SELECT p FROM Material_details p WHERE p.purchase_matarial.purchase_matarial_id = :id")
     Material_details findByPurchaseId(Integer id);
 
+    @Query("SELECT p FROM Material_details p WHERE p.purchase_matarial = :purchaseMatarial")
+    Material_details findByPurchaseM(Purchase_matarial purchaseMatarial);
+
+    //??????
     @Query("SELECT p FROM Purchase_matarial p WHERE p.order_id.orderId = :orderId")
     List<Purchase_matarial> findByOrderId(@Param("orderId") Integer orderId);
 
+//    @Query("SELECT p FROM Material_details p WHERE p.purchase_matarial_id.order_id.orderId = :orderId")
+//    List<Material_details> findByOrderId2(@Param("orderId") Integer orderId);
+
+    @Query("SELECT md FROM Material_details md JOIN md.purchase_matarial pm WHERE pm.order_id.orderId = :orderId")
+    List<Material_details> findByOrderId2(@Param("orderId") Integer orderId);
 }

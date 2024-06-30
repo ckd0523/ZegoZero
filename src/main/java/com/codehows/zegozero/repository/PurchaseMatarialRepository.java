@@ -25,5 +25,8 @@ public interface PurchaseMatarialRepository extends JpaRepository<Purchase_matar
     @Query("SELECT p FROM Purchase_matarial p WHERE p.purchase_matarial_id = (SELECT MAX(p2.purchase_matarial_id) FROM Purchase_matarial p2)")
     Purchase_matarial findMaxPurchaseMaterial();
 
+    @Query("SELECT p FROM Purchase_matarial p WHERE p.order_id = :order")
+    List<Purchase_matarial> findByOrdersId(Orders order);
+
 
 }

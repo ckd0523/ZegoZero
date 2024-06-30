@@ -7,6 +7,7 @@ import com.codehows.zegozero.entity.Orders;
 import com.codehows.zegozero.entity.Plans;
 import com.codehows.zegozero.entity.Purchase_matarial;
 import com.codehows.zegozero.repository.MaterialDetailsRepository;
+import com.codehows.zegozero.repository.OrdersRepository;
 import com.codehows.zegozero.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class OrderApiController {
     private final OrderService orderService;
     private final finishedProductService finishedProductService;
     private final MaterialDetailsService materialDetailsService;
+    private final OrdersRepository ordersRepository;
 
     private static final Logger logger = Logger.getLogger(OrderApiController.class.getName());
     private final PlanService planService;
@@ -202,7 +204,7 @@ public class OrderApiController {
             orderService.savePurchaseMaterial(save);
 
         }
-        return ResponseEntity.ok().body("All materials saved successfully");
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "All materials saved successfully"));
     }
 
 
@@ -229,6 +231,8 @@ public class OrderApiController {
 
         return ResponseEntity.ok().body("성공적으로...");
     }
+
+
 
     @GetMapping("/showInventory")
     public Map<String, Object> showInventory() throws IOException {
@@ -376,7 +380,11 @@ public class OrderApiController {
 
 
 
+    @GetMapping("selectedOrderNum/{inputValue}")
+    public Map<String, Object> selectedOrderNum(@PathVariable Integer inputValue) {
 
+        return orderService.selectedOrderNum(inputValue);
+    }
 
 }
 
