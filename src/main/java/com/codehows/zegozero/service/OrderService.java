@@ -3,10 +3,7 @@ package com.codehows.zegozero.service;
 
 import com.codehows.zegozero.dto.*;
 import com.codehows.zegozero.entity.*;
-import com.codehows.zegozero.repository.MaterialDetailsRepository;
-import com.codehows.zegozero.repository.OrdersRepository;
-import com.codehows.zegozero.repository.PlansRepository;
-import com.codehows.zegozero.repository.PurchaseMatarialRepository;
+import com.codehows.zegozero.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +24,7 @@ public class OrderService {
     private final TimeService timeService;
     private final PlanService planService;
     private final PlansRepository plansRepository;
+    private final PlanEquipmentRepository planEquipmentRepository;
 
     public void save(Order_Dto Orderdata) {
         int maxPlanId = plansRepository.getMaxPlanId();
@@ -105,9 +103,30 @@ public class OrderService {
     //게시글 삭제
     @Transactional
     public void deleteOrder(Integer order_id) {
+
+        //1.order_id order객체 찾기
         Orders order = ordersRepository.findById(order_id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. id: " + order_id));
+
+        //2.order_id로 plan찾기
+        List<Plans> plans = plansRepository.findByOrderId(order);
+
+        for (Plans plan : plans) {
+
+            List<Plan_equipment> planEquipments = planEquipmentRepository.findByPlans(plan);
+
+            planEquipmentRepository.deleteAll(planEquipments);
+            plansRepository.deleteAll(plans);
+
+        }
+
         ordersRepository.delete(order);
+
+
+
+
+        //2.plan으로 plan_equip 찾기
+        //3. plan_equip,plan, orders 삭제.
     }
 
     // 출하날짜를 수정후 저장
@@ -366,6 +385,32 @@ public class OrderService {
     }
 
     // Chart2 데이터 가져오기
+//    public List<Production_performance_Dto> getChart2(){
+//
+//        List<Orders> notNullShippingDateOrders = ordersRepository.findAllByShippingDateIsNotNull();
+//
+//        List<Production_performance_Dto> dtoList = new ArrayList<>();
+//
+//        for (Orders order : notNullShippingDateOrders){
+//            int orderId = order.getOrderId();
+//            int input = (int)Math.ceil(order.getProduction_quantity() * 1.031);
+//
+//            List<Plans> plansList = order.getPlans();
+//
+//            int output = plansList.stream()
+//                    .flatMap(plan -> plan.getPlanEquipments().stream())
+//                    .filter(planEquipment -> planEquipment.getEquipment().getEquipment_id() == 12)
+//                    .mapToInt(Plan_equipment::getOutput)
+//                    .sum();
+//
+//            Production_performance_Dto dto = new Production_performance_Dto(orderId, input, output);
+//            dtoList.add(dto);
+//        }
+//
+//        return dtoList;
+//    }
+
+    // Chart2 데이터 가져오기
     public List<Production_performance_Dto> getChart2(){
 
         List<Orders> notNullShippingDateOrders = ordersRepository.findAllByShippingDateIsNotNull();
@@ -375,17 +420,29 @@ public class OrderService {
         for (Orders order : notNullShippingDateOrders){
             int orderId = order.getOrderId();
             int input = (int)Math.ceil(order.getProduction_quantity() * 1.031);
+            int output = 0;
 
-            List<Plans> plansList = order.getPlans();
+            List<Plans> plansList = plansRepository.findByOrderId(ordersRepository.findByOrderId(orderId));
 
-            int output = plansList.stream()
-                    .flatMap(plan -> plan.getPlanEquipments().stream())
-                    .filter(planEquipment -> planEquipment.getEquipment().getEquipment_id() == 12)
-                    .mapToInt(Plan_equipment::getOutput)
-                    .sum();
+            for (Plans plans : plansList) {
 
-            Production_performance_Dto dto = new Production_performance_Dto(orderId, input, output);
-            dtoList.add(dto);
+                List<Plan_equipment> AA = planEquipmentRepository.findByPlans(plans);
+                for (Plan_equipment plan_equipment : AA) {
+                    if(plan_equipment.getEquipment().getEquipment_id() == 12){
+                        output += plan_equipment.getOutput();
+                    }
+                }
+
+
+//                int output = AA.stream()
+//                        .flatMap(plan -> plan.getEquipment_plan_id().stream())
+//                        .filter(planEquipment -> planEquipment.getEquipment_id() == 12)
+//                        .mapToInt(Plan_equipment::getOutput)
+//                        .sum();
+
+                Production_performance_Dto dto = new Production_performance_Dto(orderId, input, output);
+                dtoList.add(dto);
+            }
         }
 
         return dtoList;
