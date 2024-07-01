@@ -20,7 +20,7 @@ public class savePurchaseMaterial_Dto {
 
     private Integer order_quantity;
 
-    private LocalDateTime purchase_date = LocalDateTime.now();
+    private LocalDateTime purchase_date;
 
     private LocalDateTime delivery_completion_date;
 

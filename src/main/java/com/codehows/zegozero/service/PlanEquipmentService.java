@@ -1,12 +1,11 @@
 package com.codehows.zegozero.service;
 
 import com.codehows.zegozero.dto.*;
-import com.codehows.zegozero.entity.Equipment;
-import com.codehows.zegozero.entity.Orders;
-import com.codehows.zegozero.entity.Plan_equipment;
-import com.codehows.zegozero.entity.Plans;
+import com.codehows.zegozero.entity.*;
+import com.codehows.zegozero.repository.OrdersRepository;
 import com.codehows.zegozero.repository.PlanEquipmentRepository;
 import com.codehows.zegozero.repository.PlansRepository;
+import com.codehows.zegozero.repository.PurchaseMatarialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +29,8 @@ public class PlanEquipmentService {
 
     private final PlanEquipmentRepository planEquipmentRepository;
     private final PlansRepository plansRepository;
+    private final OrdersRepository ordersRepository;
+    private final PurchaseMatarialRepository purchaseMatarialRepository;
     private final TimeService timeService;
 
     // 생산계획 Dto를 담을 리스트
@@ -1063,6 +1064,65 @@ public class PlanEquipmentService {
     // 설비 계획 번호에 시작 시간이 있는지 여부
     public boolean checkStartDateExists(Integer equipmentPlanId) {
         return planEquipmentRepository.existsStartDateByEquipmentPlanId(equipmentPlanId);
+    }
+
+    public void addFinishTime(Integer[] deliveryOk){
+        LocalDateTime now = timeService.getDateTimeFromDB().getTime();
+
+        for (Integer i : deliveryOk) {
+
+            //1.발주번호로 수주객체를 찾는다.
+            Purchase_matarial purchaseMatarial = purchaseMatarialRepository.findByPurchaseMaterialId(i);
+
+            //2. 수주객체로 plan 객체를 찾는다
+            int orderId = purchaseMatarial.getOrder_id().getOrderId();
+            Orders orders = ordersRepository.findByOrderId(orderId);
+
+            //3. plan객체로 equip객체를 찾는다.
+            List<Plans> plans= plansRepository.findByOrderId(orders);
+            for (Plans plan : plans) {
+                List<Plan_equipment> planEquipments = planEquipmentRepository.findByPlans(plan);
+
+                //4. 찾아서 현재시간을 입력한다.
+                for (Plan_equipment planEquipment : planEquipments) {
+                    if (planEquipment.getEquipment().getEquipment_id() == 1){
+                        planEquipment.setEnd_date(now);
+                        planEquipmentRepository.save(planEquipment);
+                    }
+                }
+            }
+
+        }
+
+
+    }
+
+    public void addStartTime(){
+        LocalDateTime now = timeService.getDateTimeFromDB().getTime();
+
+        Purchase_matarial getPurchaseMatarial = purchaseMatarialRepository.findMaxPurchaseMaterial();
+
+            //1.발주번호로 수주객체를 찾는다
+            Purchase_matarial purchaseMatarial = purchaseMatarialRepository.findByPurchaseMaterialId(getPurchaseMatarial.getPurchase_matarial_id());
+
+            //2. 수주객체로 plan 객체를 찾는다
+            int orderId = purchaseMatarial.getOrder_id().getOrderId();
+            Orders orders = ordersRepository.findByOrderId(orderId);
+
+            //3. plan객체로 equip객체를 찾는다.
+            List<Plans> plans= plansRepository.findByOrderId(orders);
+            for (Plans plan : plans) {
+                List<Plan_equipment> planEquipments = planEquipmentRepository.findByPlans(plan);
+
+                //4. 찾아서 현재시간을 입력한다.
+                for (Plan_equipment planEquipment : planEquipments) {
+                    if (planEquipment.getEquipment().getEquipment_id() == 1){
+                        planEquipment.setStart_date(now);
+                        planEquipmentRepository.save(planEquipment);
+                    }
+                }
+            }
+
     }
 
 }

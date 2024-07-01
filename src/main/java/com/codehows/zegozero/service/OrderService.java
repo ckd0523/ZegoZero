@@ -229,6 +229,7 @@ public class OrderService {
             materialDetailsRepository.save(materialDetails);
         }
 
+
     }
     public List<Material_details> findAllMaterialDetail() {
         return materialDetailsRepository.findAll();
@@ -383,6 +384,32 @@ public class OrderService {
     public List<Orders> getRunningPlanEquipments(){
         return ordersRepository.findAllByShippingDateIsNull();
     }
+
+    // Chart2 데이터 가져오기
+//    public List<Production_performance_Dto> getChart2(){
+//
+//        List<Orders> notNullShippingDateOrders = ordersRepository.findAllByShippingDateIsNotNull();
+//
+//        List<Production_performance_Dto> dtoList = new ArrayList<>();
+//
+//        for (Orders order : notNullShippingDateOrders){
+//            int orderId = order.getOrderId();
+//            int input = (int)Math.ceil(order.getProduction_quantity() * 1.031);
+//
+//            List<Plans> plansList = order.getPlans();
+//
+//            int output = plansList.stream()
+//                    .flatMap(plan -> plan.getPlanEquipments().stream())
+//                    .filter(planEquipment -> planEquipment.getEquipment().getEquipment_id() == 12)
+//                    .mapToInt(Plan_equipment::getOutput)
+//                    .sum();
+//
+//            Production_performance_Dto dto = new Production_performance_Dto(orderId, input, output);
+//            dtoList.add(dto);
+//        }
+//
+//        return dtoList;
+//    }
 
     // Chart2 데이터 가져오기
     public List<Production_performance_Dto> getChart2(){

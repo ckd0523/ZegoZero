@@ -35,6 +35,7 @@ public class OrderApiController {
     private static final Logger logger = Logger.getLogger(OrderApiController.class.getName());
     private final PlanService planService;
     private final TimeService timeService;
+    private final PlanEquipmentService planEquipmentService;
 
     @PostMapping("/order")
     public ResponseEntity<?> registApiOrder(@Valid @RequestBody Order_Dto Orderdata, BindingResult bindingResult) throws IOException {
@@ -214,6 +215,8 @@ public class OrderApiController {
         for (savePurchaseMaterial_Dto save : saveList) {
             orderService.savePurchaseMaterial(save);
 
+            planEquipmentService.addStartTime();
+
         }
         return ResponseEntity.ok().body(Collections.singletonMap("message", "All materials saved successfully"));
     }
@@ -231,11 +234,11 @@ public class OrderApiController {
         // 배열 길이를 체크하고 각 값을 출력
         if (deliveryOk != null && deliveryOk.length > 0) {
 
-//            for (int i = 0; i < deliveryOk.length; i++) {
             System.out.println(deliveryOk.length);
-                orderService.findByPurchase_material_id(deliveryOk);
+            orderService.findByPurchase_material_id(deliveryOk);
+            planEquipmentService.addFinishTime(deliveryOk);
 
-//            }
+
         } else {
             return ResponseEntity.badRequest().body("값을 선택해주세요");
         }
