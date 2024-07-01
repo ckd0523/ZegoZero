@@ -21,13 +21,13 @@ $(document).ready(function() {
             responsive: true,
             orderMulti: true,
             columns: [
-                {
-                    // 체크박스 열
-                    orderable: false,
-                    render: function(data, type, full, meta) {
-                        return '<input class="checkbox" type="checkbox" value="' + full.id + '">';
-                    }
-                },
+                // {
+                //     // 체크박스 열
+                //     orderable: false,
+                //     render: function(data, type, full, meta) {
+                //         return '<input class="checkbox" type="checkbox" value="' + full.id + '">';
+                //     }
+                // },
                 { data: 'equipment_plan_id' },
                 { data: 'plan_id' },
                 { data: 'product_name' },
@@ -38,6 +38,9 @@ $(document).ready(function() {
                 { data: 'start_date' },
                 { data: 'end_date' }
             ],
+            select: {
+                style: 'single'
+            },
             "language": {
                 "emptyTable": "데이터가 없어요.",
                 "lengthMenu": "페이지당 _MENU_ 개씩 보기",
@@ -71,21 +74,16 @@ $(document).ready(function() {
             ]
         });
 
-        // 체크박스 클릭 이벤트 설정
-        $('#myTable').on('click', '.checkbox', function() {
-            var isChecked = $(this).prop('checked');
-
-            // 모든 체크박스의 체크 상태 해제
-            $('.checkbox').prop('checked', false);
-
-            // 클릭된 체크박스의 체크 상태 설정
-            $(this).prop('checked', isChecked);
-        });
-
-        // 열 선택 버튼 클릭 시 이벤트 처리
-        $('#myTable').on('click', '.colVisButton', function() {
-            table.buttons(['.buttons-colvis']).trigger();
-        });
+        // // 체크박스 클릭 이벤트 설정
+        // $('#myTable').on('click', '.checkbox', function() {
+        //     var isChecked = $(this).prop('checked');
+        //
+        //     // 모든 체크박스의 체크 상태 해제
+        //     $('.checkbox').prop('checked', false);
+        //
+        //     // 클릭된 체크박스의 체크 상태 설정
+        //     $(this).prop('checked', isChecked);
+        // });
 
     }
 
@@ -109,11 +107,12 @@ $(document).ready(function() {
 
     // START 버튼 클릭 시 이벤트 처리
     $('#startButton').on('click', function() {
-        var checkedBox = $('.checkbox:checked');
+        // var checkedBox = $('.checkbox:checked');
+        var rowData = table.row('.selected').data();
 
-        if (checkedBox.length === 1) {
-            var selectedRow = checkedBox.closest('tr');
-            var rowData = table.row(selectedRow).data();
+        if (rowData) {
+            // var selectedRow = checkedBox.closest('tr');
+            // var rowData = table.row(selectedRow).data();
             var selectedValue = $('#equipmentSelect').val();
 
             console.log('선택된 행의 데이터:', rowData);
@@ -145,7 +144,6 @@ $(document).ready(function() {
                             contentType: 'application/json',
                             data: JSON.stringify(equipmentDto),
                             success: function(response) {
-                                alert('Start time updated successfully.');
                                 console.log(response);
                                 $('#behavior').css('background-color', '#4CAF50');
                                 $('#statusText').text('가동중');
@@ -183,7 +181,6 @@ $(document).ready(function() {
                                 contentType: 'application/json',
                                 data: JSON.stringify(equipmentDto),
                                 success: function(response) {
-                                    alert('Start time updated successfully.');
                                     console.log(response);
                                     $('#behavior').css('background-color', '#4CAF50');
                                     $('#statusText').text('가동중');
@@ -226,7 +223,6 @@ $(document).ready(function() {
                                 contentType: 'application/json',
                                 data: JSON.stringify(equipmentDto),
                                 success: function(response) {
-                                    alert('Start time updated successfully.');
                                     console.log(response);
                                     $('#behavior').css('background-color', '#4CAF50');
                                     $('#statusText').text('가동중');
@@ -270,7 +266,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -317,7 +312,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -359,7 +353,6 @@ $(document).ready(function() {
                             contentType: 'application/json',
                             data: JSON.stringify(equipmentDto),
                             success: function(response) {
-                                alert('Start time updated successfully.');
                                 console.log(response);
                                 $('#behavior').css('background-color', '#4CAF50');
                                 $('#statusText').text('가동중');
@@ -399,7 +392,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -446,7 +438,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -493,7 +484,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -540,7 +530,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -587,7 +576,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -634,7 +622,6 @@ $(document).ready(function() {
                                     contentType: 'application/json',
                                     data: JSON.stringify(equipmentDto),
                                     success: function (response) {
-                                        alert('Start time updated successfully.');
                                         console.log(response);
                                         $('#behavior').css('background-color', '#4CAF50');
                                         $('#statusText').text('가동중');
@@ -671,11 +658,11 @@ $(document).ready(function() {
     // STOP 버튼 클릭 시 이벤트 처리
     $('#stopButton').on('click', function() {
         // 체크된 체크박스 가져오기
-        var checkedBox = $('.checkbox:checked');
+        var rowData = table.row('.selected').data();
 
-        if (checkedBox.length === 1) {
-            var selectedRow = checkedBox.closest('tr');
-            var rowData = table.row(selectedRow).data();
+        if (rowData) {
+            // var selectedRow = checkedBox.closest('tr');
+            // var rowData = table.row(selectedRow).data();
             var selectedValue = $('#equipmentSelect').val();
 
             console.log('선택된 행의 데이터:', rowData);
@@ -723,9 +710,9 @@ $(document).ready(function() {
                                         contentType: 'application/json',
                                         data: JSON.stringify(FinishedDto),
                                         success: function(response) {
-                                            alert('Stop time updated successfully.');
                                             console.log(response);
                                             // 테이블 리로드
+                                            alert("완제품 재고로 등록되었습니다.")
                                             $('#behavior').css('background-color', '#FF5733'); // 빨간색
                                             $('#statusText').text('대기중');
                                             table.ajax.reload(null, false);
@@ -773,7 +760,6 @@ $(document).ready(function() {
                                 contentType: 'application/json',
                                 data: JSON.stringify(equipmentDto),
                                 success: function (response) {
-                                    alert('Stop time updated successfully.');
                                     console.log(response);
                                     // 테이블 리로드
                                     $('#behavior').css('background-color', '#FF5733'); // 빨간색

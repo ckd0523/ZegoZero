@@ -30,7 +30,7 @@ public class timeApiController {
     @PostMapping("/timesave")
     public ResponseEntity<?> saveOrUpdateTime(@RequestBody System_time_Dto systemTimeDto) throws IOException {
         timeService.saveOrUpdate(systemTimeDto);
-        return ResponseEntity.ok().body("Time saved or updated successfully");
+        return ResponseEntity.ok().body("시간이 저장되었습니다.");
     }
 
 }

@@ -147,6 +147,12 @@ table.dataTable.display tbody tr:hover {
         margin-right: 0.5em;
     }
 }
+
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 2000px;
+    }
+}
 /* 팝업창 스타일 */
 .popup {
     display: none;

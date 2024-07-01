@@ -146,18 +146,22 @@ public class order_controller {
             // 엑셀 등록시 재고는 0, 제작수량 = 주문 수량
             orderData.setUsed_inventory(0);
             orderData.setProduction_quantity((int) row.getCell(1).getNumericCellValue());
-
+            System.out.println(orderData.getProduct_name());
             // orderService를 사용하여 저장
-            orderService.save(orderData);
+            orderService.save2(orderData);
 
             return "redirect:/progressorder";
         } catch (IOException e) {
             logger.log(Level.SEVERE, "파일 처리 중 오류가 발생했습니다.", e);
+            System.out.println("여기야"+e);
             return "redirect:/progressorder";
         } catch (Exception e) {
             logger.log(Level.SEVERE, "예상치 못한 오류가 발생했습니다.", e);
+            System.out.println("여기야2"+e);
             return "redirect:/progressorder";
         }
     }
+
+
 
 }

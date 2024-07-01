@@ -1074,24 +1074,29 @@ public class PlanEquipmentService {
             //1.발주번호로 수주객체를 찾는다.
             Purchase_matarial purchaseMatarial = purchaseMatarialRepository.findByPurchaseMaterialId(i);
 
+
             //2. 수주객체로 plan 객체를 찾는다
-            int orderId = purchaseMatarial.getOrder_id().getOrderId();
-            Orders orders = ordersRepository.findByOrderId(orderId);
+            if (purchaseMatarial.getOrder_id() != null) {
+                int orderId = purchaseMatarial.getOrder_id().getOrderId();
 
-            //3. plan객체로 equip객체를 찾는다.
-            List<Plans> plans= plansRepository.findByOrderId(orders);
-            for (Plans plan : plans) {
-                List<Plan_equipment> planEquipments = planEquipmentRepository.findByPlans(plan);
+                Orders orders = ordersRepository.findByOrderId(orderId);
 
-                //4. 찾아서 현재시간을 입력한다.
-                for (Plan_equipment planEquipment : planEquipments) {
-                    if (planEquipment.getEquipment().getEquipment_id() == 1){
-                        planEquipment.setEnd_date(now);
-                        planEquipmentRepository.save(planEquipment);
+
+                //3. plan객체로 equip객체를 찾는다.
+                List<Plans> plans = plansRepository.findByOrderId(orders);
+                for (Plans plan : plans) {
+                    List<Plan_equipment> planEquipments = planEquipmentRepository.findByPlans(plan);
+
+                    //4. 찾아서 현재시간을 입력한다.
+                    for (Plan_equipment planEquipment : planEquipments) {
+                        if (planEquipment.getEquipment().getEquipment_id() == 1) {
+                            planEquipment.setEnd_date(now);
+                            planEquipmentRepository.save(planEquipment);
+                        }
                     }
                 }
-            }
 
+            }
         }
 
 

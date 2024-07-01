@@ -190,7 +190,7 @@ $(document).ready(function() {
             .then(response => response.text())
             .then(data => {
                 console.log('Success:', data);
-                alert('Success:' + data);
+                alert('배송완료 처리되었습니다.');
                 location.reload();  // 비동기 통신이 끝난 후 페이지 리로드
             })
             .catch((error) => {

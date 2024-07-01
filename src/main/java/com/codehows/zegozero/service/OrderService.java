@@ -68,6 +68,46 @@ public class OrderService {
         }
     }
 
+    public void save2(Order_Dto Orderdata) {
+
+        LocalDateTime date = timeService.getDateTimeFromDB().getTime();
+        LocalDateTime date2 = date.plusDays(5);
+
+        if(Orderdata.getProduction_quantity() == 0){
+
+            Orders orders = new Orders();
+            orders.setProduct_name(Orderdata.getProduct_name());
+            orders.setQuantity(Orderdata.getQuantity());
+            orders.setUsed_inventory(Orderdata.getUsed_inventory());
+            orders.setProduction_quantity(Orderdata.getProduction_quantity());
+            orders.setOrder_date(date);
+            orders.setExpected_shipping_date(date);
+            orders.setCustomer_name(Orderdata.getCustomer_name());
+            orders.setDelivery_address(Orderdata.getDelivery_address());
+            orders.setDeletable(false);
+            orders.setDelivery_available(true);
+
+            ordersRepository.save(orders);
+
+        }else{
+
+            Orders orders = new Orders();
+            orders.setProduct_name(Orderdata.getProduct_name());
+            orders.setQuantity(Orderdata.getQuantity());
+            orders.setUsed_inventory(Orderdata.getUsed_inventory());
+            orders.setProduction_quantity(Orderdata.getProduction_quantity());
+            orders.setOrder_date(date);
+            orders.setExpected_shipping_date(date2);
+            orders.setCustomer_name(Orderdata.getCustomer_name());
+            orders.setDelivery_address(Orderdata.getDelivery_address());
+            orders.setDeletable(true);
+            orders.setDelivery_available(false);
+
+            ordersRepository.save(orders);
+
+        }
+    }
+
     public int getMaxOrderId(){
         return ordersRepository.findMaxOrderId();}
 

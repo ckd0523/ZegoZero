@@ -33,7 +33,7 @@ public class finishedProductApiController {
         productService.receivesave(finishedProduct);
         orderService.usePackaging(finishedProduct);
 
-        return ResponseEntity.ok().body("saved successfully");
+        return ResponseEntity.ok().body("완재품 재고에 추가되었습니다.");
     };
 
     // 완제품 출고
@@ -42,7 +42,7 @@ public class finishedProductApiController {
 
         orderService.update(shippingProduct);
         productService.shippingsave(shippingProduct);
-        return ResponseEntity.ok().body("saved successfully");
+        return ResponseEntity.ok().body("완재품이 출고 되었습니다.");
 
     };
 

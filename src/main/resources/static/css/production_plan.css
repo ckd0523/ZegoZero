@@ -1,6 +1,11 @@
 /* CUSTOM STYLE */
 @import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
 /* 제목 중앙 정렬 및 마진 설정 */
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 2000px;
+    }
+}
 h1 {
     text-align: center; /* 텍스트 가운데 정렬 */
     margin-top: 20px; /* 위쪽 마진 설정 */
@@ -13,7 +18,7 @@ body, select, input {
 
 /* FullCalendar 컨테이너 스타일 */
 #calendar {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 40px auto;
 }
 

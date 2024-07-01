@@ -206,7 +206,7 @@ public class OrderApiController {
         return delivered;
     }
 
-    @PostMapping("savePurchaseMaterial")
+    @PostMapping("/savePurchaseMaterial")
     public ResponseEntity<?> savePurchaseMaterial(@RequestBody List<savePurchaseMaterial_Dto> saveList) {
 
         //deletable로 변환하는 매서드 추가
@@ -240,10 +240,10 @@ public class OrderApiController {
 
 
         } else {
-            return ResponseEntity.badRequest().body("값을 선택해주세요");
+            return ResponseEntity.badRequest().body("값을 선택해주세요.");
         }
 
-        return ResponseEntity.ok().body("성공적으로...");
+        return ResponseEntity.ok().body("배송완료 처리가 되었습니다.");
     }
 
 
@@ -379,13 +379,13 @@ public class OrderApiController {
 
         // 반환할 값이 있다면 설정해줍니다.
                 if (materialDetailsList.isEmpty()) {
-                    return "Not Found";
+                    return "찾을 수 없습니다.";
                 } else {
-                    return "Success";
+                    return "성공하였습니다.";
                 }
     }
 
-    @PostMapping("PackOrder")
+    @PostMapping("/PackOrder")
     public ResponseEntity<?> PackOrder() {
         orderService.packagingOrder();
 
@@ -394,7 +394,7 @@ public class OrderApiController {
 
 
 
-    @GetMapping("selectedOrderNum/{inputValue}")
+    @GetMapping("/selectedOrderNum/{inputValue}")
     public Map<String, Object> selectedOrderNum(@PathVariable Integer inputValue) {
 
         return orderService.selectedOrderNum(inputValue);

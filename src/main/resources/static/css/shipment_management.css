@@ -1,6 +1,11 @@
 /* CUSTOM STYLE */
 @import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
 
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 2000px;
+    }
+}
 /* 제목 중앙 정렬 및 마진 설정 */
 h1 {
     text-align: center; /* 텍스트 가운데 정렬 */
@@ -149,7 +154,9 @@ table.dataTable.display tbody tr:hover {
 }
 
 /* 승우형 */
-
+.dataTables_filter{
+    margin-bottom: 10px;
+}
 .center-container {
     display: flex;
     justify-content: center;
