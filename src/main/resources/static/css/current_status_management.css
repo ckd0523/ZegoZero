@@ -166,10 +166,11 @@ table.dataTable.display tbody tr:hover {
 }
 /* 설비 가동 현황 */
 table#equipmentTable th {
-    border: 1px solid black;
+    border: 5px solid black;
     padding: 8px 15px; /* 좌우 여백 조절 */
     text-align: center;
-    background-color: #f2f2f2;
+    background-color: #ffffff;
+    border-radius: 30px; /* 라운드 코너 */
 }
 
 /*민규*/
