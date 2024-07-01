@@ -401,7 +401,7 @@ $(document).ready(function() {
 
             var orderId = rowData.order_id;
             var product_name = rowData.product_name;
-            var production_quantity = rowData.production_quantity;
+            var production_quantity =  Math.ceil((rowData.production_quantity)*1.031);
 
             console.log(orderId);
             console.log(product_name);
