@@ -47,7 +47,7 @@ $(document).ready(function() {
         orderMulti: true,
         columns: [
             {
-                data: 'order_id.orderId',
+                data: 'order_id',
                 render: function(data, type, row) {
                     return data !== null && data !== undefined ? data : '박스 및 포장지';
                 },
