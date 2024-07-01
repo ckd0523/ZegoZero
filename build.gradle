@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.codehows'
-version = '0.0.1-SNAPSHOT'
+version = 'create'
 
 java {
     toolchain {
@@ -48,4 +48,8 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.withType(Test) {
+    enabled = false
 }

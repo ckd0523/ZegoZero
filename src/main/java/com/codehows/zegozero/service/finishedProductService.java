@@ -54,7 +54,7 @@ public class finishedProductService {
            Integer real_receive_quantity = real_quantity-inventory_quantity;
 
 
-           if (production_quantity < total) {
+           if (production_quantity <= total) {
                // 입고
                Finish_product finishProduct = new Finish_product();
                finishProduct.setProduct_name(productDto.getProduct_name());

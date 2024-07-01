@@ -223,7 +223,7 @@ public class OrderApiController {
     //2.원자재 내역 테이블에 발주번호를 등록한다.
     //3. 원자재 입고량을 구하는 방법- '주문량'(원자재발주tbl)을 가져와 '입고량'(원자재내역tbl)으로 등록한다.
     //4.dto에 현재 날짜를 등록하여 함께 저장한다.
-    @PostMapping("deliveryOk")
+    @PostMapping("/deliveryOk")
     public ResponseEntity<?> deliveryOk(@RequestBody Integer[] deliveryOk) {
         //deliveryOk는 발주번호를 가진 배열
 
