@@ -30,14 +30,12 @@ public class responsePurchaseMaterial_Dto {
 
     private String delivery_status;
 
-    private Orders order_id;
+    private Integer order_id;
 
     public responsePurchaseMaterial_Dto() {
     }
 
     public responsePurchaseMaterial_Dto(Purchase_matarial purchase_matarial){
-
-
 
         this.purchase_matarial_id = purchase_matarial.getPurchase_matarial_id();
         this.raw_material=purchase_matarial.getRaw_material();
@@ -45,7 +43,11 @@ public class responsePurchaseMaterial_Dto {
         this.purchase_date=purchase_matarial.getPurchase_date();
         this.delivery_completion_date=purchase_matarial.getDelivery_completion_date();
         this.delivery_status=purchase_matarial.getDelivery_status();
-        this.order_id=purchase_matarial.getOrder_id();
+        if(purchase_matarial.getOrder_id() != null) {
+            this.order_id = purchase_matarial.getOrder_id().getOrderId();
+        } else {
+            this.order_id = null;
+        }
     }
 
 
