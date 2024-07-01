@@ -11,6 +11,9 @@
 <header th:replace="header :: header"></header>
 
 <div class="container mt-4">
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col"><h1>원자재 발주 관리</h1></div>
+    </div>
 <div class="aaaa">
     <table id="example" class="display" style="width:100%">
         <thead>
@@ -128,7 +131,10 @@
             </div>
 
             <!-- 두 테이블을 한 줄에 배치 -->
-            <div class="row table-container">
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col"><h3>제작수량(box)</h3></div>
+            </div>
+            <div class="row table-container" style="margin-bottom: 20px">
                 <div class="col">
                     <table id="example2" class="table table-bordered display" style="width:100%">
                         <thead>
@@ -143,35 +149,27 @@
                         </tbody>
                     </table>
                 </div>
-<!--                <div class="col">-->
-<!--                    <table id="example3" class="table table-bordered display" style="width:100%">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th>수주번호</th>-->
-<!--                            <th>원자재</th>-->
-<!--                            <th>주문 수량</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
 
-
-<!--                </div>-->
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="col"><h3>주문 원자재 수량</h3></div>
+            </div>
+            <div class="row table-container">
+                <div class="col">
+                    <table id="example4" class="table table-bordered display" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>수주 번호</th>
+                            <th>주문할 원자재</th>
+                            <th>수량</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
-        <table id="example4" class="table table-bordered display" style="width:100%">
-            <thead>
-            <tr>
-                <th>수주 번호</th>
-                <th>주문할 원자재</th>
-                <th>수량</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
         <div class="popupbtnarea">
             <button class="closepopupbtn btn-primary" id="regist" >등록하기</button>
         </div>

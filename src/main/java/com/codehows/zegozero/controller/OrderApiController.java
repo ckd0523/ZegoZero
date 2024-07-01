@@ -326,7 +326,7 @@ public class OrderApiController {
         Integer shippedQuantity = plan.getPlanned_quantity();
         int material1 = shippedQuantity * 4;
         int material2 = (int) Math.ceil(shippedQuantity * 0.15);
-        int material3 = shippedQuantity * 125;
+        int material3 = (int) Math.ceil(shippedQuantity * 0.125);
         int material4 = (int) Math.ceil(shippedQuantity * 0.05);
         // 시간
         LocalDateTime time = timeService.getDateTimeFromDB().getTime();
@@ -349,11 +349,11 @@ public class OrderApiController {
                 case "흑마늘":
                     material_details.setShipped_quantity(material1);
                     break;
-                case "꿀":
+                case "벌꿀":
                     material_details.setShipped_quantity(material2);
                     break;
-                case "석류":
-                case "매실":
+                case "석류농축액":
+                case "매실농축액":
                     material_details.setShipped_quantity(material3);
                     break;
                 case "콜라겐":

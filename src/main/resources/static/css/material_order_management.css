@@ -2,7 +2,7 @@
 @import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
 
 /* 제목 중앙 정렬 및 마진 설정 */
-h1 {
+h1, h3 {
     text-align: center; /* 텍스트 가운데 정렬 */
     margin-top: 20px; /* 위쪽 마진 설정 */
     margin-bottom: 20px; /* 아래쪽 마진 설정 */
@@ -190,4 +190,45 @@ table.dataTable.display tbody tr:hover {
 .btn-danger {
     background-color: #b12646;
     border: none;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+/* 모든 테이블에 테두리 설정 */
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #000;
+}
+
+.small-table th,
+.small-table td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.small-table th {
+    background-color: #f2f2f2;
+}
+
+.small-table {
+    width: auto;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* 작은 표를 오른쪽 상단에 배치 */
+.small-table-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
 }

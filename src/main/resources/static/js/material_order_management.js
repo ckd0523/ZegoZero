@@ -17,7 +17,7 @@ var allData;    //발주 등록의 모든 수주 데이터
 // 양배추즙 1개당 필요한 재료의 양
 const CABBAGEorGarlic_PER_JUICE = 4; // 1 양배추즙 당 1kg 양배추
 const HONEY_PER_JUICE = 0.15; // 1 양배추즙 당 0.1kg 벌꿀
-const PER_JUICE = 150; // ML
+const PER_JUICE = 0.125; // ML
 const COLAGEN_PER_JUICE = 0.05; // ML
 
 var selectedRows=[];
@@ -401,7 +401,7 @@ $(document).ready(function() {
 
             var orderId = rowData.order_id;
             var product_name = rowData.product_name;
-            var production_quantity =  Math.ceil((rowData.production_quantity)*1.031);
+            var production_quantity =  rowData.production_quantity;
 
             console.log(orderId);
             console.log(product_name);
@@ -538,7 +538,7 @@ $(document).ready(function() {
                             if (row.raw_material === '양배추' || row.raw_material === '흑마늘') {
                                 unit = 'kg';
                             } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀') {
-                                unit = 'ml';
+                                unit = 'L';
                             }else if(row.raw_material === '박스' || row.raw_material === '포장지'){
                                 unit = '개';
                             }
