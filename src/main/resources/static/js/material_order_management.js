@@ -58,8 +58,18 @@ $(document).ready(function() {
             {
                 data: 'order_quantity',
                 render: function (data, type, row) {
-                    return data + ' ' + '개'; // 단위를 포함하여 반환
+                    // raw_material에 따라 단위를 설정
+                    var unit = '';
+                    if (row.raw_material === '양배추' || row.raw_material === '흑마늘') {
+                        unit = 'kg';
+                    } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀' || row.raw_material === '석류농축액' || row.raw_material === '매실농축액') {
+                        unit = 'L';
+                    }else if(row.raw_material === '박스' || row.raw_material === '포장지'){
+                        unit = '개';
+                    }
+                    return data + ' ' + unit; // 단위를 포함하여 반환
                 },
+
             },
             {data: 'purchase_date'}, // order_id 내부의 production_quantity
             {data: 'delivery_status'},
@@ -501,7 +511,7 @@ $(document).ready(function() {
                 // 객체로 만들어 배열에 추가
                 const data1 = {
                     order_id: orderId,
-                    raw_material: '석류농축액',
+                    raw_material: '매실농축액',
                     order_quantity: plumJelly
                 };
 
@@ -537,7 +547,7 @@ $(document).ready(function() {
                             var unit = '';
                             if (row.raw_material === '양배추' || row.raw_material === '흑마늘') {
                                 unit = 'kg';
-                            } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀') {
+                            } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀' || row.raw_material === '석류농축액' || row.raw_material === '매실농축액') {
                                 unit = 'L';
                             }else if(row.raw_material === '박스' || row.raw_material === '포장지'){
                                 unit = '개';

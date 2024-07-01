@@ -1,15 +1,14 @@
 package com.codehows.zegozero.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "finish_product")
 @NoArgsConstructor
 @AllArgsConstructor

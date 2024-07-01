@@ -8,11 +8,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
 @Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class Orders {
 
     @Id
@@ -60,9 +60,4 @@ public class Orders {
         this.deletable = deletable;
     }
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Plans> plans;
-
-    @OneToMany(mappedBy = "order_id", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Finish_product> finishProducts;
 }

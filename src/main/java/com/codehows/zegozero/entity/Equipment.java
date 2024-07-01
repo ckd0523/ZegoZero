@@ -1,12 +1,11 @@
 package com.codehows.zegozero.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "equipment")
 @NoArgsConstructor
 @AllArgsConstructor

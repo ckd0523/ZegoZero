@@ -38,30 +38,19 @@ $(document).ready(function() {
             {
                 data: 'received_quantity',
                 title: '입고량',
-                // render: function(data, type, row) {
-                //     var unit='';
-                //
-                //     if (row.raw_material === '양배추' || row.raw_material === '흑마늘') {
-                //             unit = 'kg';
-                //     } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀') {
-                //             unit = 'ml';
-                //     }else if(row.raw_material === '박스' || row.raw_material === '포장지'){
-                //             unit = '개';
-                //     }
-                //         return data + ' ' + unit; // 단위를 포함하여 반환
-                // }
-                // },
                 render: function(data, type, row) {
-                    // raw_material에 따라 단위를 설정
-                    var unit = '';
-                    if (row.purchase_matarial.raw_material === '양배추' || row.purchase_matarial.raw_material === '흑마늘') {
-                        unit = 'kg';
-                    } else if (row.purchase_matarial.raw_material === '콜라겐' || row.purchase_matarial.raw_material === '벌꿀') {
-                        unit = 'ml';
-                    }else if(row.purchase_matarial.raw_material === '박스' || row.purchase_matarial.raw_material === '포장지'){
-                        unit = '개';
-                    }
-                    return data + ' ' + unit; // 단위를 포함하여 반환
+
+                        // raw_material에 따라 단위를 설정
+                        var unit = '';
+                        if (row.raw_material === '양배추' || row.raw_material === '흑마늘') {
+                            unit = 'kg';
+                        } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀' || row.raw_material === '석류농축액' || row.raw_material === '매실농축액') {
+                            unit = 'L';
+                        }else if(row.raw_material === '박스' || row.raw_material === '포장지'){
+                            unit = '개';
+                        }
+                        return data + ' ' + unit; // 단위를 포함하여 반환
+
                 }
             },
             { data: 'received_date', title: '입고 날짜' },
@@ -69,16 +58,15 @@ $(document).ready(function() {
                 data: 'shipped_quantity',
                 title: '출고량',
                 render: function(data, type, row){
-                    // raw_material에 따라 단위를 설정
-                    var unit = '';
-                    if (row.purchase_matarial.raw_material === '양배추' || row.purchase_matarial.raw_material === '흑마늘') {
-                        unit = 'kg';
-                    } else if(row.purchase_matarial.raw_material === '콜라겐' || row.purchase_matarial.raw_material === '벌꿀') {
-                        unit = 'ml';
-                    }else if(row.purchase_matarial.raw_material === '박스' || row.purchase_matarial.raw_material === '포장지'){
-                        unit = '개';
-                    }
-                    return data + ' ' + unit; // 단위를 포함하여 반환
+                        var unit = '';
+                        if (row.raw_material === '양배추' || row.raw_material === '흑마늘') {
+                            unit = 'kg';
+                        } else if (row.raw_material === '콜라겐' || row.raw_material === '벌꿀' || row.raw_material === '석류농축액' || row.raw_material === '매실농축액') {
+                            unit = 'L';
+                        }else if(row.raw_material === '박스' || row.raw_material === '포장지'){
+                            unit = '개';
+                        }
+                        return data + ' ' + unit; // 단위를 포함하여 반환
                 }
             },
             { data: 'shipped_date', title: '출고 날짜' }

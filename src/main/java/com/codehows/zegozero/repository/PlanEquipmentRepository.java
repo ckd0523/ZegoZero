@@ -78,4 +78,5 @@ public interface PlanEquipmentRepository extends JpaRepository<Plan_equipment, I
     @Query("SELECT CASE WHEN pe.start_date IS NOT NULL THEN true ELSE false END FROM Plan_equipment pe WHERE pe.equipment_plan_id = :equipmentPlanId")
     boolean existsStartDateByEquipmentPlanId(@Param("equipmentPlanId") Integer equipmentPlanId);
 
+
 }

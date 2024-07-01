@@ -1,19 +1,16 @@
 package com.codehows.zegozero.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
 @Table(name = "material_details")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class Material_details {
 
     @Id

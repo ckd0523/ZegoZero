@@ -1,18 +1,15 @@
 package com.codehows.zegozero.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Data
-@Table(name = "plan_equipment")
+@Getter
 @Setter
+@Table(name = "plan_equipment")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Plan_equipment {
@@ -34,12 +31,12 @@ public class Plan_equipment {
 
     private int output;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="plan")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name="plan_id")
     private Plans plan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="equipment")
+    @JoinColumn(name="equipment_id")
     private Equipment equipment;
 
 }

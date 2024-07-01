@@ -26,6 +26,11 @@ public interface OrdersRepository  extends JpaRepository<Orders, Integer> {
     @Query("SELECT o FROM Orders o WHERE o.orderId = :orderId")
     Orders findByOrderId(@Param("orderId") Integer orderId);
 
+//    @Query("SELECT o FROM Plans o WHERE o.orderId = :orderId")
+//    Orders findByOrderId2(@Param("orderId") Integer orderId);
+
+
+
     // 가장 큰 order_id를 가져오는 JPQL 쿼리
     @Query("SELECT MAX(o.orderId) FROM Orders o")
     Integer findMaxOrderId();

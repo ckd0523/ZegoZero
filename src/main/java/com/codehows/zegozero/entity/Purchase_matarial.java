@@ -1,18 +1,16 @@
 package com.codehows.zegozero.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Data
 @Table(name = "purchase_matarial")
 @NoArgsConstructor
+@Setter
+@Getter
 public class Purchase_matarial {
 
     @Id
