@@ -33,4 +33,5 @@ public class Material_details {
     @JoinColumn(name="purchase_matarial")
     private Purchase_matarial purchase_matarial;
 
+
 }
